@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# etc nginx config that couldn't get handled in first install script
+
+sudo rm /etc/nginx/sites-enabled/default
+sudo cp ./deploy/engine /etc/nginx/sites-available
+sudo ln -s /etc/nginx/sites-available/engine /etc/nginx/sites-enabled/engine
+sudo service nginx restart
+sudo echo "configged nginx"
