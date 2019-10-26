@@ -21,8 +21,14 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
         exclude: /node_modules/,
+        // use: 'ts-loader',
+        // loader: require.resolve('ts-loader'),
+        loader: 'ts-loader',
+        options: {
+          // context: __dirname,
+          configFile: resolve(__dirname,'tsconfig.webpack.json'),
+        }
       },
       {
         test: /jsx?$/,
