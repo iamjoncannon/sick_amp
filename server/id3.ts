@@ -3,7 +3,7 @@ const testFolder = './tests/';
 const fs = require('fs');
 const { resolve } = require('path')
 
-interface SongObject {
+export interface SongObject {
     ID: number 
     ALBUM: string 
     TITLE: string 
@@ -17,42 +17,39 @@ interface songStateType {
 
 let songState: songStateType = {}
 
-fs.readdirSync(resolve(__dirname, "../public/tunes")).forEach( (file : string, i : number) => {
+const tunes = fs.readdirSync(resolve(__dirname, "./public/tunes"))
 
-    let tags = NodeID3.read("./public/tunes/" + file)
+tunes.forEach( async (file : string, i : number) => {
 
-    songState[i] = { 
-        ID: i, 
-        ALBUM: "", 
-        TITLE: "",
-        ARTIST: "",
-        TRACKNUMBER: ""
-    }
+        let tags = await NodeID3.read("./public/tunes/" + file)
 
-    for(let tag in tags){
-      
-
-        if( (tag !== "raw") && ( tag !== "image" )){
-
-            songState[i][tag.toUpperCase()] = tags[tag]
+        songState[i] = { 
+            ID: i, 
+            ALBUM: "", 
+            TITLE: "",
+            ARTIST: "",
+            TRACKNUMBER: ""
         }
 
-        if(tag === "composer"){
+        for(let tag in tags){
+        
+            if( (tag !== "raw") && ( tag !== "image" )){
 
-            songState[i]["ARTIST"] = tags[tag]
-        }
+                songState[i][tag.toUpperCase()] = tags[tag]
+            }
 
-        if(tag === "raw"){
+            if(tag === "composer"){
 
-            // console.log(tags[tag])
-            if(tags[tag].TSSE){
-                songState[i]["ALBUM"] = tags[tag].TSSE
+                songState[i]["ARTIST"] = tags[tag]
+            }
+
+            if(tag === "raw"){
+
+                if(tags[tag].TSSE){
+                    songState[i]["ALBUM"] = tags[tag].TSSE
+                }
             }
         }
-    }
-});
-
-console.log(songState)
-
-// let file = "./public/tunes/001 - 0125 - 8 Utopia [brain floss mix].mp3"
-
+})
+    
+module.exports = songState

@@ -11,7 +11,7 @@
     "dep-install": "chmod +x ./deploy/install && ./deploy/install ubuntu@$addy",
     "dep-nginx": "chmod +x ./deploy/nginxConfig && ./deploy/nginxConfig",
     "deploy": "addy=$addy key=$key pm2 deploy ecosystem.config.js production",
-    "start-dev": "webpack -w --progress & node ./server/dev-server.js",
+    "start-dev": "webpack -w --progress",
     "start-server": "nodemon -L --watch main.js -e html,js,css",
     "build": "webpack -w --progress",
     "start": "echo 'Running production server' && node server.js",

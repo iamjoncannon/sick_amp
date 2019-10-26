@@ -1,2 +1,5 @@
-id:
-	tsc -p ./server -w & nodemon ./server/id3.js
+serv: 
+	nodemon dev-server.js & tsc -p ./server -w
+
+client:
+	webpack -w --progress

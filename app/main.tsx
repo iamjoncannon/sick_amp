@@ -5,7 +5,7 @@ import ReactDOM from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from 'react-redux' 
 import store from '../store/store'
-import PlayListDND from './Pages/DNDPlayLists'
+import PlayListDND from './Layout/Bottom/BottomLayout'
 
 const App = lazy(() => import("./components/app"))
 
