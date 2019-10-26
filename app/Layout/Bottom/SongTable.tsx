@@ -1,50 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Store } from './Store'
 import { useTable, useBlockLayout, useResizeColumns } from 'react-table'
 import namor from 'namor'
 
-const range = ( len : number) => {
-  const arr = []
-  for (let i = 0; i < len; i++) {
-    arr.push(i)
-  }
-  return arr
-}
+var Container = styled.div`
 
-const newPerson = () => {
-  const statusChance = Math.random()
-  return {
-    firstName: namor.generate({ words: 1, numbers: 0 }),
-    lastName: namor.generate({ words: 1, numbers: 0 }),
-    age: Math.floor(Math.random() * 30),
-    visits: Math.floor(Math.random() * 100),
-    // progress: Math.floor(Math.random() * 100),
-    status:
-      statusChance > 0.66
-        ? 'relationship'
-        : statusChance > 0.33
-        ? 'complicated'
-        : 'single',
-  }
-}
+  font-size: .75rem;
 
-function makeData(...lens) {
-  const makeDataLevel = (depth = 0) => {
-    const len = lens[depth]
-    return range(len).map(d => {
-      return {
-        ...newPerson(),
-        subRows: lens[depth + 1] ? makeDataLevel(depth + 1) : undefined,
-      }
-    })
-  }
-
-  return makeDataLevel()
-}
-
-const Container = styled.div`
-
-  padding: .5rem;
+  padding: .25rem;
 
   user-select: none; 
    -webkit-user-select: none;
@@ -80,7 +44,8 @@ const Container = styled.div`
     .th,
     .td {
       margin: 0;
-      padding: 0.5rem;
+      overflow: hidden;
+      padding: 0.25rem;
       
       
 
@@ -111,6 +76,34 @@ const Container = styled.div`
     }
   }
 `
+
+function SongTable() {
+
+  const { state, dispatch } = React.useContext(Store);
+
+  const generatedColumns = Object.keys(state.ColumnHash).map(key=>{
+      
+    return {
+      Header: key, 
+      accessor: key
+    }
+  })
+
+  const columns = React.useMemo(
+    ()=> generatedColumns, 
+    []
+  )
+
+  const formattedSongData = Object.values(state.Songs)
+
+  const data = React.useMemo(() => formattedSongData, [])
+
+  return (
+    <Container>
+      <Table columns={columns} data={data} />
+    </Container>
+  )
+}
 
 function Table({ columns, data }) {
 
@@ -185,57 +178,5 @@ function Table({ columns, data }) {
   )
 }
 
-function SongTable() {
-
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: 'First Name',
-        accessor: 'firstName',
-      },
-      {
-        Header: 'Last Name',
-        accessor: 'lastName',
-      },
-      {
-        Header: 'Age',
-        accessor: 'age',
-      },
-      // {
-      //   Header: 'Info',
-      //   columns: [
-      //     {
-      //       Header: '',
-      //       accessor: 'age',
-      //       width: 50,
-      //     },
-      //     {
-      //       Header: 'Visits',
-      //       accessor: 'visits',
-      //       width: 60,
-      //     },
-      //     {
-      //       Header: 'Status',
-      //       accessor: 'status',
-      //     },
-      //     {
-      //       Header: 'Profile Progress',
-      //       accessor: 'progress',
-      //     },
-      //   ],
-      // },
-
-    ],
-    []
-  )
-
-  const data = React.useMemo(() => makeData(20), [])
-
-  return (
-    <Container>
-      <Table columns={columns} data={data} />
-    </Container>
-  )
-}
 
 export default SongTable

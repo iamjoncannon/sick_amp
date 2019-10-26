@@ -3,22 +3,28 @@ import * as Types from './Types'
 
 const initialState : Types.Store = {
     SelectedPlaylist: 1,
+    ColumnHash: null,
     PlayLists: null,
     Songs: null,
 };
 
 interface ReduxAction {
     type: string
-    payload: string
+    payload: any
 }
 
 function reducer(state : Types.Store, action : ReduxAction ) {
+
+    console.log("Action: ", action.type, action.payload)
 
     switch (action.type) {
 
         case 'HYDRATE': {
 
-            return {...state, Songs: action.payload, isHydrated : true }
+            return {...state, 
+                    Songs: action.payload.Songs,
+                    ColumnHash: action.payload.ColumnHash
+                    }
         }
 
         case 'SELECT_PLAYLIST':

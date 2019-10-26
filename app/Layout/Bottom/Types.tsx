@@ -16,12 +16,10 @@ export interface Playlist {
     ids: number[]
 }
 
-// highlightedSong
-// select up and down with keys 
-
 export interface Store {
     SelectedPlaylist: number
     PlayLists : Playlist[] | void 
     Songs: songStateType | void 
+    ColumnHash : { [ Column : string] : Boolean} | void 
 }
 

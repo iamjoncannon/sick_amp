@@ -3,6 +3,7 @@ import { Store } from './Store'
 import styled from 'styled-components'
 import * as Types from './Types'
 import SongTable from './SongTable'
+import { sortColumns } from './Helpers'
 
 const SongSectionContainer = styled.div`
     height: 100vh;
@@ -13,22 +14,16 @@ const SongSectionContainer = styled.div`
     flex-direction: column;
 `
 
-const Songs = (props : any) => {
+const Songs = () => {
 
     const { state, dispatch } = React.useContext(Store);
 
-    let sortedData
-    
-    if(!!state.Songs){
-
-        sortedData = sortColumns(state.Songs, dispatch) 
-    }
-
+    console.log(!!state.ColumnHash)
     return (
 
         <SongSectionContainer>
             
-            <SongTable />
+            { !!state.ColumnHash && <SongTable /> }
 
         </SongSectionContainer>
     )
@@ -36,31 +31,3 @@ const Songs = (props : any) => {
 
 export default Songs
 
-
-/* 
-we have to sort through the songs and find 
-all the possible categories- later we will build
-out a feature to allow the user to delete 
-columns, like in iTunes
-
-this is going to give us a table with N columns
-
-then we iterate through each song return and place
-the data in the appropriate column 
-
-{ !!state.Songs 
-                && Object.entries(state.Songs)
-                    .map( (song : [string, Types.SongObject] ) =>{
-                console.log(song)
-                return ( 
-                    <>
-                    </>
-                )
-            })}
-
-*/
-
-function sortColumns( data : Types.songStateType, dispatch : any){
-
-
-}
