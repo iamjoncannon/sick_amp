@@ -26,7 +26,7 @@ const PlayLists = () => {
 
         }
 
-        if(!state.isHydrated){
+        if(state.Songs === null){
 
             fetchData()
         }

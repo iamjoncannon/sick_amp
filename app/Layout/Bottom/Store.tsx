@@ -2,7 +2,6 @@ import React from 'react';
 import * as Types from './Types'
 
 const initialState : Types.Store = {
-    isHydrated : false,
     SelectedPlaylist: 1,
     PlayLists: null,
     Songs: null,

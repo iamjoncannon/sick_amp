@@ -6,16 +6,22 @@ export interface SongObject {
     TRACKNUMBER: string
 }
 
+export interface songStateType {
+    [ key: number ] : SongObject
+}
+
 export interface Playlist {
     Title: string
     id: number
     ids: number[]
 }
 
+// highlightedSong
+// select up and down with keys 
+
 export interface Store {
-    isHydrated: boolean
     SelectedPlaylist: number
     PlayLists : Playlist[] | void 
-    Songs: SongObject[] | void 
+    Songs: songStateType | void 
 }
 
