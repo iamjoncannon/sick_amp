@@ -6,7 +6,7 @@ import * as Types from './Types'
 import { StoreProvider, Store } from './Store'
 import Songs from './Songs'
 import PlayLists from './PlayLists'
-import Player from '../MenuBar/Player'
+import Audio from '../MenuBar/AudioPlayer/Audio'
 
 const Container = styled.div`
     display: flex;
@@ -19,10 +19,11 @@ const PlayListDND = () => {
 
         <StoreProvider>
             <Container>
-                <Player />
-                <PlayLists />      
+                <Audio />
+
+                {/* <PlayLists />      
              
-                <Songs />
+                <Songs /> */}
            
             </Container>
         </StoreProvider>

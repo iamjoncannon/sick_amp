@@ -25,10 +25,10 @@ app.get('/track/:fileName', (req, res, err) => {
   const filePath = path.resolve(__dirname, './public/tunes', req.params.fileName);
   const stat = fs.statSync(filePath);
 
-  res.writeHead(200, {
-    'Content-Type': 'audio/mpeg',
-    'Content-Length': stat.size
-  });
+  // res.writeHead(200, {
+  //   'Content-Type': 'audio/mpeg',
+  //   'Content-Length': stat.size
+  // });
 
   const readStream = fs.createReadStream(filePath);
 

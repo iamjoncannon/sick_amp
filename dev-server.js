@@ -17,10 +17,10 @@ app.get('/track/:fileName', function (req, res, err) {
     console.log("hitting mp3 endpoint");
     var filePath = path.resolve(__dirname, './public/tunes', req.params.fileName);
     var stat = fs.statSync(filePath);
-    res.writeHead(200, {
-        'Content-Type': 'audio/mpeg',
-        'Content-Length': stat.size
-    });
+    // res.writeHead(200, {
+    //   'Content-Type': 'audio/mpeg',
+    //   'Content-Length': stat.size
+    // });
     var readStream = fs.createReadStream(filePath);
     // attach this stream with response stream
     readStream.pipe(res);
