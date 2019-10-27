@@ -2,20 +2,9 @@ const NodeID3 = require('node-id3');
 const testFolder = './tests/';
 const fs = require('fs');
 const { resolve } = require('path')
+import * as Types from './Types'
 
-export interface SongObject {
-    ID: number 
-    ALBUM: string 
-    TITLE: string 
-    ARTIST: string 
-    TRACKNUMBER: string
-}
-
-interface songStateType {
-    [ key: number ] : SongObject
-}
-
-let songState: songStateType = {}
+let songState: Types.songStateType = {}
 
 const tunes = fs.readdirSync(resolve(__dirname, "./public/tunes"))
 
@@ -51,5 +40,24 @@ tunes.forEach( async (file : string, i : number) => {
             }
         }
 })
-    
-module.exports = songState
+
+const playlists : Types.Playlist[] = [
+    {
+        Title: "Aphex",
+        id: 0,
+        ids: [1,2,3,4]
+    },
+    {
+        Title: "Sigrid",
+        id: 1,
+        ids: [7,8]
+    }
+]
+
+const returnData : Types.returnDataType = {
+
+    Songs: songState,
+    PlayLists : playlists
+}
+
+module.exports = returnData

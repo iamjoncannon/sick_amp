@@ -73,4 +73,20 @@ tunes.forEach(function (file, i) { return __awaiter(void 0, void 0, void 0, func
         }
     });
 }); });
-module.exports = songState;
+var playlists = [
+    {
+        Title: "Aphex",
+        id: 0,
+        ids: [1, 2, 3, 4]
+    },
+    {
+        Title: "Sigrid",
+        id: 1,
+        ids: [7, 8]
+    }
+];
+var returnData = {
+    Songs: songState,
+    PlayLists: playlists
+};
+module.exports = returnData;

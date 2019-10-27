@@ -2,7 +2,7 @@ import React from 'react';
 import * as Types from './Types'
 
 const initialState : Types.Store = {
-    SelectedPlaylist: 1,
+    SelectedPlaylist: 1, // defaults to "All"
     ColumnHash: null,
     PlayLists: null,
     Songs: null,
@@ -21,8 +21,11 @@ function reducer(state : Types.Store, action : ReduxAction ) {
 
         case 'HYDRATE': {
 
+            const { Songs, PlayLists} = action.payload
+
             return {...state, 
-                    Songs: action.payload.Songs,
+                    Songs,
+                    PlayLists,
                     ColumnHash: action.payload.ColumnHash
                     }
         }

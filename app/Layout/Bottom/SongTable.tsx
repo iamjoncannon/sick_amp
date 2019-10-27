@@ -66,9 +66,6 @@ var Container = styled.div`
       padding-top: .25rem;
       padding-bottom: .25rem;
       
-      
-      
-
       ${'' /* In this example we use an absolutely position resizer,
        so this is required. */}
       position: relative;
@@ -117,7 +114,24 @@ function SongTable() {
     []
   )
 
-  const formattedSongData = Object.values(state.Songs)
+  // clone to prevent mutating the store by filtering 
+  let formattedSongData = JSON.parse(JSON.stringify(state.Songs))
+  
+  // filter list if playlist selected  
+
+  if(state.SelectedPlaylist !== "All" && !!state.PlayLists){
+    
+    const currentList = state.PlayLists[state.SelectedPlaylist].ids
+    
+    for(let song in formattedSongData){
+
+      if(!currentList.includes(formattedSongData[song].ID)){
+        delete formattedSongData[song]
+      }
+    }
+  }
+
+  formattedSongData = Object.values(formattedSongData)
 
   const data = React.useMemo(() => formattedSongData, [])
 
@@ -129,8 +143,8 @@ function SongTable() {
 
 }
 
-// boilerplate from the library that will manage local state
-// and local events- click, up, down
+// boilerplate from the table CSS library that will manage local state
+// and local events- click, doubleclick, up, down
 
 function Table({ columns, data }) {
 
@@ -138,7 +152,7 @@ function Table({ columns, data }) {
 
   React.useEffect(()=>{
 
-    const keyPressHandler = (e) =>{
+    const keyPressHandler = (e: any) =>{
 
       e.preventDefault()
       e.stopPropagation()
@@ -192,9 +206,7 @@ function Table({ columns, data }) {
     useResizeColumns
   )
 
-  function handleClick(e){
-
-    console.dir(e.target.parentNode.id)
+  function handleClick(e: any){
 
     handleIDSelect(Number(e.target.parentNode.id))
   }
@@ -231,7 +243,11 @@ function Table({ columns, data }) {
            
             return prepareRow(row) || (
               
-              <div {...row.getRowProps()} className={ Number(row.original.ID) === Number(selectedID) ? "tr selected" : "tr" } id={row.original.ID} onClick={e=>handleClick(e)}>
+              <div {...row.getRowProps()} 
+                   className={ Number(row.original.ID) === Number(selectedID) ? "tr selected" : "tr" } 
+                   id={row.original.ID} 
+                   onClick={e=>handleClick(e)}
+              >
 
                 {row.cells.map(cell => {
                   return (

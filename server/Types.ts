@@ -16,14 +16,7 @@ export interface Playlist {
     ids: number[]
 }
 
-export interface PlaylistState {
-    [key : number] : Playlist
+export interface returnDataType {
+    Songs: songStateType
+    PlayLists: Playlist[]
 }
-
-export interface Store {
-    SelectedPlaylist: number | void
-    PlayLists : PlaylistState | void 
-    Songs: songStateType | void 
-    ColumnHash : { [ Column : string] : Boolean} | void 
-}
-
