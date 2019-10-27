@@ -17,7 +17,8 @@ tunes.forEach( async (file : string, i : number) => {
             ALBUM: "", 
             TITLE: "",
             ARTIST: "",
-            TRACKNUMBER: ""
+            TRACKNUMBER: "",
+            FILENAME: file
         }
 
         for(let tag in tags){

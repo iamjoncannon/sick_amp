@@ -54,7 +54,8 @@ tunes.forEach(function (file, i) { return __awaiter(void 0, void 0, void 0, func
                     ALBUM: "",
                     TITLE: "",
                     ARTIST: "",
-                    TRACKNUMBER: ""
+                    TRACKNUMBER: "",
+                    FILENAME: file
                 };
                 for (tag in tags) {
                     if ((tag !== "raw") && (tag !== "image")) {

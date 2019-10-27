@@ -36,7 +36,14 @@ function reducer(state : Types.Store, action : ReduxAction ) {
         
         case 'ADD_SONG_TO_PLAYLIST':
 
-            return {...state}
+            const { PlayLists } = state 
+            const { payload: { song, playlist } } = action
+
+            const nextPlaylists = [...PlayLists]
+
+            nextPlaylists[playlist].ids = [...PlayLists[playlist].ids, Number(song)]
+
+            return {...state, PlayLists : nextPlaylists}
         
         default:
           return state;

@@ -6,9 +6,22 @@ import axios from 'axios'
 import { sortColumns } from './Helpers'
 import * as Types from './Types'
 
-const PlayListStyle = styled.div`
+const PlayListContainer = styled.div`
 
     margin-top: .5rem;
+
+    .selected {
+
+        border: 1px solid white;
+    }
+
+    span:focus{
+        background: white;
+    }
+
+    &:hover{
+        background: white;
+    }
 
     span:hover{
         opacity: .5;
@@ -36,14 +49,37 @@ const Playlist = (props: PlaylistProps) => {
         })
     }
 
+    const onDragOver = (e : any) => {
+    
+        e.preventDefault()
+    }
+
+    const onDrop = (e: any) => {
+
+        const selected = e.dataTransfer.getData( "track")
+
+        dispatch({
+            type: "ADD_SONG_TO_PLAYLIST",
+            payload: {
+                song: selected,
+                playlist: e.target.id
+            }
+        })
+    }
+
     return(
-        <PlayListStyle onClick={()=>handleClick(props.data.id)}>
-            <span> ♫ {props.data.Title}</span>
-        </PlayListStyle>
+        <PlayListContainer 
+            onClick={()=>handleClick(props.data.id)}
+            onDragOver={e=> onDragOver(e)}
+            onDrop={(e)=>onDrop(e)}
+        >
+      
+            <span id={props.data.id}> ♫ {props.data.Title}</span>
+        </PlayListContainer>
     )
 }
 
-const PlayListContainer = styled.div`
+const PlayListsContainer = styled.div`
     color: white;
     cursor: default;
     height: 100vh;
@@ -92,7 +128,7 @@ const PlayLists = () => {
     console.log("Next State: ", state)
 
     return (
-        <PlayListContainer>
+        <PlayListsContainer>
             <span style={{textDecoration: "underline"}}>Playlists</span>
             <Playlist key={"All"} data={{Title: "All", id: "All"}}/>
 
@@ -105,7 +141,7 @@ const PlayLists = () => {
                     )
                 })
             }
-        </PlayListContainer>
+        </PlayListsContainer>
     )
 }
 

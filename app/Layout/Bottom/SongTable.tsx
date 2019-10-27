@@ -134,8 +134,6 @@ function SongTable() {
 
   formattedSongData = Object.values(formattedSongData)
 
-  console.log(formattedSongData)
-
   const data = React.useMemo(() => formattedSongData)
 
   return (
@@ -214,6 +212,11 @@ function Table({ columns, data }) {
     handleIDSelect(Number(e.target.parentNode.id))
   }
 
+  const onDragStart = (e : any, id: number) => {
+    
+    e.dataTransfer.setData( "track", id)
+  }
+
   return (
 
     <div {...getTableProps()} className="table">
@@ -247,6 +250,8 @@ function Table({ columns, data }) {
             return prepareRow(row) || (
               
               <div {...row.getRowProps()} 
+                   draggable
+                   onDragStart={(e)=>onDragStart(e, Number(row.original.ID))} 
                    className={ Number(row.original.ID) === Number(selectedID) ? "tr selected" : "tr" } 
                    id={row.original.ID} 
                    onClick={e=>handleClick(e)}
