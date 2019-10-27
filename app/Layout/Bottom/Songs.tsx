@@ -9,10 +9,15 @@ const SongSectionContainer = styled.div`
     width: 86vw;
     font-size: 2vh;
     overflow-x: scroll;
-    background-color: grey;
+    background-color: ${props=>props.theme.primaryColor};
     border: 1px solid black;
     display: flex;
     flex-direction: column;
+`
+
+const PlayListFilterContainer = styled.div`
+    height: 15vh;
+    background-color: ${props=>props.theme.tertiaryColor}
 `
 
 const Songs = () => {
@@ -23,7 +28,9 @@ const Songs = () => {
 
         <SongSectionContainer>
 
-            <div style={{height: "15vh"}}></div>
+            <PlayListFilterContainer>
+
+            </PlayListFilterContainer>
             
             { !!state.ColumnHash && <SongTable /> }
 

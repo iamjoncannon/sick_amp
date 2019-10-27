@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { withTheme } from 'styled-components'
 import { Store } from '../../store/Store'
 import { useTable, useBlockLayout, useResizeColumns } from 'react-table'
 
@@ -18,9 +18,7 @@ var Container = styled.div`
   height: 75vh;
   font-size: .75rem;
   font-weight: 500;
-
-  padding: .1rem;
-
+  overflow: scroll;
   user-select: none; 
    -webkit-user-select: none;
    -khtml-user-select: none; 
@@ -28,26 +26,33 @@ var Container = styled.div`
    -ms-user-select: none; 
 
    .headers .th {
-
+      background-color: ${props=> props.theme.primaryColor}
    }
 
    .headers:hover{
-     background-color: grey !important;
+
+     background-color: ${props=>props.theme.highlightColor} !important;
    }
 
   .tr:hover{
-    background-color: orange; 
+    opacity: .75;
+  }
+
+  .primary {
+    background-color: ${props=> props.theme.tertiaryColor}
+  }
+
+  .secondary {
+    background-color: ${props=> props.theme.primaryColor}
   }
 
   .selected {
-    
-    background-color: orange;
+    opacity: .75;
+    border: .5px solid ${props=>props.theme.highlightColor};
   }
 
   .playing {
-    color: blue; 
-    border: 1px solid black;
-    
+    color: red;
   }
 
   .table {
@@ -155,7 +160,12 @@ function SongTable() {
 
   return (
     <Container>
-      <Table columns={columns} data={data} />
+      
+      <Table 
+        columns={columns} 
+        data={data} 
+      />
+
     </Container>
   )
 
@@ -316,6 +326,15 @@ function Table({ columns, data }) {
             let calculatedStyle = "tr"
 
             const isSelected = Number(row.original.ID) === Number(selectedID) 
+
+            if(i % 2 === 0 ){
+              
+              calculatedStyle += " primary"
+            }
+            else{
+
+              calculatedStyle += " secondary"
+            }
 
             if(isSelected){
 

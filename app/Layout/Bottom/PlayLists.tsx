@@ -9,12 +9,12 @@ import * as Types from '../../store/Types'
 // section 
 
 const PlayListsContainer = styled.div`
-    color: white;
+ 
     font-size: 2vh;
     cursor: default;
     height: 90vh;
     width: 14vw;
-    background-color: black;
+    background-color: ${props=>props.theme.primaryColor};
     border: 1px solid black;
     display: flex;
     flex-direction: column;
@@ -38,11 +38,7 @@ const PlayListContainer = styled.div`
     }
 
     &:hover{
-        background: white;
-    }
-
-    span:hover{
-        opacity: .5;
+        background: ${props=>props.theme.tertiaryColor};
     }
 `
 

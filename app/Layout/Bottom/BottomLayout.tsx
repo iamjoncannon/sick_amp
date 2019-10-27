@@ -9,6 +9,7 @@ import PlayLists from './PlayLists'
 import Audio from '../MenuBar/AudioPlayer/Audio'
 
 const Container = styled.div`
+    color: ${props=>props.theme.fontColor}
     display: flex;
     flex-direction: row;
 `

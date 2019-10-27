@@ -28,7 +28,7 @@ const PlayerContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  background-color: #212527;
+ 
 `
 
 const ControlsContainer = styled.div`
