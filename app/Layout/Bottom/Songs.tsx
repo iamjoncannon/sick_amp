@@ -7,7 +7,8 @@ import { sortColumns } from './Helpers'
 
 const SongSectionContainer = styled.div`
     height: 100vh;
-    width: 75vw;
+    width: 90vw;
+    overflow-x: scroll;
     background-color: grey;
     border: 1px solid black;
     display: flex;
@@ -18,7 +19,6 @@ const Songs = () => {
 
     const { state, dispatch } = React.useContext(Store);
 
-    console.log(!!state.ColumnHash)
     return (
 
         <SongSectionContainer>

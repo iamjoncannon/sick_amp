@@ -7,14 +7,32 @@ import namor from 'namor'
 var Container = styled.div`
 
   font-size: .75rem;
+  font-weight: 500;
 
-  padding: .25rem;
+  padding: .1rem;
 
   user-select: none; 
    -webkit-user-select: none;
    -khtml-user-select: none; 
    -moz-user-select: none;
    -ms-user-select: none; 
+
+   .headers .th {
+
+   }
+
+   .headers:hover{
+     background-color: grey !important;
+   }
+
+  .tr:hover{
+    background-color: orange; 
+  }
+
+  .selected {
+    
+    background-color: orange;
+  }
 
   .table {
     display: inline-block;
@@ -27,7 +45,7 @@ var Container = styled.div`
         .th{
           div:not(last-child){
 
-            border-right: 2px solid black
+            border-right: 1px solid black
           }
         }
       }
@@ -44,8 +62,10 @@ var Container = styled.div`
     .th,
     .td {
       margin: 0;
-      overflow: hidden;
-      padding: 0.25rem;
+      padding-left: .5rem;
+      padding-top: .25rem;
+      padding-bottom: .25rem;
+      
       
       
 
@@ -77,10 +97,13 @@ var Container = styled.div`
   }
 `
 
+// container that manages global state from store
+
 function SongTable() {
 
   const { state, dispatch } = React.useContext(Store);
 
+  // format state for the table library 
   const generatedColumns = Object.keys(state.ColumnHash).map(key=>{
       
     return {
@@ -103,15 +126,52 @@ function SongTable() {
       <Table columns={columns} data={data} />
     </Container>
   )
+
 }
+
+// boilerplate from the library that will manage local state
+// and local events- click, up, down
 
 function Table({ columns, data }) {
 
+  const [ selectedID, handleIDSelect ] = React.useState(0)
+
+  React.useEffect(()=>{
+
+    const keyPressHandler = (e) =>{
+
+      e.preventDefault()
+      e.stopPropagation()
+    
+      let { key } = e
+      
+      if(key === "ArrowUp"){
+  
+        let newSeletedID = selectedID - 1
+    
+        handleIDSelect(newSeletedID)
+      }
+      
+      if(key === "ArrowDown"){
+  
+        let newSeletedID = selectedID + 1
+    
+        handleIDSelect(newSeletedID)
+      }
+    }
+    
+    window.addEventListener('keydown', keyPressHandler)
+
+    return () => {
+      window.removeEventListener('keydown', keyPressHandler);
+    }
+  })
+ 
   const defaultColumn = React.useMemo(
     () => ({
       minWidth: 20,
-      width: 150,
-      maxWidth: 500,
+      // width: 100,
+      maxWidth: 250,
     }),
     []
   )
@@ -132,6 +192,13 @@ function Table({ columns, data }) {
     useResizeColumns
   )
 
+  function handleClick(e){
+
+    console.dir(e.target.parentNode.id)
+
+    handleIDSelect(Number(e.target.parentNode.id))
+  }
+
   return (
 
     <div {...getTableProps()} className="table">
@@ -140,7 +207,7 @@ function Table({ columns, data }) {
 
         {headerGroups.map(headerGroup => (
         
-          <div {...headerGroup.getHeaderGroupProps()} className="tr">
+          <div {...headerGroup.getHeaderGroupProps()} className="tr headers">
             {headerGroup.headers.map(column => (
               <div {...column.getHeaderProps()} className="th">
                 {column.render('Header')}
@@ -160,9 +227,12 @@ function Table({ columns, data }) {
 
         {rows.map(
         
-          (row, i) =>
-            prepareRow(row) || (
-              <div {...row.getRowProps()} className="tr" onClick={(e)=>console.dir(e.target)}>
+          (row, i) => {
+           
+            return prepareRow(row) || (
+              
+              <div {...row.getRowProps()} className={ Number(row.original.ID) === Number(selectedID) ? "tr selected" : "tr" } id={row.original.ID} onClick={e=>handleClick(e)}>
+
                 {row.cells.map(cell => {
                   return (
                     <div {...cell.getCellProps()} className="td">
@@ -172,11 +242,11 @@ function Table({ columns, data }) {
                 })}
               </div>
             )
+          }
         )}
       </div>
     </div>
   )
 }
-
 
 export default SongTable
