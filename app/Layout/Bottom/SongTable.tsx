@@ -126,6 +126,7 @@ function SongTable() {
     for(let song in formattedSongData){
 
       if(!currentList.includes(formattedSongData[song].ID)){
+
         delete formattedSongData[song]
       }
     }
@@ -133,7 +134,9 @@ function SongTable() {
 
   formattedSongData = Object.values(formattedSongData)
 
-  const data = React.useMemo(() => formattedSongData, [])
+  console.log(formattedSongData)
+
+  const data = React.useMemo(() => formattedSongData)
 
   return (
     <Container>

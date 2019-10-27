@@ -26,9 +26,18 @@ interface PlaylistProps {
 
 const Playlist = (props: PlaylistProps) => {
 
-    
+    const { state, dispatch } = React.useContext(Store);
+
+    const handleClick = (id: number | string) => {
+
+        dispatch({
+            type:"SELECT_PLAYLIST",
+            payload: id
+        })
+    }
+
     return(
-        <PlayListStyle>
+        <PlayListStyle onClick={()=>handleClick(props.data.id)}>
             <span> ♫ {props.data.Title}</span>
         </PlayListStyle>
     )
@@ -79,6 +88,8 @@ const PlayLists = () => {
             fetchData()
         }
     })
+
+    console.log("Next State: ", state)
 
     return (
         <PlayListContainer>
