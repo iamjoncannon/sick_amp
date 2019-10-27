@@ -84,6 +84,26 @@ function reducer(state : Types.Store, action : ReduxAction ) {
 
             return {...state, isPlaying: !state.isPlaying}
         }
+
+        case "PLAY_NEXT_TRACK": {
+
+            const CurrentPlaylist = state.PlayLists[state.SelectedPlaylist]
+            
+            // same thing as PLAY_TRACK, except we set current to next before calculating
+            // other values 
+            
+            let current = Number(state.Transport.current)
+            
+            current = current === CurrentPlaylist.length - 1 ? 0 : current + 1 
+            
+            const previous = current === 0 ? CurrentPlaylist[CurrentPlaylist.length - 1] : current - 1
+            
+            const next = current === CurrentPlaylist.length - 1 ? 0 : current + 1 
+            
+            let newTransport : Types.Transport = { current, previous, next } 
+            
+            return {...state, Transport: newTransport, isPlaying: true}
+        }
         
         default:
           return state;

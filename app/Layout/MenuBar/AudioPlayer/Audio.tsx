@@ -47,22 +47,15 @@ const ControlsContainer = styled.div`
 
 function Audio() {
 
-  const { state, dispatch } = React.useContext(Store);
-
-  const { curTime, duration, playing, setClickedTime } = useAudioPlayer();
-
-  
+  const { curTime, duration, setClickedTime } = useAudioPlayer();
 
   return (
 
     <PlayerContainer>
 
-      <audio id="audio" preload="auto">
-        {/* <source src='http://localhost:3001/track/01%20Plot%20Twist.mp3#t=50' /> */}
-        {/* <source src='/track/01%20Plot%20Twist.mp3#t=50' /> */}
-        {/* <source src={`/tunes/${filePath}`} /> */}
-        Your browser does not support the <code>audio</code> element.
-      </audio>
+      <audio 
+        id="audio" 
+      />
 
       <Song 
         songName="" 

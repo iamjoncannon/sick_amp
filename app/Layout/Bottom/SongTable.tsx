@@ -43,6 +43,11 @@ var Container = styled.div`
     background-color: orange;
   }
 
+  .playing {
+    color: blue; 
+    opacity: .5;
+  }
+
   .table {
     display: inline-block;
     border-spacing: 0;
@@ -301,6 +306,29 @@ function Table({ columns, data }) {
         {rows.map(
         
           (row : any, i : number) => {
+            
+            // check if locally selected or globally playing 
+
+            let calculatedStyle = "tr"
+
+            const isSelected = Number(row.original.ID) === Number(selectedID) 
+
+            if(isSelected){
+
+              calculatedStyle += " selected"
+
+              console.log("hitting selected", selectedID)
+            }
+
+            const isPlaying = Number(row.original.ID) === Number(state.Transport.current) 
+
+            if(isPlaying){
+
+              calculatedStyle += " playing"
+
+              console.log('hitting isPlaying', state.Transport.current )
+            }
+            
            
             return prepareRow(row) || (
               
@@ -308,7 +336,7 @@ function Table({ columns, data }) {
                    draggable
                    onDoubleClick={e=>handleDoubleClick(e)}
                    onDragStart={(e)=>onDragStart(e, Number(row.original.ID))} 
-                   className={ Number(row.original.ID) === Number(selectedID) ? "tr selected" : "tr" } 
+                   className={ calculatedStyle } 
                    id={row.original.ID} 
                    onClick={e=>handleClick(e)}
               >
