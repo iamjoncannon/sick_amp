@@ -14,7 +14,7 @@ const BarContainer = styled.div`
 
   .bar__time {
     color: white;
-    font-size: 16px;
+    font-size: 1.5vh;
   }
 
   #bar__progress {
@@ -28,11 +28,9 @@ const BarContainer = styled.div`
 
     .bar__progress__knob {
       position: relative;
-      height: 16px;
-      width: 16px;
-      border: 1.5px solid white;
-      border-radius: 50%;
-      background-color: orange;
+      height: 2vh;
+      width: .5vw;
+      background-color: white;
     }
   }
 `
@@ -104,7 +102,7 @@ export default function Bar(props) {
       <BarProgress
         id="bar__progress"
         style={{
-          background: `linear-gradient(to right, orange ${curPercentage}%, white 0)`
+          background: `linear-gradient(to right, white ${curPercentage}%, black 0)`
         }}
         onMouseDown={e => handleTimeDrag(e)}
       >

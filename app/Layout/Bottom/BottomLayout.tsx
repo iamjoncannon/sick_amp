@@ -16,16 +16,13 @@ const Container = styled.div`
 const PlayListDND = () => {
 
     return (
+        <Container>
 
-        <StoreProvider>
-                <Audio />
-            <Container>
-                <PlayLists />      
-             
-                <Songs />
-           
-            </Container>
-        </StoreProvider>
+            <PlayLists />      
+            
+            <Songs />
+        
+        </Container>
     )
 }
 

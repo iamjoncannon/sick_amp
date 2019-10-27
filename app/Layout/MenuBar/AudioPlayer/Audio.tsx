@@ -22,19 +22,17 @@ I have not been able to resolve yet
 */
 
 const PlayerContainer = styled.div`
-  width: 30vw;
-  height: 10vh;
   font-family: sans-serif;
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 0;
   background-color: #212527;
 `
 
 const ControlsContainer = styled.div`
+
     width: 100%;
     margin-top: 20px;
     flex-grow: 1;

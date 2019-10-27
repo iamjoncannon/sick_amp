@@ -6,6 +6,24 @@ import axios from 'axios'
 import { sortColumns } from './Helpers'
 import * as Types from '../../store/Types'
 
+// section 
+
+const PlayListsContainer = styled.div`
+    color: white;
+    font-size: 2vh;
+    cursor: default;
+    height: 90vh;
+    width: 14vw;
+    background-color: black;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-left: 1rem;
+`
+
+// each 
+
 const PlayListContainer = styled.div`
 
     margin-top: .5rem;
@@ -85,19 +103,6 @@ const Playlist = (props: PlaylistContainerProps) => {
         </PlayListContainer>
     )
 }
-
-const PlayListsContainer = styled.div`
-    color: white;
-    cursor: default;
-    height: 100vh;
-    width: 10vw;
-    background-color: black;
-    border: 1px solid black;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    padding-left: 1rem;
-`
 
 const PlayLists = () => {
     

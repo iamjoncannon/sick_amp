@@ -15,6 +15,7 @@ I have not been able to resolve
 
 var Container = styled.div`
 
+  height: 75vh;
   font-size: .75rem;
   font-weight: 500;
 
@@ -45,7 +46,8 @@ var Container = styled.div`
 
   .playing {
     color: blue; 
-    opacity: .5;
+    border: 1px solid black;
+    
   }
 
   .table {
@@ -284,6 +286,7 @@ function Table({ columns, data }) {
         {headerGroups.map(headerGroup => (
         
           <div {...headerGroup.getHeaderGroupProps()} className="tr headers">
+
             {headerGroup.headers.map(column => (
               <div {...column.getHeaderProps()} className="th">
                 {column.render('Header')}
@@ -294,6 +297,7 @@ function Table({ columns, data }) {
                 />
               </div>
             ))}
+
           </div>
 
         ))}
@@ -316,8 +320,6 @@ function Table({ columns, data }) {
             if(isSelected){
 
               calculatedStyle += " selected"
-
-              console.log("hitting selected", selectedID)
             }
 
             const isPlaying = Number(row.original.ID) === Number(state.Transport.current) 
@@ -325,11 +327,8 @@ function Table({ columns, data }) {
             if(isPlaying){
 
               calculatedStyle += " playing"
-
-              console.log('hitting isPlaying', state.Transport.current )
             }
-            
-           
+
             return prepareRow(row) || (
               
               <div {...row.getRowProps()} 
@@ -341,7 +340,8 @@ function Table({ columns, data }) {
                    onClick={e=>handleClick(e)}
               >
 
-                {row.cells.map(cell => {
+                {row.cells.map( cell => {
+                  
                   return (
                     <div {...cell.getCellProps()} className="td">
                       {cell.render('Cell')}

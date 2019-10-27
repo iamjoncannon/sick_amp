@@ -6,8 +6,8 @@ import SongTable from './SongTable'
 import { sortColumns } from './Helpers'
 
 const SongSectionContainer = styled.div`
-    height: 100vh;
-    width: 90vw;
+    width: 86vw;
+    font-size: 2vh;
     overflow-x: scroll;
     background-color: grey;
     border: 1px solid black;
@@ -22,6 +22,8 @@ const Songs = () => {
     return (
 
         <SongSectionContainer>
+
+            <div style={{height: "15vh"}}></div>
             
             { !!state.ColumnHash && <SongTable /> }
 
