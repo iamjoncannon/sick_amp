@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# shell into the remote instance and install node/nginx/pm2
+
+cd ~/.ssh
+ssh -T -i $key $1 << 'ENDSSH'
+curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
+sudo apt-get install -y nodejs
+sudo npm i -g pm2 -y
+sudo apt install postgresql postgresql-contrib -y
+sudo apt-get -y install nginx
+exit
+
+ENDSSH
