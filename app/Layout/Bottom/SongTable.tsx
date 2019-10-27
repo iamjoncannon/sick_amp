@@ -1,8 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Store } from './Store'
+import { Store } from '../../store/Store'
 import { useTable, useBlockLayout, useResizeColumns } from 'react-table'
-import namor from 'namor'
+
+/*
+
+Note- there are a ton of type errors in this library which 
+I have not been able to resolve
+
+*/
+
+
+// Container styling from table library 
 
 var Container = styled.div`
 
@@ -43,10 +52,9 @@ var Container = styled.div`
       
       .tr:first-child {
         .th{
-          div:not(last-child){
+          
 
             border-right: 1px solid black
-          }
         }
       }
     }
@@ -62,6 +70,8 @@ var Container = styled.div`
     .th,
     .td {
       margin: 0;
+      overflow: hidden;
+      white-space: nowrap;
       padding-left: .5rem;
       padding-top: .25rem;
       padding-bottom: .25rem;
@@ -114,7 +124,7 @@ function SongTable() {
     []
   )
 
-  // clone to prevent mutating the store by filtering 
+  // clone to prevent store mutations from filtering 
   let formattedSongData = JSON.parse(JSON.stringify(state.Songs))
   
   // filter list if playlist selected  
@@ -144,13 +154,22 @@ function SongTable() {
 
 }
 
-// boilerplate from the table CSS library that will manage local state
-// and local events- click, doubleclick, up, down
+/*
+
+boilerplate from the table CSS library that will manage local state
+and local events- click, doubleclick, up, down
+
+this one is a bit longer, so I'm going to annotate
+
+*/
 
 function Table({ columns, data }) {
 
-  const [ selectedID, handleIDSelect ] = React.useState(0)
   const { state, dispatch } = React.useContext(Store);
+  
+  const [ selectedID, handleIDSelect ] = React.useState(0)
+
+  // hook to manage keyboard events- 
 
   React.useEffect(()=>{
 
@@ -159,7 +178,25 @@ function Table({ columns, data }) {
       e.preventDefault()
       e.stopPropagation()
     
-      let { key } = e
+      const { key, code } = e
+
+      if(code === "Enter"){
+
+        dispatch({
+          type: "PLAY_TRACK",
+          payload: selectedID 
+        })
+
+      }
+
+      if(code === "Space"){
+
+        dispatch({
+          type: "TOGGLE_PLAYERSTATE",
+          payload: null 
+        })
+
+      }
       
       if(key === "ArrowUp"){
   
@@ -174,6 +211,7 @@ function Table({ columns, data }) {
     
         handleIDSelect(newSeletedID)
       }
+
     }
     
     window.addEventListener('keydown', keyPressHandler)
@@ -183,11 +221,33 @@ function Table({ columns, data }) {
     }
   })
  
+  // our callbacks to manage events on the tracks 
+
+  function handleClick(e: any){
+
+    handleIDSelect(Number(e.target.parentNode.id))
+  }
+
+  const onDragStart = (e : any, id: number) => {
+    
+    e.dataTransfer.setData( "track", id)
+  }
+
+  const handleDoubleClick = (e: any) => {
+
+      dispatch({
+        type: "PLAY_TRACK",
+        payload: e.target.parentNode.id
+      })
+  }
+
+  // column boilerplate from the table library: 
+
   const defaultColumn = React.useMemo(
     () => ({
       minWidth: 20,
       // width: 100,
-      maxWidth: 250,
+      maxWidth: 500,
     }),
     []
   )
@@ -208,20 +268,12 @@ function Table({ columns, data }) {
     useResizeColumns
   )
 
-  function handleClick(e: any){
-
-    handleIDSelect(Number(e.target.parentNode.id))
-  }
-
-  const onDragStart = (e : any, id: number) => {
-    
-    e.dataTransfer.setData( "track", id)
-  }
-
   return (
 
     <div {...getTableProps()} className="table">
     
+    {/* Column Headers  */}
+
       <div>
 
         {headerGroups.map(headerGroup => (
@@ -242,16 +294,19 @@ function Table({ columns, data }) {
         ))}
       </div>
 
+      {/* The song tracks  */}
+
       <div {...getTableBodyProps()}>
 
         {rows.map(
         
-          (row, i) => {
+          (row : any, i : number) => {
            
             return prepareRow(row) || (
               
               <div {...row.getRowProps()} 
                    draggable
+                   onDoubleClick={e=>handleDoubleClick(e)}
                    onDragStart={(e)=>onDragStart(e, Number(row.original.ID))} 
                    className={ Number(row.original.ID) === Number(selectedID) ? "tr selected" : "tr" } 
                    id={row.original.ID} 
@@ -265,11 +320,13 @@ function Table({ columns, data }) {
                     </div>
                   )
                 })}
+
               </div>
             )
           }
         )}
       </div>
+
     </div>
   )
 }

@@ -4,6 +4,7 @@ export interface SongObject {
     TITLE: string 
     ARTIST: string 
     TRACKNUMBER: string
+    FILENAME: string
 }
 
 export interface songStateType {
@@ -28,6 +29,7 @@ export interface Transport {
 
 export interface Store {
     Transport : Transport 
+    isPlaying: Boolean
     SelectedPlaylist: number | string | void
     PlayLists : PlaylistState | void 
     Songs: songStateType | void 

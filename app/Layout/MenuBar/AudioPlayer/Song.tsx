@@ -10,10 +10,6 @@ const SongContainer = styled.div`
       text-align: left;
       margin: 0;
       color: white;
-      font-family: "Permanent Marker", cursive;
-      font-weight: normal;
-      font-size: 3.5em;
-
       &:hover {
         color: greenyellow;
       }
@@ -22,9 +18,6 @@ const SongContainer = styled.div`
     .song__artist {
       margin: 0;
       color: white;
-      font-family: "Rock Salt", cursive;
-      font-weight: normal;
-      font-size: 1em;
 
       &:hover {
         color: greenyellow;

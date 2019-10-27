@@ -1,7 +1,7 @@
 import React from 'react';
-import { Store } from './Store'
+import { Store } from '../../store/Store'
 import styled from 'styled-components'
-import * as Types from './Types'
+import * as Types from '../../store/Types'
 import SongTable from './SongTable'
 import { sortColumns } from './Helpers'
 

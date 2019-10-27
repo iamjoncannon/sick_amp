@@ -4,9 +4,10 @@ import * as Types from './Types'
 const initialState : Types.Store = {
     Transport : {
         previous: null, 
-        current: null, 
-        next: null
+        current: 0, 
+        next: 1
     },
+    isPlaying: false,
     SelectedPlaylist: "All",
     ColumnHash: null,
     PlayLists: null,
@@ -28,12 +29,14 @@ function reducer(state : Types.Store, action : ReduxAction ) {
 
         case 'HYDRATE': {
 
-            const { Songs, PlayLists} = action.payload
+            const { Songs, PlayLists, ColumnHash } = action.payload
+
+            PlayLists.All = [...Object.values(Songs)]
 
             return {...state, 
                     Songs,
                     PlayLists,
-                    ColumnHash: action.payload.ColumnHash
+                    ColumnHash,
                     }
         }
 
@@ -43,8 +46,25 @@ function reducer(state : Types.Store, action : ReduxAction ) {
 
         case 'PLAY_TRACK': {
 
+            /*
+                receives playlist id and song id 
+                returns new transport object 
+                
+                edge cases - first or last song in 
+                playlist, automatically loop to next 
+            */
 
+            const current : number = action.payload
 
+            const CurrentPlaylist = state.PlayLists[state.SelectedPlaylist]
+
+            let newTransport : Types.Transport = { current, previous: null, next: null } 
+
+            newTransport.previous = current === 0 ? CurrentPlaylist[CurrentPlaylist.length - 1] : current - 1
+
+            newTransport.next = current === CurrentPlaylist.length - 1 ? 0 : current + 1 
+
+            return {...state, Transport: newTransport, isPlaying: true}
 
         }
         
@@ -58,6 +78,11 @@ function reducer(state : Types.Store, action : ReduxAction ) {
             nextPlaylists[playlist].ids = [...PlayLists[playlist].ids, Number(song)]
 
             return {...state, PlayLists : nextPlaylists}
+        }
+
+        case "TOGGLE_PLAYERSTATE": {
+
+            return {...state, isPlaying: !state.isPlaying}
         }
         
         default:

@@ -1,10 +1,10 @@
 import React from 'react';
 const useEffect = (React as any).useEffect;
-import {Store} from './Store'
+import { Store } from '../../store/Store'
 import styled from 'styled-components'
 import axios from 'axios'
 import { sortColumns } from './Helpers'
-import * as Types from './Types'
+import * as Types from '../../store/Types'
 
 const PlayListContainer = styled.div`
 
@@ -28,7 +28,7 @@ const PlayListContainer = styled.div`
     }
 `
 
-interface PlaylistProps {
+interface PlaylistContainerProps {
     key: string | number
     data: { 
         Title: string, 
@@ -37,7 +37,14 @@ interface PlaylistProps {
     }
 }
 
-const Playlist = (props: PlaylistProps) => {
+interface PlaylistEachProps {
+    id: any
+}
+
+const PlayListEach = styled.span<PlaylistEachProps>``
+
+
+const Playlist = (props: PlaylistContainerProps) => {
 
     const { state, dispatch } = React.useContext(Store);
 
@@ -74,7 +81,7 @@ const Playlist = (props: PlaylistProps) => {
             onDrop={(e)=>onDrop(e)}
         >
       
-            <span id={props.data.id}> ♫ {props.data.Title}</span>
+            <PlayListEach id={props.data.id}> ♫ {props.data.Title} </PlayListEach>
         </PlayListContainer>
     )
 }

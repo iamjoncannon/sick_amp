@@ -2,8 +2,8 @@ import React from 'react';
 const useState = (React as any).useState;
 const useEffect = (React as any).useEffect;
 import styled from 'styled-components'
-import * as Types from './Types'
-import { StoreProvider, Store } from './Store'
+import * as Types from '../../store/Types'
+import { StoreProvider, Store } from '../../store/Store'
 import Songs from './Songs'
 import PlayLists from './PlayLists'
 import Audio from '../MenuBar/AudioPlayer/Audio'
@@ -18,12 +18,11 @@ const PlayListDND = () => {
     return (
 
         <StoreProvider>
-            <Container>
                 <Audio />
-
-                {/* <PlayLists />      
+            <Container>
+                <PlayLists />      
              
-                <Songs /> */}
+                <Songs />
            
             </Container>
         </StoreProvider>

@@ -5,6 +5,21 @@ import Pause from "./Pause";
 import Bar from "./Bar";
 import useAudioPlayer from './useAudioPlayer';
 import styled from 'styled-components'
+import { Store } from '../../../store/Store'
+
+/*
+
+s/o to this guy:
+
+https://codesandbox.io/s/custom-audio-player-with-react-hooks-7s7sd
+
+This player is adapted from this codebase, with styling converted
+from SASS to styled components 
+
+Note- there are type errors related to the audio component which 
+I have not been able to resolve yet 
+
+*/
 
 const PlayerContainer = styled.div`
   width: 30vw;
@@ -32,7 +47,11 @@ const ControlsContainer = styled.div`
 
 function Audio() {
 
-  const { curTime, duration, playing, setPlaying, setClickedTime } = useAudioPlayer();
+  const { state, dispatch } = React.useContext(Store);
+
+  const { curTime, duration, playing, setClickedTime } = useAudioPlayer();
+
+  
 
   return (
 
@@ -41,7 +60,7 @@ function Audio() {
       <audio id="audio" preload="auto">
         {/* <source src='http://localhost:3001/track/01%20Plot%20Twist.mp3#t=50' /> */}
         {/* <source src='/track/01%20Plot%20Twist.mp3#t=50' /> */}
-        <source src='/tunes/01 Plot Twist.mp3' />
+        {/* <source src={`/tunes/${filePath}`} /> */}
         Your browser does not support the <code>audio</code> element.
       </audio>
 
@@ -52,10 +71,10 @@ function Audio() {
 
       <ControlsContainer>
 
-        {playing ?
+        {/* {playing ?
           <Pause handleClick={() => setPlaying(false)} /> :
           <Play handleClick={() => setPlaying(true)} />
-        }
+        } */}
 
         <Bar
           curTime={curTime}
