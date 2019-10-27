@@ -20,8 +20,15 @@ export interface PlaylistState {
     [key : number] : Playlist
 }
 
+export interface Transport {
+    previous: number | void 
+    current: number | void
+    next: number | void
+}
+
 export interface Store {
-    SelectedPlaylist: number | void
+    Transport : Transport 
+    SelectedPlaylist: number | string | void
     PlayLists : PlaylistState | void 
     Songs: songStateType | void 
     ColumnHash : { [ Column : string] : Boolean} | void 

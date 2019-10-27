@@ -150,6 +150,7 @@ function SongTable() {
 function Table({ columns, data }) {
 
   const [ selectedID, handleIDSelect ] = React.useState(0)
+  const { state, dispatch } = React.useContext(Store);
 
   React.useEffect(()=>{
 

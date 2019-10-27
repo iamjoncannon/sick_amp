@@ -1,7 +1,10 @@
 'use strict'
+const http = require('http');
 const express = require('express')
 const path = require('path')
+const fs = require('fs')
 const app = express()
+const ss = require('socket.io-stream');
 const PORT = process.env.PORT || 3001
 const dummyData = require('./id3')
 
@@ -11,6 +14,30 @@ app.use(express.urlencoded({ extended: true }))
 
 // static middleware
 app.use(express.static(path.join(__dirname, './public')))
+
+
+// streaming socket handling 
+
+app.get('/track/:fileName', (req, res, err) => {
+
+  console.log("hitting mp3 endpoint", )
+  
+  const filePath = path.resolve(__dirname, './public/tunes', req.params.fileName);
+  const stat = fs.statSync(filePath);
+
+  res.writeHead(200, {
+    'Content-Type': 'audio/mpeg',
+    'Content-Length': stat.size
+  });
+
+  const readStream = fs.createReadStream(filePath);
+
+  // attach this stream with response stream
+  readStream.pipe(res);
+});
+
+
+// static data and error handling 
 
 app.get("/data", (req : any, res: any ) => {
 

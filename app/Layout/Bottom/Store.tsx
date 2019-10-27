@@ -2,7 +2,12 @@ import React from 'react';
 import * as Types from './Types'
 
 const initialState : Types.Store = {
-    SelectedPlaylist: 1, // defaults to "All"
+    Transport : {
+        previous: null, 
+        current: null, 
+        next: null
+    },
+    SelectedPlaylist: "All",
     ColumnHash: null,
     PlayLists: null,
     Songs: null,
@@ -10,7 +15,9 @@ const initialState : Types.Store = {
 
 interface ReduxAction {
     type: string
-    payload: any
+    // ideally this would be an enum 
+    // with the contract for every action
+    payload: any 
 }
 
 function reducer(state : Types.Store, action : ReduxAction ) {
@@ -33,8 +40,15 @@ function reducer(state : Types.Store, action : ReduxAction ) {
         case 'SELECT_PLAYLIST':
         
             return { ...state, SelectedPlaylist: action.payload }
+
+        case 'PLAY_TRACK': {
+
+
+
+
+        }
         
-        case 'ADD_SONG_TO_PLAYLIST':
+        case 'ADD_SONG_TO_PLAYLIST':{
 
             const { PlayLists } = state 
             const { payload: { song, playlist } } = action
@@ -44,6 +58,7 @@ function reducer(state : Types.Store, action : ReduxAction ) {
             nextPlaylists[playlist].ids = [...PlayLists[playlist].ids, Number(song)]
 
             return {...state, PlayLists : nextPlaylists}
+        }
         
         default:
           return state;

@@ -6,20 +6,7 @@ import * as Types from './Types'
 import { StoreProvider, Store } from './Store'
 import Songs from './Songs'
 import PlayLists from './PlayLists'
-
-
-/*
-
-<Container> flex direction row 
-    state - selected Playlist 
-
-    <PlayLists />  onClick - this becomes selected playlist
-
-    <SongList selectedPlaylist=selectedPlaylist />
-
-</Container>
-
-*/
+import Player from '../MenuBar/Player'
 
 const Container = styled.div`
     display: flex;
@@ -32,7 +19,7 @@ const PlayListDND = () => {
 
         <StoreProvider>
             <Container>
-
+                <Player />
                 <PlayLists />      
              
                 <Songs />
