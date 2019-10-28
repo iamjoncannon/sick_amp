@@ -1246,18 +1246,39 @@ function reducer(state, action) {
         case 'SELECT_PLAYLIST':
             return { ...state, SelectedPlaylist: action.payload };
         case 'PLAY_TRACK': {
-            /*
-                receives playlist id and song id
-                returns new transport object
-                
-                edge cases - first or last song in
-                playlist, automatically loop to next
-            */
             const current = Number(action.payload);
-            const CurrentPlaylist = state.PlayLists[state.SelectedPlaylist];
-            let newTransport = { current, previous: null, next: null };
-            newTransport.previous = current === 0 ? CurrentPlaylist[CurrentPlaylist.length - 1] : current - 1;
-            newTransport.next = current === CurrentPlaylist.length - 1 ? 0 : current + 1;
+            const { SelectedPlaylist } = state;
+            let newTransport = { current };
+            return { ...state, Transport: newTransport, isPlaying: true, RunningPlaylist: SelectedPlaylist };
+        }
+        case "PLAY_PREVIOUS_TRACK": {
+            const { RunningPlaylist, PlayLists, Transport: { current } } = state;
+            // if its playing from the all playlist, then its simply the previous track
+            // or the end of the playlist if current = 0 
+            let next_current;
+            let CurrentPlaylist;
+            if (RunningPlaylist === "All") {
+                CurrentPlaylist = PlayLists[RunningPlaylist];
+                next_current = current === 0 ? CurrentPlaylist.length - 1 : Number(current) - 1;
+            }
+            else {
+                // if its a specific playlist, then we need to find the index of the track in the 
+                // playlists ids and return the previous index, or end if 0 
+                CurrentPlaylist = PlayLists[RunningPlaylist].ids;
+                const current_index = CurrentPlaylist.indexOf(current);
+                next_current = current_index === 0 ? CurrentPlaylist[CurrentPlaylist.length - 1] : CurrentPlaylist[current_index - 1];
+            }
+            let newTransport = { current: next_current };
+            return { ...state, Transport: newTransport, isPlaying: true };
+        }
+        case "PLAY_NEXT_TRACK": {
+            const CurrentPlaylist = state.PlayLists[state.RunningPlaylist];
+            // same thing as PLAY_TRACK, except we set current to next before calculating
+            // other values 
+            let current = Number(state.Transport.next);
+            const previous = current === 0 ? CurrentPlaylist[CurrentPlaylist.length - 1] : current - 1;
+            const next = current === CurrentPlaylist.length - 1 ? 0 : current + 1;
+            let newTransport = { current, previous, next };
             return { ...state, Transport: newTransport, isPlaying: true };
         }
         case 'ADD_SONG_TO_PLAYLIST': {
@@ -1271,26 +1292,6 @@ function reducer(state, action) {
         }
         case "TOGGLE_PLAYERSTATE": {
             return { ...state, isPlaying: !state.isPlaying };
-        }
-        case "PLAY_PREVIOUS_TRACK": {
-            const CurrentPlaylist = state.PlayLists[state.SelectedPlaylist];
-            // same thing as PLAY_TRACK, except we set current to previous before calculating
-            // other values 
-            let current = Number(state.Transport.previous);
-            const previous = current === 0 ? CurrentPlaylist[CurrentPlaylist.length - 1] : current - 1;
-            const next = current === CurrentPlaylist.length - 1 ? 0 : current + 1;
-            let newTransport = { current, previous, next };
-            return { ...state, Transport: newTransport, isPlaying: true };
-        }
-        case "PLAY_NEXT_TRACK": {
-            const CurrentPlaylist = state.PlayLists[state.SelectedPlaylist];
-            // same thing as PLAY_TRACK, except we set current to next before calculating
-            // other values 
-            let current = Number(state.Transport.next);
-            const previous = current === 0 ? CurrentPlaylist[CurrentPlaylist.length - 1] : current - 1;
-            const next = current === CurrentPlaylist.length - 1 ? 0 : current + 1;
-            let newTransport = { current, previous, next };
-            return { ...state, Transport: newTransport, isPlaying: true };
         }
         case "REARRANGE_PLAYLIST": {
             const { item_to_put_before, item_to_be_moved } = action.payload;
