@@ -1,8 +1,10 @@
 # sick_amp - open source audio streaming/owning/sharing/djing
 
+Typescript Web audio interface- React Hooks, styled components 
+
 ## build
 
-npm i && npm run install-lazy && npm run start-dev 
+mk client
+mk server
 
-## app structure 
 
