@@ -26,9 +26,8 @@ const PlayerContainer = styled.div`
   text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: flex-end;
   align-items: center;
-
 `
 
 const ControlsContainer = styled.div`

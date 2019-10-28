@@ -189,16 +189,18 @@ const PlayListsContainer = styled_components__WEBPACK_IMPORTED_MODULE_2__["defau
     flex-direction: column;
     justify-content: flex-start;
     padding-left: 1rem;
+
+    #selected {
+        font-weight: bold;
+        text-decoration: underline;
+        background-color: ${props => props.theme.highlightColor};
+        color: ${props => props.theme.secondaryColor};
+    }
 `;
 // each 
 const PlayListContainer = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"].div `
 
     margin-top: .5rem;
-
-    .selected {
-
-        border: 1px solid white;
-    }
 
     span:focus{
         background: white;
@@ -208,7 +210,6 @@ const PlayListContainer = styled_components__WEBPACK_IMPORTED_MODULE_2__["defaul
         background: ${props => props.theme.tertiaryColor};
     }
 `;
-const PlayListEach = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"].span ``;
 const Playlist = (props) => {
     const { state, dispatch } = react__WEBPACK_IMPORTED_MODULE_0___default.a.useContext(_store_Store__WEBPACK_IMPORTED_MODULE_1__["Store"]);
     const handleClick = (id) => {
@@ -230,11 +231,11 @@ const Playlist = (props) => {
             }
         });
     };
-    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(PlayListContainer, { onClick: () => handleClick(props.data.id), onDragOver: e => onDragOver(e), onDrop: (e) => onDrop(e) },
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(PlayListEach, { id: props.data.id },
-            " \u266B ",
-            props.data.Title,
-            " ")));
+    const { id } = props.data;
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(PlayListContainer, { onClick: () => handleClick(props.data.id), onDragOver: e => onDragOver(e), onDrop: (e) => onDrop(e), id: id === state.SelectedPlaylist ? "selected" : undefined },
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", { id: id },
+            "\u266B ",
+            props.data.Title)));
 };
 const PlayLists = () => {
     const { state, dispatch } = react__WEBPACK_IMPORTED_MODULE_0___default.a.useContext(_store_Store__WEBPACK_IMPORTED_MODULE_1__["Store"]);
@@ -605,9 +606,8 @@ const PlayerContainer = styled_components__WEBPACK_IMPORTED_MODULE_4__["default"
   text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: flex-end;
   align-items: center;
-
 `;
 const ControlsContainer = styled_components__WEBPACK_IMPORTED_MODULE_4__["default"].div `
 
@@ -669,14 +669,14 @@ const BarContainer = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"].d
     flex: 1;
     border-radius: 5px;
     margin: 0 20px;
-    height: 1px;
+    height: 2.5px;
     display: flex;
     align-items: center;
     cursor: pointer;
 
     .bar__progress__knob {
       position: relative;
-      height: 2vh;
+      height: 1.5vh;
       width: .5vw;
       background-color: white;
     }
@@ -722,7 +722,7 @@ function Bar(props) {
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(BarProgress, { id: "bar__progress", style: {
                 background: `linear-gradient(to right, white ${curPercentage}%, grey 0)`
             }, onMouseDown: e => handleTimeDrag(e) },
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", { className: "bar__progress__knob", style: { left: `${curPercentage - 2}%` } })),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", { className: "bar__progress__knob", style: { left: `${curPercentage}%` } })),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", { className: "bar__time" }, formatDuration(duration))));
 }
 
@@ -754,12 +754,12 @@ const SongInfoContainer = styled_components__WEBPACK_IMPORTED_MODULE_1__["defaul
     
     span:first-child{
       font-weight: bold;
-      font-size: 2vh;
+      font-size: 1.6vh;
     }
 
     span:last-child{
       font-weight: 100;
-      font-size: 1.75vh;
+      font-size: 1.6vh;
     }
 
 `;
@@ -1199,7 +1199,7 @@ function reducer(state, action) {
                 edge cases - first or last song in
                 playlist, automatically loop to next
             */
-            const current = action.payload;
+            const current = Number(action.payload);
             const CurrentPlaylist = state.PlayLists[state.SelectedPlaylist];
             let newTransport = { current, previous: null, next: null };
             newTransport.previous = current === 0 ? CurrentPlaylist[CurrentPlaylist.length - 1] : current - 1;
@@ -1220,7 +1220,7 @@ function reducer(state, action) {
             const CurrentPlaylist = state.PlayLists[state.SelectedPlaylist];
             // same thing as PLAY_TRACK, except we set current to previous before calculating
             // other values 
-            let current = state.Transport.previous;
+            let current = Number(state.Transport.previous);
             const previous = current === 0 ? CurrentPlaylist[CurrentPlaylist.length - 1] : current - 1;
             const next = current === CurrentPlaylist.length - 1 ? 0 : current + 1;
             let newTransport = { current, previous, next };
@@ -1230,7 +1230,7 @@ function reducer(state, action) {
             const CurrentPlaylist = state.PlayLists[state.SelectedPlaylist];
             // same thing as PLAY_TRACK, except we set current to next before calculating
             // other values 
-            let current = state.Transport.next;
+            let current = Number(state.Transport.next);
             const previous = current === 0 ? CurrentPlaylist[CurrentPlaylist.length - 1] : current - 1;
             const next = current === CurrentPlaylist.length - 1 ? 0 : current + 1;
             let newTransport = { current, previous, next };

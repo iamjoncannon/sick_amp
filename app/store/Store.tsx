@@ -57,7 +57,7 @@ function reducer(state : Types.Store, action : ReduxAction ) {
                 playlist, automatically loop to next 
             */
 
-            const current : number = action.payload
+            const current : number = Number(action.payload)
 
             const CurrentPlaylist = state.PlayLists[state.SelectedPlaylist]
 
@@ -95,7 +95,7 @@ function reducer(state : Types.Store, action : ReduxAction ) {
             // same thing as PLAY_TRACK, except we set current to previous before calculating
             // other values 
             
-            let current = state.Transport.previous 
+            let current = Number(state.Transport.previous) 
                         
             const previous = current === 0 ? CurrentPlaylist[CurrentPlaylist.length - 1] : current - 1
             
@@ -113,7 +113,7 @@ function reducer(state : Types.Store, action : ReduxAction ) {
             // same thing as PLAY_TRACK, except we set current to next before calculating
             // other values 
             
-            let current = state.Transport.next
+            let current = Number(state.Transport.next)
                         
             const previous = current === 0 ? CurrentPlaylist[CurrentPlaylist.length - 1] : current - 1
             

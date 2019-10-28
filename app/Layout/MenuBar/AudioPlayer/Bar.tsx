@@ -21,14 +21,14 @@ const BarContainer = styled.div`
     flex: 1;
     border-radius: 5px;
     margin: 0 20px;
-    height: 1px;
+    height: 2.5px;
     display: flex;
     align-items: center;
     cursor: pointer;
 
     .bar__progress__knob {
       position: relative;
-      height: 2vh;
+      height: 1.5vh;
       width: .5vw;
       background-color: white;
     }
@@ -109,7 +109,7 @@ export default function Bar(props) {
 
         <span
           className="bar__progress__knob"
-          style={{ left: `${curPercentage - 2}%` }}
+          style={{ left: `${curPercentage}%` }}
         />
          
       </BarProgress>

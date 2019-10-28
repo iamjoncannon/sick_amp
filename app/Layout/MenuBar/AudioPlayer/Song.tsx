@@ -11,12 +11,12 @@ const SongInfoContainer = styled.div`
     
     span:first-child{
       font-weight: bold;
-      font-size: 2vh;
+      font-size: 1.6vh;
     }
 
     span:last-child{
       font-weight: 100;
-      font-size: 1.75vh;
+      font-size: 1.6vh;
     }
 
 `
@@ -34,6 +34,7 @@ function Song() {
 
   return (
     <SongInfoContainer>
+
       {
         !!state.Songs &&
         <> 

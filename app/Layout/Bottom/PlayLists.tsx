@@ -20,6 +20,13 @@ const PlayListsContainer = styled.div`
     flex-direction: column;
     justify-content: flex-start;
     padding-left: 1rem;
+
+    #selected {
+        font-weight: bold;
+        text-decoration: underline;
+        background-color: ${props=>props.theme.highlightColor};
+        color: ${props=>props.theme.secondaryColor};
+    }
 `
 
 // each 
@@ -27,11 +34,6 @@ const PlayListsContainer = styled.div`
 const PlayListContainer = styled.div`
 
     margin-top: .5rem;
-
-    .selected {
-
-        border: 1px solid white;
-    }
 
     span:focus{
         background: white;
@@ -50,12 +52,6 @@ interface PlaylistContainerProps {
         ids?: number[]
     }
 }
-
-interface PlaylistEachProps {
-    id: any
-}
-
-const PlayListEach = styled.span<PlaylistEachProps>``
 
 
 const Playlist = (props: PlaylistContainerProps) => {
@@ -88,14 +84,21 @@ const Playlist = (props: PlaylistContainerProps) => {
         })
     }
 
+    const { id } = props.data
+
     return(
         <PlayListContainer 
             onClick={()=>handleClick(props.data.id)}
             onDragOver={e=> onDragOver(e)}
             onDrop={(e)=>onDrop(e)}
+            id={ id === state.SelectedPlaylist ? "selected" : undefined}
+
         >
       
-            <PlayListEach id={props.data.id}> ♫ {props.data.Title} </PlayListEach>
+            <span 
+                id={id} 
+            >♫ {props.data.Title}</span>
+        
         </PlayListContainer>
     )
 }
@@ -137,7 +140,9 @@ const PlayLists = () => {
 
     return (
         <PlayListsContainer>
+
             <span style={{textDecoration: "underline"}}>Playlists</span>
+            
             <Playlist key={"All"} data={{Title: "All", id: "All"}}/>
 
             {
