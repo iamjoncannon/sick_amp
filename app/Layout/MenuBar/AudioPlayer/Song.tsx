@@ -1,42 +1,48 @@
 import React from 'react';
 import styled from 'styled-components'
+import { Store } from '../../../store/Store'
 
-const SongContainer = styled.div`
+const SongInfoContainer = styled.div`
 
     user-select: none;
-    margin: 0 20px;
-
-    .song__title {
-      text-align: left;
-      margin: 0;
-      color: white;
-      &:hover {
-        color: greenyellow;
-      }
+    color: ${props=>props.theme.fontColor};
+    display: flex;
+    flex-direction: column;
+    
+    span:first-child{
+      font-weight: bold;
+      font-size: 2vh;
     }
 
-    .song__artist {
-      margin: 0;
-      color: white;
-
-      &:hover {
-        color: greenyellow;
-        cursor: pointer;
-      }
+    span:last-child{
+      font-weight: 100;
+      font-size: 1.75vh;
     }
+
 `
 
-function Song(props) {
+function Song() {
 
-  const { songName, songArtist } = props;
+  const { state, dispatch } = React.useContext(Store);
   
+  let selectedTrackObject
+  
+  if(!!state.Songs){
+
+    selectedTrackObject = state.Songs[state.Transport.current]
+  } 
+
   return (
-    <SongContainer>
+    <SongInfoContainer>
+      {
+        !!state.Songs &&
+        <> 
+          <span>{selectedTrackObject.TITLE}</span>
+          <span>{selectedTrackObject.ARTIST} - {selectedTrackObject.ALBUM} </span>
+        </>
+      }
     
-      <h1 className="song__title">{songName}</h1>
-      <h2 className="song__artist">{songArtist}</h2>
-    
-    </SongContainer>
+    </SongInfoContainer>
   )
 }
 

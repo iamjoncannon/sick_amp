@@ -26,7 +26,7 @@ const PlayerContainer = styled.div`
   text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
 
 `
@@ -46,6 +46,9 @@ const ControlsContainer = styled.div`
 function Audio() {
 
   const { curTime, duration, setClickedTime } = useAudioPlayer();
+  const { state, dispatch } = React.useContext(Store);
+
+
 
   return (
 
@@ -56,21 +59,17 @@ function Audio() {
       />
 
       <Song 
-        songName="" 
-        songArtist=""
+        songName="Testing" 
+        songArtist="Testing"
       />
 
       <ControlsContainer>
 
-        {/* {playing ?
-          <Pause handleClick={() => setPlaying(false)} /> :
-          <Play handleClick={() => setPlaying(true)} />
-        } */}
-
         <Bar
           curTime={curTime}
           duration={duration}
-          onTimeUpdate={(time) => setClickedTime(time)}/>
+          onTimeUpdate={(time) => setClickedTime(time)}
+        />
 
       </ControlsContainer>
 

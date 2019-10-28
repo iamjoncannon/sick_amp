@@ -580,6 +580,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Bar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Bar */ "./app/Layout/MenuBar/AudioPlayer/Bar.tsx");
 /* harmony import */ var _useAudioPlayer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./useAudioPlayer */ "./app/Layout/MenuBar/AudioPlayer/useAudioPlayer.tsx");
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var _store_Store__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../store/Store */ "./app/store/Store.tsx");
+
 
 
 
@@ -603,7 +605,7 @@ const PlayerContainer = styled_components__WEBPACK_IMPORTED_MODULE_4__["default"
   text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
 
 `;
@@ -620,9 +622,10 @@ const ControlsContainer = styled_components__WEBPACK_IMPORTED_MODULE_4__["defaul
 `;
 function Audio() {
     const { curTime, duration, setClickedTime } = Object(_useAudioPlayer__WEBPACK_IMPORTED_MODULE_3__["default"])();
+    const { state, dispatch } = react__WEBPACK_IMPORTED_MODULE_0___default.a.useContext(_store_Store__WEBPACK_IMPORTED_MODULE_5__["Store"]);
     return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(PlayerContainer, null,
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("audio", { id: "audio" }),
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Song__WEBPACK_IMPORTED_MODULE_1__["default"], { songName: "", songArtist: "" }),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Song__WEBPACK_IMPORTED_MODULE_1__["default"], { songName: "Testing", songArtist: "Testing" }),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ControlsContainer, null,
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Bar__WEBPACK_IMPORTED_MODULE_2__["default"], { curTime: curTime, duration: duration, onTimeUpdate: (time) => setClickedTime(time) }))));
 }
@@ -738,37 +741,42 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var _store_Store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../store/Store */ "./app/store/Store.tsx");
 
 
-const SongContainer = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div `
+
+const SongInfoContainer = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div `
 
     user-select: none;
-    margin: 0 20px;
-
-    .song__title {
-      text-align: left;
-      margin: 0;
-      color: white;
-      &:hover {
-        color: greenyellow;
-      }
+    color: ${props => props.theme.fontColor};
+    display: flex;
+    flex-direction: column;
+    
+    span:first-child{
+      font-weight: bold;
+      font-size: 2vh;
     }
 
-    .song__artist {
-      margin: 0;
-      color: white;
-
-      &:hover {
-        color: greenyellow;
-        cursor: pointer;
-      }
+    span:last-child{
+      font-weight: 100;
+      font-size: 1.75vh;
     }
+
 `;
-function Song(props) {
-    const { songName, songArtist } = props;
-    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(SongContainer, null,
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", { className: "song__title" }, songName),
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", { className: "song__artist" }, songArtist)));
+function Song() {
+    const { state, dispatch } = react__WEBPACK_IMPORTED_MODULE_0___default.a.useContext(_store_Store__WEBPACK_IMPORTED_MODULE_2__["Store"]);
+    let selectedTrackObject;
+    if (!!state.Songs) {
+        selectedTrackObject = state.Songs[state.Transport.current];
+    }
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(SongInfoContainer, null, !!state.Songs &&
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null,
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, selectedTrackObject.TITLE),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null,
+                selectedTrackObject.ARTIST,
+                " - ",
+                selectedTrackObject.ALBUM,
+                " "))));
 }
 /* harmony default export */ __webpack_exports__["default"] = (Song);
 
