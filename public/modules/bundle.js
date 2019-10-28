@@ -335,6 +335,11 @@ var Container = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div `
     border: .5px solid ${props => props.theme.highlightColor};
   }
 
+  .draggedOver {
+
+    border-top: 2px solid red;
+  }
+
   .playing {
     color: red;
   }
@@ -410,15 +415,13 @@ function SongTable() {
         };
     });
     const columns = react__WEBPACK_IMPORTED_MODULE_0___default.a.useMemo(() => generatedColumns, []);
-    // clone to prevent store mutations from filtering 
-    let formattedSongData = JSON.parse(JSON.stringify(state.Songs));
+    let formattedSongData = state.Songs;
     // filter list if playlist selected  
     if (state.SelectedPlaylist !== "All" && !!state.PlayLists) {
+        formattedSongData = [];
         const currentList = state.PlayLists[state.SelectedPlaylist].ids;
-        for (let song in formattedSongData) {
-            if (!currentList.includes(formattedSongData[song].ID)) {
-                delete formattedSongData[song];
-            }
+        for (let song of currentList) {
+            formattedSongData.push(state.Songs[song]);
         }
     }
     formattedSongData = Object.values(formattedSongData);
@@ -437,6 +440,7 @@ this one is a bit longer, so I'm going to annotate
 function Table({ columns, data }) {
     const { state, dispatch } = react__WEBPACK_IMPORTED_MODULE_0___default.a.useContext(_store_Store__WEBPACK_IMPORTED_MODULE_2__["Store"]);
     const [selectedID, handleIDSelect] = react__WEBPACK_IMPORTED_MODULE_0___default.a.useState(0);
+    const [isDraggedOver, handleDragOver] = react__WEBPACK_IMPORTED_MODULE_0___default.a.useState(null);
     // hook to manage keyboard events- 
     react__WEBPACK_IMPORTED_MODULE_0___default.a.useEffect(() => {
         const keyPressHandler = (e) => {
@@ -482,6 +486,23 @@ function Table({ columns, data }) {
             payload: e.target.parentNode.id
         });
     };
+    const onDragOver = (e) => {
+        const { id } = e.target.parentNode;
+        e.preventDefault();
+        handleDragOver(id);
+    };
+    const onDrop = (e) => {
+        handleDragOver(null);
+        const { id } = e.target.parentNode;
+        const item_to_be_moved = e.dataTransfer.getData("track");
+        dispatch({
+            type: "REARRANGE_PLAYLIST",
+            payload: {
+                item_to_put_before: Number(id),
+                item_to_be_moved: Number(item_to_be_moved)
+            }
+        });
+    };
     // column boilerplate from the table library: 
     const defaultColumn = react__WEBPACK_IMPORTED_MODULE_0___default.a.useMemo(() => ({
         minWidth: 20,
@@ -514,7 +535,10 @@ function Table({ columns, data }) {
             if (isPlaying) {
                 calculatedStyle += " playing";
             }
-            return prepareRow(row) || (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", Object.assign({}, row.getRowProps(), { draggable: true, onDoubleClick: e => handleDoubleClick(e), onDragStart: (e) => onDragStart(e, Number(row.original.ID)), className: calculatedStyle, id: row.original.ID, onClick: e => handleClick(e) }), row.cells.map(cell => {
+            if (!!isDraggedOver && Number(row.original.ID) === Number(isDraggedOver)) {
+                calculatedStyle += " draggedOver";
+            }
+            return prepareRow(row) || (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", Object.assign({}, row.getRowProps(), { draggable: true, onDoubleClick: e => handleDoubleClick(e), onDragStart: (e) => onDragStart(e, Number(row.original.ID)), onDragOver: e => onDragOver(e), className: calculatedStyle, id: row.original.ID, onClick: e => handleClick(e), onDrop: (e) => onDrop(e) }), row.cells.map(cell => {
                 return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", Object.assign({}, cell.getCellProps(), { className: "td" }), cell.render('Cell')));
             })));
         }))));
@@ -1235,6 +1259,26 @@ function reducer(state, action) {
             const next = current === CurrentPlaylist.length - 1 ? 0 : current + 1;
             let newTransport = { current, previous, next };
             return { ...state, Transport: newTransport, isPlaying: true };
+        }
+        case "REARRANGE_PLAYLIST": {
+            const { item_to_put_before, item_to_be_moved } = action.payload;
+            let next_playlist_object = [...state.PlayLists];
+            if (state.SelectedPlaylist !== "All") {
+                let targetPlaylist = next_playlist_object[state.SelectedPlaylist].ids;
+                let nextTargetPlaylist = [];
+                // this is not the most clever way to do this
+                // but it works 
+                for (let i = 0; i < targetPlaylist.length; i++) {
+                    if (targetPlaylist[i] !== item_to_be_moved) {
+                        if (targetPlaylist[i] === item_to_put_before) {
+                            nextTargetPlaylist.push(item_to_be_moved);
+                        }
+                        nextTargetPlaylist.push(targetPlaylist[i]);
+                    }
+                }
+                next_playlist_object[state.SelectedPlaylist].ids = nextTargetPlaylist;
+            }
+            return { ...state, PlayLists: next_playlist_object };
         }
         default:
             return state;

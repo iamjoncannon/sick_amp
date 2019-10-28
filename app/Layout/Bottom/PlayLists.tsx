@@ -53,7 +53,6 @@ interface PlaylistContainerProps {
     }
 }
 
-
 const Playlist = (props: PlaylistContainerProps) => {
 
     const { state, dispatch } = React.useContext(Store);
@@ -89,7 +88,7 @@ const Playlist = (props: PlaylistContainerProps) => {
     return(
         <PlayListContainer 
             onClick={()=>handleClick(props.data.id)}
-            onDragOver={e=> onDragOver(e)}
+            onDragOver={ e=> onDragOver(e)}
             onDrop={(e)=>onDrop(e)}
             id={ id === state.SelectedPlaylist ? "selected" : undefined}
 

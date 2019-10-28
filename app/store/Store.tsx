@@ -123,6 +123,39 @@ function reducer(state : Types.Store, action : ReduxAction ) {
             
             return {...state, Transport: newTransport, isPlaying: true}
         }
+
+        case "REARRANGE_PLAYLIST": {
+
+            const { item_to_put_before, item_to_be_moved } = action.payload
+
+            let next_playlist_object = [...state.PlayLists]
+            
+            if(state.SelectedPlaylist !== "All"){
+
+                let targetPlaylist = next_playlist_object[state.SelectedPlaylist].ids
+
+                let nextTargetPlaylist = []
+
+                // this is not the most clever way to do this
+                // but it works 
+                for(let i = 0; i < targetPlaylist.length; i++){
+
+                    if(targetPlaylist[i] !== item_to_be_moved){
+                        
+                        if(targetPlaylist[i] === item_to_put_before){
+
+                            nextTargetPlaylist.push(item_to_be_moved)
+                        }
+
+                        nextTargetPlaylist.push(targetPlaylist[i])
+                    }
+                }
+
+                next_playlist_object[state.SelectedPlaylist].ids = nextTargetPlaylist
+            }
+            
+            return {...state, PlayLists : next_playlist_object}
+        }
         
         default:
           return state;

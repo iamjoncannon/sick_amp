@@ -51,6 +51,11 @@ var Container = styled.div`
     border: .5px solid ${props=>props.theme.highlightColor};
   }
 
+  .draggedOver {
+
+    border-top: 2px solid red;
+  }
+
   .playing {
     color: red;
   }
@@ -136,21 +141,19 @@ function SongTable() {
     []
   )
 
-  // clone to prevent store mutations from filtering 
-  let formattedSongData = JSON.parse(JSON.stringify(state.Songs))
-  
+  let formattedSongData = state.Songs
+
   // filter list if playlist selected  
 
   if(state.SelectedPlaylist !== "All" && !!state.PlayLists){
     
+    formattedSongData = [] 
+    
     const currentList = state.PlayLists[state.SelectedPlaylist].ids
     
-    for(let song in formattedSongData){
+    for(let song of currentList){
 
-      if(!currentList.includes(formattedSongData[song].ID)){
-
-        delete formattedSongData[song]
-      }
+      formattedSongData.push(state.Songs[song])
     }
   }
 
@@ -185,6 +188,7 @@ function Table({ columns, data }) {
   const { state, dispatch } = React.useContext(Store);
   
   const [ selectedID, handleIDSelect ] = React.useState(0)
+  const [ isDraggedOver, handleDragOver ] = React.useState(null)
 
   // hook to manage keyboard events- 
 
@@ -256,6 +260,33 @@ function Table({ columns, data }) {
         type: "PLAY_TRACK",
         payload: e.target.parentNode.id
       })
+  }
+
+  const onDragOver = (e : any) => {
+
+    const { id } = e.target.parentNode
+
+    e.preventDefault()
+
+    handleDragOver(id)
+  }
+
+  const onDrop = (e: any) => {
+
+    handleDragOver(null)
+
+    const { id } = e.target.parentNode
+
+    const item_to_be_moved = e.dataTransfer.getData( "track")
+
+    dispatch({
+        type: "REARRANGE_PLAYLIST",
+        payload: {
+            item_to_put_before: Number(id),
+            item_to_be_moved: Number(item_to_be_moved)
+        }
+    })
+
   }
 
   // column boilerplate from the table library: 
@@ -348,15 +379,22 @@ function Table({ columns, data }) {
               calculatedStyle += " playing"
             }
 
+            if(!!isDraggedOver && Number(row.original.ID) === Number(isDraggedOver)){
+
+              calculatedStyle += " draggedOver"
+            }
+
             return prepareRow(row) || (
               
               <div {...row.getRowProps()} 
                    draggable
                    onDoubleClick={e=>handleDoubleClick(e)}
                    onDragStart={(e)=>onDragStart(e, Number(row.original.ID))} 
+                   onDragOver={ e=> onDragOver(e)}
                    className={ calculatedStyle } 
                    id={row.original.ID} 
                    onClick={e=>handleClick(e)}
+                   onDrop={(e)=>onDrop(e)}
               >
 
                 {row.cells.map( cell => {
