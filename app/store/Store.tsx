@@ -152,8 +152,15 @@ function reducer(state : Types.Store, action : ReduxAction ) {
                 }
 
                 next_playlist_object[state.SelectedPlaylist].ids = nextTargetPlaylist
+                
             }
             
+            // this could be refactored- playlists is an object
+            // we also want to treat like an array - "All" needs
+            // to be reappended if we destructure as above 
+                
+            next_playlist_object["All"] = [...Object.values(state.Songs)]
+                        
             return {...state, PlayLists : next_playlist_object}
         }
         
@@ -174,4 +181,9 @@ export function StoreProvider(props : any) {
             {props.children}
         </Store.Provider>
     )
+}
+
+function clone(item){
+
+    return JSON.parse(JSON.stringify(item))
 }
