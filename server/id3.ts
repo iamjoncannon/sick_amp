@@ -10,7 +10,16 @@ const tunes = fs.readdirSync(resolve(__dirname, "./public/tunes"))
 
 tunes.forEach( async (file : string, i : number) => {
 
-        let tags = await NodeID3.read("./public/tunes/" + file)
+        let tags 
+        
+        try{
+            tags = await NodeID3.read("./public/tunes/" + file)
+        }
+        catch(err){
+
+            console.log(err)
+        }
+        
 
         songState[i] = { 
             ID: i, 

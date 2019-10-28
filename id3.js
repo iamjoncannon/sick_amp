@@ -43,12 +43,20 @@ var resolve = require('path').resolve;
 var songState = {};
 var tunes = fs.readdirSync(resolve(__dirname, "./public/tunes"));
 tunes.forEach(function (file, i) { return __awaiter(void 0, void 0, void 0, function () {
-    var tags, tag;
+    var tags, err_1, tag;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, NodeID3.read("./public/tunes/" + file)];
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, NodeID3.read("./public/tunes/" + file)];
             case 1:
                 tags = _a.sent();
+                return [3 /*break*/, 3];
+            case 2:
+                err_1 = _a.sent();
+                console.log(err_1);
+                return [3 /*break*/, 3];
+            case 3:
                 songState[i] = {
                     ID: i,
                     ALBUM: "",

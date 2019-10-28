@@ -1253,6 +1253,9 @@ function reducer(state, action) {
         }
         case "PLAY_PREVIOUS_TRACK": {
             const { RunningPlaylist, PlayLists, Transport: { current } } = state;
+            // architecture note- I decided to structure the "All" Playlist and the specific
+            // playlists differently- see ./Types -- this requires us to handle each differently
+            // in the playlist actions - this could certainly be revisited and refactored 
             // if its playing from the all playlist, then its simply the previous track
             // or the end of the playlist if current = 0 
             let next_current;

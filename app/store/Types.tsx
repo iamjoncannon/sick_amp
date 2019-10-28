@@ -19,6 +19,7 @@ export interface Playlist {
 
 export interface PlaylistState {
     [key : number] : Playlist
+    All : number[]
 }
 
 export interface Transport {

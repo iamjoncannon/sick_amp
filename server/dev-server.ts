@@ -14,7 +14,6 @@ app.use(express.urlencoded({ extended: true }))
 // static middleware
 app.use(express.static(path.join(__dirname, './public')))
 
-
 app.get('/track/:fileName', (req, res, err) => {
   
   const filePath = path.resolve(__dirname, './public/tunes', req.params.fileName);
