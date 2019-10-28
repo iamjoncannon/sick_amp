@@ -254,6 +254,11 @@ function Table({ columns, data }) {
     e.dataTransfer.setData( "track", id)
   }
 
+  const onDragEnd = () => {
+
+    dispatch({type: "DRAG_OVER_PLAYLIST", payload: null})
+  }
+
   const handleDoubleClick = (e: any) => {
 
       dispatch({
@@ -390,11 +395,12 @@ function Table({ columns, data }) {
                    draggable
                    onDoubleClick={e=>handleDoubleClick(e)}
                    onDragStart={(e)=>onDragStart(e, Number(row.original.ID))} 
-                   onDragOver={ e=> onDragOver(e)}
+                   onDragEnd={onDragEnd}
+                   onDragOver={ e=> state.SelectedPlaylist !== "All" && onDragOver(e)}
                    className={ calculatedStyle } 
                    id={row.original.ID} 
                    onClick={e=>handleClick(e)}
-                   onDrop={(e)=>onDrop(e)}
+                   onDrop={(e)=> state.SelectedPlaylist !== "All" && onDrop(e)}
               >
 
                 {row.cells.map( cell => {

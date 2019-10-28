@@ -21,11 +21,20 @@ const PlayListsContainer = styled.div`
     justify-content: flex-start;
     padding-left: 1rem;
 
+    button {
+        height: 1vh;
+    }
+
     #selected {
         font-weight: bold;
         text-decoration: underline;
         background-color: ${props=>props.theme.highlightColor};
         color: ${props=>props.theme.secondaryColor};
+    }
+
+    #draggedOver {
+
+        border: 2px solid black; 
     }
 `
 
@@ -68,6 +77,11 @@ const Playlist = (props: PlaylistContainerProps) => {
     const onDragOver = (e : any) => {
     
         e.preventDefault()
+
+        if(state.draggedOverPlaylist !== id){
+
+            dispatch({ type: "DRAG_OVER_PLAYLIST", payload: id })
+        }
     }
 
     const onDrop = (e: any) => {
@@ -85,12 +99,23 @@ const Playlist = (props: PlaylistContainerProps) => {
 
     const { id } = props.data
 
+    let selectionState
+
+    if(state.draggedOverPlaylist === id ){
+
+        selectionState = "draggedOver"
+    }
+    else if(id === state.SelectedPlaylist){
+
+        selectionState = "selected"
+    }
+
     return(
         <PlayListContainer 
             onClick={()=>handleClick(props.data.id)}
             onDragOver={ e=> onDragOver(e)}
             onDrop={(e)=>onDrop(e)}
-            id={ id === state.SelectedPlaylist ? "selected" : undefined}
+            id={ selectionState }
 
         >
       
@@ -135,12 +160,18 @@ const PlayLists = () => {
         }
     })
 
+    const addPlaylist = () => {
+
+        dispatch({type:"ADD_PLAYLIST"})
+    }
+
     console.log("Next State: ", state)
 
     return (
         <PlayListsContainer>
 
-            <span style={{textDecoration: "underline"}}>Playlists</span>
+            <span style={{textDecoration: "underline"}}>Playlists <button onClick={addPlaylist}>+</button> </span>
+            
             
             <Playlist key={"All"} data={{Title: "All", id: "All"}}/>
 

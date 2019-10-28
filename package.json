@@ -7,7 +7,7 @@
     "test": "jest $1 --config=jest.config.js --watch -- -u",
     "sass": "node-sass scss/main.scss public/style.css -w -r",
     "sass-bund": "node-sass scss/main.scss public/style.css",
-    "sh": "cd ~/.ssh & ssh -i $key ubuntu@$gopher_api_addy",
+    "sh": "cd ~/.ssh & ssh -i $key ubuntu@$sick_amp_addy",
     "dep-install": "chmod +x ./deploy/install && ./deploy/install ubuntu@$addy",
     "dep-nginx": "chmod +x ./deploy/nginxConfig && ./deploy/nginxConfig",
     "deploy": "addy=$addy key=$key pm2 deploy ecosystem.config.js production",

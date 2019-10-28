@@ -4,7 +4,7 @@ var express = require('express');
 var path = require('path');
 var fs = require('fs');
 var app = express();
-var PORT = process.env.PORT || 3001;
+var PORT = process.env.PORT || 3000;
 var dummyData = require('./id3');
 // body parsing middleware
 app.use(express.json());

@@ -9,9 +9,11 @@ const initialState : Types.Store = {
     },
     isPlaying: false,
     SelectedPlaylist: "All",
+    RunningPlaylist: "All",
     ColumnHash: null,
     PlayLists: null,
     Songs: null,
+    draggedOverPlaylist: null,
 };
 
 interface ReduxAction {
@@ -78,9 +80,12 @@ function reducer(state : Types.Store, action : ReduxAction ) {
 
             const nextPlaylists = [...PlayLists]
 
-            nextPlaylists[playlist].ids = [...PlayLists[playlist].ids, Number(song)]
+            if(!nextPlaylists[playlist].ids.includes(Number(song))){
 
-            return {...state, PlayLists : nextPlaylists}
+                nextPlaylists[playlist].ids = [...PlayLists[playlist].ids, Number(song)]
+            }
+
+            return {...state, PlayLists : nextPlaylists, draggedOverPlaylist: null}
         }
 
         case "TOGGLE_PLAYERSTATE": {
@@ -162,6 +167,22 @@ function reducer(state : Types.Store, action : ReduxAction ) {
             next_playlist_object["All"] = [...Object.values(state.Songs)]
                         
             return {...state, PlayLists : next_playlist_object}
+        }
+
+        case "ADD_PLAYLIST":{
+
+            let next_playlist_object = [...state.PlayLists]
+
+            next_playlist_object[next_playlist_object.length] = { Title: "New PlayList", id: next_playlist_object.length, ids: [ ]}
+
+            next_playlist_object["All"] = [...Object.values(state.Songs)]
+
+            return {...state, PlayLists : next_playlist_object}
+        }
+
+        case "DRAG_OVER_PLAYLIST": {
+
+            return {...state, draggedOverPlaylist: action.payload}
         }
         
         default:

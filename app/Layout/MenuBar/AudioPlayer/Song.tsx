@@ -38,8 +38,8 @@ function Song() {
       {
         !!state.Songs &&
         <> 
-          <span>{selectedTrackObject.TITLE}</span>
-          <span>{selectedTrackObject.ARTIST} - {selectedTrackObject.ALBUM} </span>
+          <span>{selectedTrackObject.TITLE || selectedTrackObject.FILENAME}</span>
+          <span>{selectedTrackObject.ARTIST || selectedTrackObject.FILENAME} - {selectedTrackObject.ALBUM} </span>
         </>
       }
     

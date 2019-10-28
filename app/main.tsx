@@ -8,7 +8,7 @@ import ThemeManager  from './store/ThemeManager'
 import MenuBar from './Layout/MenuBar/MenuBar'
 import BottomLayout from './Layout/Bottom/BottomLayout'
 
-const App = lazy(() => import("./components/app"))
+// const App = lazy(() => import("./components/app"))
 
 ReactDOM.render(    
         <Suspense fallback="Loading...">

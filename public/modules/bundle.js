@@ -190,11 +190,20 @@ const PlayListsContainer = styled_components__WEBPACK_IMPORTED_MODULE_2__["defau
     justify-content: flex-start;
     padding-left: 1rem;
 
+    button {
+        height: 1vh;
+    }
+
     #selected {
         font-weight: bold;
         text-decoration: underline;
         background-color: ${props => props.theme.highlightColor};
         color: ${props => props.theme.secondaryColor};
+    }
+
+    #draggedOver {
+
+        border: 2px solid black; 
     }
 `;
 // each 
@@ -220,6 +229,9 @@ const Playlist = (props) => {
     };
     const onDragOver = (e) => {
         e.preventDefault();
+        if (state.draggedOverPlaylist !== id) {
+            dispatch({ type: "DRAG_OVER_PLAYLIST", payload: id });
+        }
     };
     const onDrop = (e) => {
         const selected = e.dataTransfer.getData("track");
@@ -232,7 +244,14 @@ const Playlist = (props) => {
         });
     };
     const { id } = props.data;
-    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(PlayListContainer, { onClick: () => handleClick(props.data.id), onDragOver: e => onDragOver(e), onDrop: (e) => onDrop(e), id: id === state.SelectedPlaylist ? "selected" : undefined },
+    let selectionState;
+    if (state.draggedOverPlaylist === id) {
+        selectionState = "draggedOver";
+    }
+    else if (id === state.SelectedPlaylist) {
+        selectionState = "selected";
+    }
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(PlayListContainer, { onClick: () => handleClick(props.data.id), onDragOver: e => onDragOver(e), onDrop: (e) => onDrop(e), id: selectionState },
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", { id: id },
             "\u266B ",
             props.data.Title)));
@@ -258,9 +277,15 @@ const PlayLists = () => {
             fetchData();
         }
     });
+    const addPlaylist = () => {
+        dispatch({ type: "ADD_PLAYLIST" });
+    };
     console.log("Next State: ", state);
     return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(PlayListsContainer, null,
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", { style: { textDecoration: "underline" } }, "Playlists"),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", { style: { textDecoration: "underline" } },
+            "Playlists ",
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { onClick: addPlaylist }, "+"),
+            " "),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Playlist, { key: "All", data: { Title: "All", id: "All" } }),
         !!state.PlayLists &&
             state.PlayLists.map((each) => {
@@ -480,6 +505,9 @@ function Table({ columns, data }) {
     const onDragStart = (e, id) => {
         e.dataTransfer.setData("track", id);
     };
+    const onDragEnd = () => {
+        dispatch({ type: "DRAG_OVER_PLAYLIST", payload: null });
+    };
     const handleDoubleClick = (e) => {
         dispatch({
             type: "PLAY_TRACK",
@@ -538,7 +566,7 @@ function Table({ columns, data }) {
             if (!!isDraggedOver && Number(row.original.ID) === Number(isDraggedOver)) {
                 calculatedStyle += " draggedOver";
             }
-            return prepareRow(row) || (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", Object.assign({}, row.getRowProps(), { draggable: true, onDoubleClick: e => handleDoubleClick(e), onDragStart: (e) => onDragStart(e, Number(row.original.ID)), onDragOver: e => onDragOver(e), className: calculatedStyle, id: row.original.ID, onClick: e => handleClick(e), onDrop: (e) => onDrop(e) }), row.cells.map(cell => {
+            return prepareRow(row) || (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", Object.assign({}, row.getRowProps(), { draggable: true, onDoubleClick: e => handleDoubleClick(e), onDragStart: (e) => onDragStart(e, Number(row.original.ID)), onDragEnd: onDragEnd, onDragOver: e => state.SelectedPlaylist !== "All" && onDragOver(e), className: calculatedStyle, id: row.original.ID, onClick: e => handleClick(e), onDrop: (e) => state.SelectedPlaylist !== "All" && onDrop(e) }), row.cells.map(cell => {
                 return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", Object.assign({}, cell.getCellProps(), { className: "td" }), cell.render('Cell')));
             })));
         }))));
@@ -795,9 +823,9 @@ function Song() {
     }
     return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(SongInfoContainer, null, !!state.Songs &&
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null,
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, selectedTrackObject.TITLE),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, selectedTrackObject.TITLE || selectedTrackObject.FILENAME),
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null,
-                selectedTrackObject.ARTIST,
+                selectedTrackObject.ARTIST || selectedTrackObject.FILENAME,
                 " - ",
                 selectedTrackObject.ALBUM,
                 " "))));
@@ -1163,7 +1191,7 @@ const lazy = react__WEBPACK_IMPORTED_MODULE_0___default.a.lazy;
 
 
 
-const App = lazy(() => Promise.resolve().then(function webpackMissingModule() { var e = new Error("Cannot find module './components/app'"); e.code = 'MODULE_NOT_FOUND'; throw e; }));
+// const App = lazy(() => import("./components/app"))
 react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Suspense, { fallback: "Loading..." },
     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_store_Store__WEBPACK_IMPORTED_MODULE_2__["StoreProvider"], null,
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_store_ThemeManager__WEBPACK_IMPORTED_MODULE_3__["default"], null,
@@ -1195,9 +1223,11 @@ const initialState = {
     },
     isPlaying: false,
     SelectedPlaylist: "All",
+    RunningPlaylist: "All",
     ColumnHash: null,
     PlayLists: null,
     Songs: null,
+    draggedOverPlaylist: null,
 };
 function reducer(state, action) {
     console.log("Action: ", action.type, action.payload);
@@ -1234,8 +1264,10 @@ function reducer(state, action) {
             const { PlayLists } = state;
             const { payload: { song, playlist } } = action;
             const nextPlaylists = [...PlayLists];
-            nextPlaylists[playlist].ids = [...PlayLists[playlist].ids, Number(song)];
-            return { ...state, PlayLists: nextPlaylists };
+            if (!nextPlaylists[playlist].ids.includes(Number(song))) {
+                nextPlaylists[playlist].ids = [...PlayLists[playlist].ids, Number(song)];
+            }
+            return { ...state, PlayLists: nextPlaylists, draggedOverPlaylist: null };
         }
         case "TOGGLE_PLAYERSTATE": {
             return { ...state, isPlaying: !state.isPlaying };
@@ -1283,6 +1315,15 @@ function reducer(state, action) {
             // to be reappended if we destructure as above 
             next_playlist_object["All"] = [...Object.values(state.Songs)];
             return { ...state, PlayLists: next_playlist_object };
+        }
+        case "ADD_PLAYLIST": {
+            let next_playlist_object = [...state.PlayLists];
+            next_playlist_object[next_playlist_object.length] = { Title: "New PlayList", id: next_playlist_object.length, ids: [] };
+            next_playlist_object["All"] = [...Object.values(state.Songs)];
+            return { ...state, PlayLists: next_playlist_object };
+        }
+        case "DRAG_OVER_PLAYLIST": {
+            return { ...state, draggedOverPlaylist: action.payload };
         }
         default:
             return state;

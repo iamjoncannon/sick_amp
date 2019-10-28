@@ -31,8 +31,10 @@ export interface Store {
     Transport : Transport 
     isPlaying: Boolean
     SelectedPlaylist: number | string | void
+    RunningPlaylist: number | string | void
     PlayLists : PlaylistState | void 
     Songs: songStateType | void 
     ColumnHash : { [ Column : string] : Boolean} | void 
+    draggedOverPlaylist: Boolean    
 }
 
