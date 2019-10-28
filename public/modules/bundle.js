@@ -666,7 +666,7 @@ const BarContainer = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"].d
     flex: 1;
     border-radius: 5px;
     margin: 0 20px;
-    height: 10px;
+    height: 1px;
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -717,7 +717,7 @@ function Bar(props) {
     return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(BarContainer, null,
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", { className: "bar__time" }, formatDuration(curTime)),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(BarProgress, { id: "bar__progress", style: {
-                background: `linear-gradient(to right, white ${curPercentage}%, black 0)`
+                background: `linear-gradient(to right, white ${curPercentage}%, grey 0)`
             }, onMouseDown: e => handleTimeDrag(e) },
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", { className: "bar__progress__knob", style: { left: `${curPercentage - 2}%` } })),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", { className: "bar__time" }, formatDuration(duration))));
@@ -873,12 +873,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const IconContainer = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div `
+
     color: ${props => props.theme.fontColor}
     position: absolute;
     left: 5vh;
     font-size: 2vh;
     font-weight: bold;
     cursor: default;
+    background-color: rgba(255, 0, 0, .25);
+    padding: .5vh 1vh .5vh 1vh;
+    border-radius: 1vh;
 `;
 const Icon = () => {
     return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(IconContainer, null,
@@ -905,9 +909,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _MenuBar_AudioPlayer_Audio__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../MenuBar/AudioPlayer/Audio */ "./app/Layout/MenuBar/AudioPlayer/Audio.tsx");
 /* harmony import */ var _Icon__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Icon */ "./app/Layout/MenuBar/Icon.tsx");
 /* harmony import */ var _Transport__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Transport */ "./app/Layout/MenuBar/Transport.tsx");
+/* harmony import */ var _VolumeBar__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./VolumeBar */ "./app/Layout/MenuBar/VolumeBar.tsx");
 
 const useState = react__WEBPACK_IMPORTED_MODULE_0___default.a.useState;
 const useEffect = react__WEBPACK_IMPORTED_MODULE_0___default.a.useEffect;
+
 
 
 
@@ -966,6 +972,7 @@ const MenuBar = (props) => {
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(PrimaryMenuContainer, null,
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Icon__WEBPACK_IMPORTED_MODULE_4__["default"], null),
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Transport__WEBPACK_IMPORTED_MODULE_5__["default"], null),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_VolumeBar__WEBPACK_IMPORTED_MODULE_6__["default"], null),
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(PlayerStateContainer, null,
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_MenuBar_AudioPlayer_Audio__WEBPACK_IMPORTED_MODULE_3__["default"], null))),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(SecondaryMenuContainer, null,
@@ -1002,7 +1009,7 @@ __webpack_require__.r(__webpack_exports__);
 const Container = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div `
 
     position: absolute;
-    left: 25vh;
+    left: 22vh;
 
     svg {
         margin-right: 2vh;
@@ -1025,6 +1032,76 @@ const Transport = () => {
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_2__["FontAwesomeIcon"], { icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faForward"], onClick: () => handleTransport("PLAY_NEXT_TRACK") })));
 };
 /* harmony default export */ __webpack_exports__["default"] = (Transport);
+
+
+/***/ }),
+
+/***/ "./app/Layout/MenuBar/VolumeBar.tsx":
+/*!******************************************!*\
+  !*** ./app/Layout/MenuBar/VolumeBar.tsx ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+
+
+const Container = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div `
+
+    position: absolute;
+    left: 38vh;
+    top: 1.5vh;
+    cursor: pointer;
+    width: 5vw;
+
+    .slider {
+        -webkit-appearance: none;
+        background: ${props => props.theme.highlightColor};
+        outline: none;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+        height: .75vh;
+
+    }
+
+    .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 1vw;
+        height: 2vh;
+        border-radius: 30px;
+        background: ${props => props.theme.secondaryColor};
+        cursor: pointer;
+        border: 1px solid white;
+    }
+
+    .slider::-moz-range-thumb {
+        width: 1vw;
+        height: 2vh;
+        border-radius: 30px;
+        background: ${props => props.theme.secondaryColor};
+        cursor: pointer;
+        border: 1px solid white;
+    }
+
+`;
+const StyledInput = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].input `
+    
+`;
+const VolumeBar = () => {
+    const [volume, setVolume] = react__WEBPACK_IMPORTED_MODULE_0___default.a.useState(950);
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.useEffect(() => {
+        let audio = document.getElementById("audio");
+        audio.volume = volume / 1000;
+    });
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Container, null,
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { className: "slider", type: "range", min: 0, max: 1000, value: volume, onChange: e => setVolume(e.target.value) })));
+};
+/* harmony default export */ __webpack_exports__["default"] = (VolumeBar);
 
 
 /***/ }),

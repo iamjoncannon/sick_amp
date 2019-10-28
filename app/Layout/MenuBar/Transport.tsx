@@ -7,7 +7,7 @@ import { Store } from '../../store/Store'
 const Container = styled.div`
 
     position: absolute;
-    left: 25vh;
+    left: 22vh;
 
     svg {
         margin-right: 2vh;

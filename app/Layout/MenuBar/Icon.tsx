@@ -2,12 +2,16 @@ import React from 'react';
 import styled from 'styled-components'
 
 const IconContainer = styled.div`
+
     color: ${props=>props.theme.fontColor}
     position: absolute;
     left: 5vh;
     font-size: 2vh;
     font-weight: bold;
     cursor: default;
+    background-color: rgba(255, 0, 0, .25);
+    padding: .5vh 1vh .5vh 1vh;
+    border-radius: 1vh;
 `
 
 const Icon = () => {

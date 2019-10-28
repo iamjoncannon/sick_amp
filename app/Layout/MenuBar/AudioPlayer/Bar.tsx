@@ -21,7 +21,7 @@ const BarContainer = styled.div`
     flex: 1;
     border-radius: 5px;
     margin: 0 20px;
-    height: 10px;
+    height: 1px;
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -102,7 +102,7 @@ export default function Bar(props) {
       <BarProgress
         id="bar__progress"
         style={{
-          background: `linear-gradient(to right, white ${curPercentage}%, black 0)`
+          background: `linear-gradient(to right, white ${curPercentage}%, grey 0)`
         }}
         onMouseDown={e => handleTimeDrag(e)}
       >

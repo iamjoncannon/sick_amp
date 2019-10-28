@@ -8,6 +8,7 @@ import { Store } from '../../store/Store'
 import Audio from '../MenuBar/AudioPlayer/Audio'
 import Icon from './Icon'
 import Transport from './Transport'
+import VolumeBar from './VolumeBar'
 
 const PrimaryMenuContainer = styled.div`
     background-color: ${props=>props.theme.primaryColor};
@@ -68,6 +69,7 @@ const MenuBar = (props: any) => {
         <PrimaryMenuContainer>
             <Icon />
             <Transport /> 
+            <VolumeBar />
             <PlayerStateContainer>
                 
 
