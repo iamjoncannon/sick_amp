@@ -4,7 +4,8 @@ Typescript Web audio interface- React Hooks, styled components
 
 ## build
 
-mk client
-mk server
+make client
+
+make server
 
 
