@@ -16,6 +16,7 @@ ReactDOM.render(
             <ThemeManager>
 
               <MenuBar />
+              
               <BottomLayout />
             
             </ThemeManager>

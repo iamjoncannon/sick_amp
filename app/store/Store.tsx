@@ -33,10 +33,13 @@ function reducer(state : Types.Store, action : ReduxAction ) {
 
             PlayLists.All = [...Object.values(Songs)]
 
+            const Transport = { previous: Object.keys(Songs).length -1 , current: 0, next: 1}
+
             return {...state, 
                     Songs,
                     PlayLists,
                     ColumnHash,
+                    Transport
                     }
         }
 
@@ -85,6 +88,24 @@ function reducer(state : Types.Store, action : ReduxAction ) {
             return {...state, isPlaying: !state.isPlaying}
         }
 
+        case "PLAY_PREVIOUS_TRACK": {
+
+            const CurrentPlaylist = state.PlayLists[state.SelectedPlaylist]
+            
+            // same thing as PLAY_TRACK, except we set current to previous before calculating
+            // other values 
+            
+            let current = state.Transport.previous 
+                        
+            const previous = current === 0 ? CurrentPlaylist[CurrentPlaylist.length - 1] : current - 1
+            
+            const next = current === CurrentPlaylist.length - 1 ? 0 : current + 1 
+            
+            let newTransport : Types.Transport = { current, previous, next } 
+            
+            return {...state, Transport: newTransport, isPlaying: true}
+        }
+
         case "PLAY_NEXT_TRACK": {
 
             const CurrentPlaylist = state.PlayLists[state.SelectedPlaylist]
@@ -92,10 +113,8 @@ function reducer(state : Types.Store, action : ReduxAction ) {
             // same thing as PLAY_TRACK, except we set current to next before calculating
             // other values 
             
-            let current = Number(state.Transport.current)
-            
-            current = current === CurrentPlaylist.length - 1 ? 0 : current + 1 
-            
+            let current = state.Transport.next
+                        
             const previous = current === 0 ? CurrentPlaylist[CurrentPlaylist.length - 1] : current - 1
             
             const next = current === CurrentPlaylist.length - 1 ? 0 : current + 1 

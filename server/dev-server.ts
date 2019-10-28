@@ -4,7 +4,6 @@ const express = require('express')
 const path = require('path')
 const fs = require('fs')
 const app = express()
-const ss = require('socket.io-stream');
 const PORT = process.env.PORT || 3001
 const dummyData = require('./id3')
 
@@ -16,11 +15,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, './public')))
 
 
-// streaming socket handling 
-
 app.get('/track/:fileName', (req, res, err) => {
-
-  console.log("hitting mp3 endpoint", )
   
   const filePath = path.resolve(__dirname, './public/tunes', req.params.fileName);
   const stat = fs.statSync(filePath);

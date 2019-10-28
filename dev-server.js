@@ -4,7 +4,6 @@ var express = require('express');
 var path = require('path');
 var fs = require('fs');
 var app = express();
-var ss = require('socket.io-stream');
 var PORT = process.env.PORT || 3001;
 var dummyData = require('./id3');
 // body parsing middleware
@@ -12,9 +11,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // static middleware
 app.use(express.static(path.join(__dirname, './public')));
-// streaming socket handling 
 app.get('/track/:fileName', function (req, res, err) {
-    console.log("hitting mp3 endpoint");
     var filePath = path.resolve(__dirname, './public/tunes', req.params.fileName);
     var stat = fs.statSync(filePath);
     // res.writeHead(200, {

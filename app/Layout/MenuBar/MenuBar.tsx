@@ -6,14 +6,17 @@ import * as Types from '../../store/Types'
 import { Store } from '../../store/Store'
 
 import Audio from '../MenuBar/AudioPlayer/Audio'
+import Icon from './Icon'
+import Transport from './Transport'
 
-const Container = styled.div`
+const PrimaryMenuContainer = styled.div`
     background-color: ${props=>props.theme.primaryColor};
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     height: 6vh;
+    position: relative;
 `
 
 const PlayerStateContainer = styled.div`
@@ -27,19 +30,59 @@ const SecondaryMenuContainer = styled.div`
     background-color: ${props=>props.theme.secondaryColor};
     border: 1px solid ${props=>props.theme.primaryColor};
     height: 4vh;
+    color:${props=>props.theme.fontColor}
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75vh;
+    
+    div {
+        width: 40vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    span {
+
+        cursor: pointer;
+    }
+    
+    span:first-child {
+        margin-right: 2.5vh;
+        text-decoration: underline;
+        background-color: ${props=>props.theme.secondaryColor};
+    }
+
+    span:last-child {
+        margin-left: 2.5vh;
+    }
 `
 
-const MenuBar = () => {
+const MenuBar = (props: any) => {
+
+    const { state, dispatch } = React.useContext(Store);
 
     return (
         <>
-        <Container>
+        <PrimaryMenuContainer>
+            <Icon />
+            <Transport /> 
             <PlayerStateContainer>
-                <Audio />
-            </PlayerStateContainer>
-        </Container>
-        <SecondaryMenuContainer>
+                
 
+                <Audio />
+
+            </PlayerStateContainer>
+        
+        </PrimaryMenuContainer>
+        
+        <SecondaryMenuContainer>
+            <div>
+                <span>My Library</span>
+                <span>Profile</span>
+                <span>Sick.DB</span>
+            </div>
         </SecondaryMenuContainer>
         </>
     )
