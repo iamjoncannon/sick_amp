@@ -1272,13 +1272,19 @@ function reducer(state, action) {
             return { ...state, Transport: newTransport, isPlaying: true };
         }
         case "PLAY_NEXT_TRACK": {
-            const CurrentPlaylist = state.PlayLists[state.RunningPlaylist];
-            // same thing as PLAY_TRACK, except we set current to next before calculating
-            // other values 
-            let current = Number(state.Transport.next);
-            const previous = current === 0 ? CurrentPlaylist[CurrentPlaylist.length - 1] : current - 1;
-            const next = current === CurrentPlaylist.length - 1 ? 0 : current + 1;
-            let newTransport = { current, previous, next };
+            const { RunningPlaylist, PlayLists, Transport: { current } } = state;
+            let next_current;
+            let CurrentPlaylist;
+            if (RunningPlaylist === "All") {
+                CurrentPlaylist = PlayLists[RunningPlaylist];
+                next_current = current === CurrentPlaylist.length - 1 ? 0 : Number(current) + 1;
+            }
+            else {
+                CurrentPlaylist = PlayLists[RunningPlaylist].ids;
+                const current_index = CurrentPlaylist.indexOf(current);
+                next_current = current_index === CurrentPlaylist.length - 1 ? CurrentPlaylist[0] : CurrentPlaylist[current_index + 1];
+            }
+            let newTransport = { current: next_current };
             return { ...state, Transport: newTransport, isPlaying: true };
         }
         case 'ADD_SONG_TO_PLAYLIST': {
