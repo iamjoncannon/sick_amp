@@ -3,3 +3,6 @@ serv:
 
 client:
 	webpack -w --progress
+
+client-compile:
+	NODE_ENV=production webpack -p --progress
