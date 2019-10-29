@@ -200,7 +200,8 @@ function Table({ columns, data }) {
       e.stopPropagation()
     
       const { key, code } = e
-
+      const { PlayLists, SelectedPlaylist } = state 
+      
       if(code === "Enter"){
 
         dispatch({
@@ -220,19 +221,48 @@ function Table({ columns, data }) {
       }
       
       if(key === "ArrowUp"){
+
+        let newSeletedID 
+
+        if(SelectedPlaylist === "All"){
+
+          newSeletedID = selectedID === 0 ? PlayLists["All"].length -1 : Number(selectedID) - 1 
+        }
+        else{
+
+            // if its a specific playlist, then we need to find the index of the track in the 
+            // playlists ids and return the previous index, or end if 0 
+
+            const CurrentPlaylist = PlayLists[SelectedPlaylist].ids
+
+            const current_index = CurrentPlaylist.indexOf(selectedID)
+
+            newSeletedID = current_index === 0 ? CurrentPlaylist[CurrentPlaylist.length -1] : CurrentPlaylist[current_index -1 ] 
+        
+        }
   
-        let newSeletedID = selectedID - 1
-    
         handleIDSelect(newSeletedID)
       }
       
       if(key === "ArrowDown"){
-  
-        let newSeletedID = selectedID + 1
-    
+
+        let newSeletedID 
+
+        if(SelectedPlaylist === "All"){
+
+          newSeletedID = selectedID === PlayLists["All"].length -1 ? 0 : Number(selectedID) + 1 
+      }
+      else{
+
+          let CurrentPlaylist = PlayLists[SelectedPlaylist].ids
+
+          const current_index = CurrentPlaylist.indexOf(selectedID)
+
+          newSeletedID = current_index === CurrentPlaylist.length -1 ? CurrentPlaylist[0] : CurrentPlaylist[current_index + 1 ] 
+      }
+        
         handleIDSelect(newSeletedID)
       }
-
     }
     
     window.addEventListener('keydown', keyPressHandler)

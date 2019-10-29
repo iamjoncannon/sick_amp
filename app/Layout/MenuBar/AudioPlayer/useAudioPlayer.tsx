@@ -53,7 +53,9 @@ function useAudioPlayer() {
 
       if(!currentTrack || (currentTrack !== filePath) ){
 
-        audio.src = `/tunes/${filePath}`
+        // audio.src = `/tunes/${filePath}`
+        
+        audio.src = `https://sickamptunes.s3.amazonaws.com/${filePath}`
         setCurrentTrack(filePath)
       }
     }

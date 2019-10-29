@@ -72,24 +72,22 @@ function reducer(state : Types.Store, action : ReduxAction ) {
             // or the end of the playlist if current = 0 
 
             let next_current 
-            let CurrentPlaylist 
 
             if(RunningPlaylist === "All"){
 
-                CurrentPlaylist = PlayLists[RunningPlaylist]
-
-                next_current = current === 0 ? CurrentPlaylist.length -1 : Number(current) - 1 
+                next_current = current === 0 ? PlayLists[RunningPlaylist].length -1 : Number(current) - 1 
             }
             else{
 
                 // if its a specific playlist, then we need to find the index of the track in the 
                 // playlists ids and return the previous index, or end if 0 
 
-                CurrentPlaylist = PlayLists[RunningPlaylist].ids
+                let CurrentPlaylist = PlayLists[RunningPlaylist].ids
 
                 const current_index = CurrentPlaylist.indexOf(current)
 
                 next_current = current_index === 0 ? CurrentPlaylist[CurrentPlaylist.length -1] : CurrentPlaylist[current_index -1 ] 
+            
             }
 
             let newTransport : Types.Transport = { current: next_current } 

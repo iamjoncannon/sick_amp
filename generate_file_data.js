@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,72 +34,42 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-exports.__esModule = true;
-var NodeID3 = require('node-id3');
-var testFolder = './tests/';
-var fs = require('fs');
-var resolve = require('path').resolve;
-var songState = {};
-var tunes = fs.readdirSync(resolve(__dirname, "./public/tunes"));
-tunes.forEach(function (file, i) { return __awaiter(void 0, void 0, void 0, function () {
-    var tags, err_1, tag;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, NodeID3.read("./public/tunes/" + file)];
-            case 1:
-                tags = _a.sent();
-                return [3 /*break*/, 3];
-            case 2:
-                err_1 = _a.sent();
-                console.log(err_1);
-                return [3 /*break*/, 3];
-            case 3:
-                songState[i] = {
-                    ID: i,
-                    ALBUM: "",
-                    TITLE: "",
-                    ARTIST: "",
-                    TRACKNUMBER: "",
-                    FILENAME: file
-                };
-                for (tag in tags) {
-                    if ((tag !== "raw") && (tag !== "image")) {
-                        songState[i][tag.toUpperCase()] = tags[tag];
-                    }
-                    if (tag === "composer") {
-                        songState[i]["ARTIST"] = tags[tag];
-                    }
-                    if (tag === "raw") {
-                        if (tags[tag].TSSE) {
-                            songState[i]["ALBUM"] = tags[tag].TSSE;
-                        }
-                    }
-                }
-                return [2 /*return*/];
-        }
+var SuffixTrie = require('./suffixTrie')["default"];
+var resolve = require("path").resolve;
+function get_mp3_data() {
+    return __awaiter(this, void 0, void 0, function () {
+        var data;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, require("./id3")];
+                case 1:
+                    data = _a.sent();
+                    return [2 /*return*/, data];
+            }
+        });
     });
-}); });
-var playlists = [
-    {
-        Title: "Aphex",
-        id: 0,
-        ids: [1, 2, 3, 4, 5, 6, 7, 8]
-    },
-    {
-        Title: "Sigrid",
-        id: 1,
-        ids: [9, 7, 8]
+}
+get_mp3_data().then(function (result) {
+    require('fs').writeFile("file_data.json", JSON.stringify(result), function (err) {
+        if (err)
+            throw err;
+    });
+    // create suffix trie
+    var MetaDataTrie = new SuffixTrie();
+    // store each property in each file metadata, with
+    // the song id as the trie payload 
+    var Songs = result.Songs;
+    for (var song in Songs) {
+        var payload = song;
+        var metadata = Songs[song];
+        for (var dataItem in metadata) {
+            if (dataItem !== payload) {
+                MetaDataTrie.insertIntoTrie(metadata[dataItem], payload);
+            }
+        }
     }
-];
-var returnData = {
-    Songs: songState,
-    PlayLists: playlists
-};
-fs.writeFile("data.json", returnData, function (err) {
-    if (err)
-        throw err;
-    console.log(returnData);
+    require('fs').writeFile("song_metadata_trie.json", JSON.stringify(MetaDataTrie.root), function (err) {
+        if (err)
+            throw err;
+    });
 });
-module.exports = returnData;

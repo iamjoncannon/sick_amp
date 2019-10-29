@@ -20,7 +20,6 @@ tunes.forEach( async (file : string, i : number) => {
             console.log(err)
         }
         
-
         songState[i] = { 
             ID: i, 
             ALBUM: "", 

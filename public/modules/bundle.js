@@ -472,6 +472,7 @@ function Table({ columns, data }) {
             e.preventDefault();
             e.stopPropagation();
             const { key, code } = e;
+            const { PlayLists, SelectedPlaylist } = state;
             if (code === "Enter") {
                 dispatch({
                     type: "PLAY_TRACK",
@@ -485,11 +486,29 @@ function Table({ columns, data }) {
                 });
             }
             if (key === "ArrowUp") {
-                let newSeletedID = selectedID - 1;
+                let newSeletedID;
+                if (SelectedPlaylist === "All") {
+                    newSeletedID = selectedID === 0 ? PlayLists["All"].length - 1 : Number(selectedID) - 1;
+                }
+                else {
+                    // if its a specific playlist, then we need to find the index of the track in the 
+                    // playlists ids and return the previous index, or end if 0 
+                    const CurrentPlaylist = PlayLists[SelectedPlaylist].ids;
+                    const current_index = CurrentPlaylist.indexOf(selectedID);
+                    newSeletedID = current_index === 0 ? CurrentPlaylist[CurrentPlaylist.length - 1] : CurrentPlaylist[current_index - 1];
+                }
                 handleIDSelect(newSeletedID);
             }
             if (key === "ArrowDown") {
-                let newSeletedID = selectedID + 1;
+                let newSeletedID;
+                if (SelectedPlaylist === "All") {
+                    newSeletedID = selectedID === PlayLists["All"].length - 1 ? 0 : Number(selectedID) + 1;
+                }
+                else {
+                    let CurrentPlaylist = PlayLists[SelectedPlaylist].ids;
+                    const current_index = CurrentPlaylist.indexOf(selectedID);
+                    newSeletedID = current_index === CurrentPlaylist.length - 1 ? CurrentPlaylist[0] : CurrentPlaylist[current_index + 1];
+                }
                 handleIDSelect(newSeletedID);
             }
         };
@@ -880,7 +899,8 @@ function useAudioPlayer() {
         if (state.Songs) {
             filePath = state.Songs[state.Transport.current].FILENAME;
             if (!currentTrack || (currentTrack !== filePath)) {
-                audio.src = `/tunes/${filePath}`;
+                // audio.src = `/tunes/${filePath}`
+                audio.src = `https://sickamptunes.s3.amazonaws.com/${filePath}`;
                 setCurrentTrack(filePath);
             }
         }
@@ -1259,15 +1279,13 @@ function reducer(state, action) {
             // if its playing from the all playlist, then its simply the previous track
             // or the end of the playlist if current = 0 
             let next_current;
-            let CurrentPlaylist;
             if (RunningPlaylist === "All") {
-                CurrentPlaylist = PlayLists[RunningPlaylist];
-                next_current = current === 0 ? CurrentPlaylist.length - 1 : Number(current) - 1;
+                next_current = current === 0 ? PlayLists[RunningPlaylist].length - 1 : Number(current) - 1;
             }
             else {
                 // if its a specific playlist, then we need to find the index of the track in the 
                 // playlists ids and return the previous index, or end if 0 
-                CurrentPlaylist = PlayLists[RunningPlaylist].ids;
+                let CurrentPlaylist = PlayLists[RunningPlaylist].ids;
                 const current_index = CurrentPlaylist.indexOf(current);
                 next_current = current_index === 0 ? CurrentPlaylist[CurrentPlaylist.length - 1] : CurrentPlaylist[current_index - 1];
             }
