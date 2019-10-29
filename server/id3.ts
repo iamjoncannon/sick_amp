@@ -6,13 +6,14 @@ import * as Types from './Types'
 
 let songState: Types.songStateType = {}
 
-const tunes = fs.readdirSync(resolve(__dirname, "./public/tunes"))
+const tunes = fs.readdirSync(resolve(__dirname, "./public/tunes/rnb"))
 
 tunes.forEach( async (file : string, i : number) => {
 
         let tags 
         
         try{
+            
             tags = await NodeID3.read("./public/tunes/" + file)
         }
         catch(err){

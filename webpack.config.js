@@ -5,7 +5,7 @@ const MinifyPlugin = require("babel-minify-webpack-plugin");
 module.exports = {
   plugins: [
     // new BundleAnalyzerPlugin(),
-    new MinifyPlugin()
+    // new MinifyPlugin()
   ],
   entry: ['babel-polyfill', './app/main'],
   output: {
@@ -14,7 +14,7 @@ module.exports = {
     path: resolve(__dirname, './public'),
     filename: './modules/bundle.js'
   },
-  mode: 'production',
+  mode: 'development',
   context: __dirname,
   devtool: 'source-map',
   resolve: {

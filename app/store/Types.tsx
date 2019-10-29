@@ -11,14 +11,33 @@ export interface songStateType {
     [ key: number ] : SongObject
 }
 
-export interface Playlist {
+
+/* 
+
+export interface PlayList {
     Title: string
     id: number
     ids: number[]
 }
 
+*/
+
+
+export interface PlayList {
+
+    created_at: string  // "2019-10-29T20:22:51.949220+00:00"
+    files: number[]     // (67) [1, 6, 13, 15, 22, 24, 27, 28, 33, 34, 36, 44, 46, 47, 48, 49, 57, 59, 62, 64, 67, 68, 72, 75, 79, 85, 90, 91, 96, 97, 103, 105, 106, 107, 108, 110, 111, 112, 114, 116, 117, 120, 124, 129, 134, 136, 137, 138, 140, 143, 146, 152, 157, 161, 163, 164, 168, 170, 172, 177, 179, 180, 187, 188, 190, 197, 200]
+    id: number          // 1
+    name: string        // "Sick Jams 3"
+    slug: string        // "sick-jams-3"
+    updated_at: string  // "2019-10-29T20:22:52.255682+00:00"
+    user: number        // 1
+    hydrated: boolean 
+}
+
+
 export interface PlaylistState {
-    [key : number] : Playlist
+    [key : number] : PlayList
     All : number[]
 }
 

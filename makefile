@@ -22,6 +22,7 @@ server-compile:
 	tsc -p ./server 
 
 dc-bld: 
+	make client-compile
 	make server-compile
 	docker build . -t iamjoncannon/sickamp
 

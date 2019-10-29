@@ -41,7 +41,7 @@ var testFolder = './tests/';
 var fs = require('fs');
 var resolve = require('path').resolve;
 var songState = {};
-var tunes = fs.readdirSync(resolve(__dirname, "./public/tunes"));
+var tunes = fs.readdirSync(resolve(__dirname, "./public/tunes/rnb"));
 tunes.forEach(function (file, i) { return __awaiter(void 0, void 0, void 0, function () {
     var tags, err_1, tag;
     return __generator(this, function (_a) {

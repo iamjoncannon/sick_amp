@@ -14,6 +14,7 @@ const initialState : Types.Store = {
     PlayLists: null,
     Songs: null,
     draggedOverPlaylist: null,
+    token: "dev"
 };
 
 interface ReduxAction {
@@ -28,6 +29,11 @@ function reducer(state : Types.Store, action : ReduxAction ) {
     console.log("Action: ", action.type, action.payload)
 
     switch (action.type) {
+
+        case 'HYDRATE_PLAYLISTS': {
+
+            return {...state, PlayLists: action.payload}
+        }
 
         case 'HYDRATE': {
 

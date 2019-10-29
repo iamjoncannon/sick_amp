@@ -5,7 +5,7 @@ const path = require('path')
 const fs = require('fs')
 const app = express()
 const PORT = process.env.PORT || 3000
-const dummyData = require('./id3')
+// const dummyData = require('./id3')
 
 // body parsing middleware
 app.use(express.json())

@@ -5,8 +5,8 @@ import styled from 'styled-components'
 import axios from 'axios'
 import { sortColumns } from './Helpers'
 import * as Types from '../../store/Types'
-
-// section 
+import PlayList from './PlayList'
+import { remote_url } from '../../../config'
 
 const PlayListsContainer = styled.div`
  
@@ -38,94 +38,11 @@ const PlayListsContainer = styled.div`
     }
 `
 
-// each 
-
-const PlayListContainer = styled.div`
-
-    margin-top: .5rem;
-
-    span:focus{
-        background: white;
-    }
-
-    &:hover{
-        background: ${props=>props.theme.tertiaryColor};
-    }
+const PlayListHeader = styled.span`
+    text-decoration: underline;
+    margin-top: 2vh;
 `
 
-interface PlaylistContainerProps {
-    key: string | number
-    data: { 
-        Title: string, 
-        id: string | number, 
-        ids?: number[]
-    }
-}
-
-const Playlist = (props: PlaylistContainerProps) => {
-
-    const { state, dispatch } = React.useContext(Store);
-
-    const handleClick = (id: number | string) => {
-
-        dispatch({
-            type:"SELECT_PLAYLIST",
-            payload: id
-        })
-    }
-
-    const onDragOver = (e : any) => {
-    
-        e.preventDefault()
-
-        if(state.draggedOverPlaylist !== id){
-
-            dispatch({ type: "DRAG_OVER_PLAYLIST", payload: id })
-        }
-    }
-
-    const onDrop = (e: any) => {
-
-        const selected = e.dataTransfer.getData( "track")
-
-        dispatch({
-            type: "ADD_SONG_TO_PLAYLIST",
-            payload: {
-                song: selected,
-                playlist: e.target.id
-            }
-        })
-    }
-
-    const { id } = props.data
-
-    let selectionState
-
-    if(state.draggedOverPlaylist === id ){
-
-        selectionState = "draggedOver"
-    }
-    else if(id === state.SelectedPlaylist){
-
-        selectionState = "selected"
-    }
-
-    return(
-        <PlayListContainer 
-            onClick={()=>handleClick(props.data.id)}
-            onDragOver={ e=> onDragOver(e)}
-            onDrop={(e)=>onDrop(e)}
-            id={ selectionState }
-
-        >
-      
-            <span 
-                id={id} 
-            >♫ {props.data.Title}</span>
-        
-        </PlayListContainer>
-    )
-}
 
 const PlayLists = () => {
     
@@ -135,54 +52,67 @@ const PlayLists = () => {
 
         async function fetchData(){
 
-            let { data } = await axios.get('/data')
+            let { data } = await axios.get(`${remote_url}/folders/?api_key=${state.token}`)
+            
+            const formattedData = {}
+            
+            for(let playlist in data){
 
-            const { Songs, PlayLists } = data
+                // add All playlist
 
-            let ColumnHash = sortColumns(Songs)
-
-            let sortedData = {
-                Songs,
-                PlayLists,
-                ColumnHash
+                formattedData["All"] = { name: "All Songs" }
+                
+                // make sure the local hash key is the same 
+                // as the id returned from the server
+                formattedData[data[playlist].id] = data[playlist]
+                
+                // add hydrated boolean to prevent manage
+                // fetching of data for each playlist 
+                formattedData[data[playlist].id].hydrated = false
             }
 
             dispatch({
-                type: "HYDRATE",
-                payload: sortedData
+                type: "HYDRATE_PLAYLISTS",
+                payload: formattedData
             })
-
         }
 
-        if(state.Songs === null){
-
+        if(state.PlayLists === null){
+            
             fetchData()
         }
     })
+
 
     const addPlaylist = () => {
 
         dispatch({type:"ADD_PLAYLIST"})
     }
 
-    console.log("Next State: ", state)
-
     return (
+
         <PlayListsContainer>
-
-            <span style={{textDecoration: "underline"}}>Playlists <button onClick={addPlaylist}>+</button> </span>
             
-            
-            <Playlist key={"All"} data={{Title: "All", id: "All"}}/>
-
             {
                 !!state.PlayLists &&
-                state.PlayLists.map( (each : Types.Playlist) =>{
+                <>
 
-                    return (
-                        <Playlist key={each.id} data={each} />
-                    )
-                })
+                    <PlayList key={"All"} id={"All"} /> 
+
+                    <PlayListHeader>
+                        Playlists 
+                        <button onClick={addPlaylist}>+</button> 
+                    </PlayListHeader>
+                    
+                    {Object.values(state.PlayLists)
+                        .filter(each=> each.name !== "All Songs")
+                        .map( (each : Types.PlayList) =>{
+                            
+                            return (
+                                <PlayList key={each.id} id={each.id} /> 
+                                )
+                        })}
+                </>
             }
         </PlayListsContainer>
     )
