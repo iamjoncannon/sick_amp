@@ -1,4 +1,5 @@
 import React from 'react';
+const Suspense = (React as any).Suspense;
 const useState = (React as any).useState;
 const useEffect = (React as any).useEffect;
 import styled from 'styled-components'
@@ -6,9 +7,9 @@ import * as Types from '../../store/Types'
 import { Store } from '../../store/Store'
 
 import Audio from '../MenuBar/AudioPlayer/Audio'
-import Icon from './Icon'
-import Transport from './Transport'
 import VolumeBar from './VolumeBar'
+const Icon = React.lazy(() => import('./Icon'))
+const Transport = React.lazy(() => import('./Transport'))
 
 const PrimaryMenuContainer = styled.div`
     background-color: ${props=>props.theme.primaryColor};
@@ -67,8 +68,12 @@ const MenuBar = (props: any) => {
     return (
         <>
         <PrimaryMenuContainer>
-            <Icon />
-            <Transport /> 
+            <Suspense fallback="Loading...">
+                
+                <Icon />
+                <Transport /> 
+            </Suspense>
+
             <VolumeBar />
             <PlayerStateContainer>
                 <Audio />

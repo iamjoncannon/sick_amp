@@ -54,7 +54,10 @@ const VolumeBar = () => {
 
         let audio = document.getElementById("audio")
 
-        audio.volume = volume / 1000
+        if(audio){
+
+            audio.volume = volume / 1000
+        }
     })
 
     return (

@@ -45,6 +45,10 @@ dep:
 	make dc-push 
 	make dc-deploy 
 
+install-lazy:
+	npm install webpack@4.28.4
+	npm install acorn-dynamic-import@4.0.0
+	npm update acorn --depth 20 && npm dedupe
 
 # some git commands to help deal with me accidentally
 # committing mp3s

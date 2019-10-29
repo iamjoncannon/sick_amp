@@ -4,8 +4,10 @@ const useEffect = (React as any).useEffect;
 import styled from 'styled-components'
 import * as Types from '../../store/Types'
 import { StoreProvider, Store } from '../../store/Store'
-import Songs from './Songs'
+const Songs = React.lazy(() => import('./Songs'))
+// import Songs from './Songs'
 import PlayLists from './PlayLists'
+
 import Audio from '../MenuBar/AudioPlayer/Audio'
 
 const Container = styled.div`

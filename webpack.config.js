@@ -1,8 +1,11 @@
 const { resolve } = require('path')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const MinifyPlugin = require("babel-minify-webpack-plugin");
 
 module.exports = {
   plugins: [
     // new BundleAnalyzerPlugin(),
+    new MinifyPlugin()
   ],
   entry: ['babel-polyfill', './app/main'],
   output: {
@@ -11,7 +14,7 @@ module.exports = {
     path: resolve(__dirname, './public'),
     filename: './modules/bundle.js'
   },
-  mode: 'development',
+  mode: 'production',
   context: __dirname,
   devtool: 'source-map',
   resolve: {
@@ -27,6 +30,8 @@ module.exports = {
         loader: 'ts-loader',
         options: {
           // context: __dirname,
+          transpileOnly: true,
+          experimentalWatchApi: true,
           configFile: resolve(__dirname,'tsconfig.webpack.json'),
         }
       },
