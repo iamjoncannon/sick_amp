@@ -35,11 +35,10 @@ app.get('/track/:fileName', (req, res, err) => {
 
 app.get("/data", (req : any, res: any ) => {
 
-  const returnJason = require('./id3')
+  // const returnJason = require('./id3')
   
-  res.send(JSON.stringify(returnJason))
-  res.end
-  
+  res.send(JSON.stringify(require('./public/file_data.json')))
+  res.end()
 }) 
 
 app.get('*', (req : any, res: any ) => {

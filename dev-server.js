@@ -24,9 +24,9 @@ app.get('/track/:fileName', function (req, res, err) {
 });
 // static data and error handling 
 app.get("/data", function (req, res) {
-    var returnJason = require('./id3');
-    res.send(JSON.stringify(returnJason));
-    res.end;
+    // const returnJason = require('./id3')
+    res.send(JSON.stringify(require('./public/file_data.json')));
+    res.end();
 });
 app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname, './public/index.html'));
