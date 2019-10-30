@@ -2,16 +2,16 @@ import React from 'react';
 import * as Types from './Types'
 
 const initialState : Types.Store = {
-    Transport : {
-        current: 1, 
-    },
+    Transport : {  current: 1 },
     isPlaying: false,
+    
+    PlayLists: null,
     SelectedPlaylist: "All",
     RunningPlaylist: "All",
-    Columns: null,
-    PlayLists: null,
-    Songs: null,
     draggedOverPlaylist: null,
+    
+    Columns: null,
+    Songs: null,
     token: "dev"
 };
 
@@ -28,52 +28,53 @@ function reducer(state : Types.Store, action : ReduxAction ) {
 
     switch (action.type) {
 
-        case 'HYDRATE_PLAYLISTS': {
+        /*
 
-            return {...state, PlayLists: action.payload}
-        }
+            COLUMNS
 
-        case 'HYDRATE_SONGS': {
+        */
 
-            const { PlayList, Page, data } = action.payload
-
-            // pouring songs into the pool
-
-            const Songs = {...state.Songs, ...data}
-
-            // update the hydration hash for the playlist 
-
-            const PlayLists = {...state.PlayLists}
-
-            PlayLists[PlayList].hydrated[Page] = true 
-  
-            return {...state, PlayLists : PlayLists, Songs: Songs }
-        }
-
-        case 'PLAYLIST_END': {
-
-            const { PlayList, Page } = action.payload
-
-            const next_PlayLists = {...state.PlayLists}
-
-            next_PlayLists[PlayList].hydrated["Complete"] = true 
-            next_PlayLists[PlayList].hydrated[Page] = true 
-
-            return {...state, PlayLists: next_PlayLists }
-        }
-
-        case 'HYDRATE_COLUMNS': {
+       case 'HYDRATE_COLUMNS': {
 
             return {...state, Columns: action.payload.data}
-        }
-        
+       }   
 
-        case 'SELECT_PLAYLIST':{
-    
-            return { ...state, SelectedPlaylist: action.payload }
-        }
-        
-        case 'PLAY_TRACK': {
+
+       /*
+
+            TRANSPORT
+       */
+
+
+      case "TOGGLE_PLAYERSTATE": {
+
+            return {...state, isPlaying: !state.isPlaying}
+      }
+
+        /*
+
+            SONGS 
+
+        */
+
+       case 'HYDRATE_SONGS': {
+
+           const { PlayList, Page, data } = action.payload
+
+           // pouring songs into the pool
+
+           const Songs = {...state.Songs, ...data}
+
+           // update the hydration hash for the playlist 
+
+           const PlayLists = {...state.PlayLists}
+
+           PlayLists[PlayList].hydrated[Page] = true 
+ 
+           return {...state, PlayLists : PlayLists, Songs: Songs }
+       }
+
+       case 'PLAY_TRACK': {
 
             const current : number = Number(action.payload)
 
@@ -83,7 +84,7 @@ function reducer(state : Types.Store, action : ReduxAction ) {
 
             return {...state, Transport: newTransport, isPlaying: true, RunningPlaylist: SelectedPlaylist}
         }
-        
+
         case "PLAY_PREVIOUS_TRACK": {
 
             const { RunningPlaylist, PlayLists, Transport : { current } } = state 
@@ -146,6 +147,36 @@ function reducer(state : Types.Store, action : ReduxAction ) {
             return {...state, Transport: newTransport, isPlaying: true}
         }
 
+        /*
+
+            PLAYLISTS/FOLDERS
+
+        */
+
+        case 'HYDRATE_PLAYLISTS': {
+
+            return {...state, PlayLists: action.payload}
+        }
+
+
+        case 'PLAYLIST_END': {
+
+            const { PlayList, Page } = action.payload
+
+            const next_PlayLists = {...state.PlayLists}
+
+            next_PlayLists[PlayList].hydrated["Complete"] = true 
+            next_PlayLists[PlayList].hydrated[Page] = true 
+
+            return {...state, PlayLists: next_PlayLists }
+        }
+
+    
+        case 'SELECT_PLAYLIST':{
+    
+            return { ...state, Page: 1, SelectedPlaylist: action.payload }
+        }
+        
         case 'ADD_SONG_TO_PLAYLIST':{
 
             const { PlayLists } = state 
@@ -159,11 +190,6 @@ function reducer(state : Types.Store, action : ReduxAction ) {
             }
 
             return {...state, PlayLists : nextPlaylists, draggedOverPlaylist: null}
-        }
-
-        case "TOGGLE_PLAYERSTATE": {
-
-            return {...state, isPlaying: !state.isPlaying}
         }
 
         case "REARRANGE_PLAYLIST": {
@@ -194,15 +220,8 @@ function reducer(state : Types.Store, action : ReduxAction ) {
                 }
 
                 next_playlist_object[state.SelectedPlaylist].files = nextTargetPlaylist
-                
             }
-            
-            // this could be refactored- playlists is an object
-            // we also want to treat like an array - "All" needs
-            // to be reappended if we destructure as above 
-                
-            // next_playlist_object["All"] = [...Object.values(state.Songs)]
-                        
+                                    
             return {...state, PlayLists : next_playlist_object}
         }
 
@@ -235,7 +254,7 @@ export const Store = React.createContext(null);
 
 export function StoreProvider(props : any) {
 
-    const [state, dispatch] = React.useReducer(reducer, initialState);
+    const [ state, dispatch ] = React.useReducer(reducer, initialState);
     const value = { state, dispatch };
 
     return (

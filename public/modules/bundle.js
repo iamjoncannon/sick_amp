@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"2ee9aa811652ce42a0cb","1":"d545ceca97b80ed7c45f","2":"3a012b43a7d1c60810ba","3":"4f02bc95aec477774fa9","4":"18c30706026d68b1db51","5":"3d7d2038d333c3daaa89","6":"689b28c3528c549c6085","7":"86184c75555d82c169dc","8":"6ab9b1995abe206efb75"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"2ee9aa811652ce42a0cb","1":"d545ceca97b80ed7c45f","2":"3a012b43a7d1c60810ba","3":"4f02bc95aec477774fa9","4":"16d99dec47561a46d89e","5":"3d7d2038d333c3daaa89","6":"689b28c3528c549c6085","7":"86184c75555d82c169dc","8":"6ab9b1995abe206efb75"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -341,24 +341,39 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 
 const initialState = {
-    Transport: {
-        current: 1,
-    },
+    Transport: { current: 1 },
     isPlaying: false,
+    PlayLists: null,
     SelectedPlaylist: "All",
     RunningPlaylist: "All",
-    Columns: null,
-    PlayLists: null,
-    Songs: null,
     draggedOverPlaylist: null,
+    Columns: null,
+    Songs: null,
     token: "dev"
 };
 function reducer(state, action) {
     console.log("Action: ", action.type, action.payload);
     switch (action.type) {
-        case 'HYDRATE_PLAYLISTS': {
-            return { ...state, PlayLists: action.payload };
+        /*
+
+            COLUMNS
+
+        */
+        case 'HYDRATE_COLUMNS': {
+            return { ...state, Columns: action.payload.data };
         }
+        /*
+ 
+             TRANSPORT
+        */
+        case "TOGGLE_PLAYERSTATE": {
+            return { ...state, isPlaying: !state.isPlaying };
+        }
+        /*
+
+            SONGS
+
+        */
         case 'HYDRATE_SONGS': {
             const { PlayList, Page, data } = action.payload;
             // pouring songs into the pool
@@ -367,19 +382,6 @@ function reducer(state, action) {
             const PlayLists = { ...state.PlayLists };
             PlayLists[PlayList].hydrated[Page] = true;
             return { ...state, PlayLists: PlayLists, Songs: Songs };
-        }
-        case 'PLAYLIST_END': {
-            const { PlayList, Page } = action.payload;
-            const next_PlayLists = { ...state.PlayLists };
-            next_PlayLists[PlayList].hydrated["Complete"] = true;
-            next_PlayLists[PlayList].hydrated[Page] = true;
-            return { ...state, PlayLists: next_PlayLists };
-        }
-        case 'HYDRATE_COLUMNS': {
-            return { ...state, Columns: action.payload.data };
-        }
-        case 'SELECT_PLAYLIST': {
-            return { ...state, SelectedPlaylist: action.payload };
         }
         case 'PLAY_TRACK': {
             const current = Number(action.payload);
@@ -424,6 +426,24 @@ function reducer(state, action) {
             let newTransport = { current: next_current };
             return { ...state, Transport: newTransport, isPlaying: true };
         }
+        /*
+
+            PLAYLISTS/FOLDERS
+
+        */
+        case 'HYDRATE_PLAYLISTS': {
+            return { ...state, PlayLists: action.payload };
+        }
+        case 'PLAYLIST_END': {
+            const { PlayList, Page } = action.payload;
+            const next_PlayLists = { ...state.PlayLists };
+            next_PlayLists[PlayList].hydrated["Complete"] = true;
+            next_PlayLists[PlayList].hydrated[Page] = true;
+            return { ...state, PlayLists: next_PlayLists };
+        }
+        case 'SELECT_PLAYLIST': {
+            return { ...state, Page: 1, SelectedPlaylist: action.payload };
+        }
         case 'ADD_SONG_TO_PLAYLIST': {
             const { PlayLists } = state;
             const { payload: { song, playlist } } = action;
@@ -432,9 +452,6 @@ function reducer(state, action) {
                 nextPlaylists[playlist].files = [...PlayLists[playlist].files, Number(song)];
             }
             return { ...state, PlayLists: nextPlaylists, draggedOverPlaylist: null };
-        }
-        case "TOGGLE_PLAYERSTATE": {
-            return { ...state, isPlaying: !state.isPlaying };
         }
         case "REARRANGE_PLAYLIST": {
             const { item_to_put_before, item_to_be_moved } = action.payload;
@@ -454,10 +471,6 @@ function reducer(state, action) {
                 }
                 next_playlist_object[state.SelectedPlaylist].files = nextTargetPlaylist;
             }
-            // this could be refactored- playlists is an object
-            // we also want to treat like an array - "All" needs
-            // to be reappended if we destructure as above 
-            // next_playlist_object["All"] = [...Object.values(state.Songs)]
             return { ...state, PlayLists: next_playlist_object };
         }
         case "ADD_PLAYLIST": {

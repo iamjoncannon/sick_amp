@@ -46,12 +46,17 @@ const PlayListHeader = styled.span`
 const PlayLists = () => {
     
     const { state, dispatch } = React.useContext(Store);
+    const [ isLoading, handleLoading ] = React.useState(false)
 
     React.useEffect( ()=>{
 
         if(state.PlayLists === null){
-            
-            fetchInitialData(state.token, dispatch)
+
+            handleLoading(true)
+            if(!isLoading){
+
+                fetchInitialData(state.token, dispatch)
+            }
         }
     })
 
@@ -85,7 +90,7 @@ const PlayLists = () => {
                         })}
                 </>
             }
-            
+
         </PlayListsContainer>
     )
 }

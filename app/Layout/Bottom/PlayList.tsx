@@ -31,7 +31,11 @@ const PlayList = (props: PlaylistContainerProps) => {
 
     const { id } = props 
 
-    const { PlayLists } = state 
+    const { PlayLists, 
+            RunningPlaylist, 
+            SelectedPlaylist, 
+            draggedOverPlaylist 
+         } = state 
 
     const { name } = PlayLists[id]
 
@@ -68,11 +72,11 @@ const PlayList = (props: PlaylistContainerProps) => {
 
     let selectionState
 
-    if(state.draggedOverPlaylist === id ){
+    if(draggedOverPlaylist === id ){
 
         selectionState = "draggedOver"
     }
-    else if(id === state.SelectedPlaylist){
+    else if(id === SelectedPlaylist){
 
         selectionState = "selected"
     }
@@ -88,10 +92,10 @@ const PlayList = (props: PlaylistContainerProps) => {
         >
             <span 
                 id={id} 
-            >{name}</span>
+            >{name}{id === RunningPlaylist && " ♫"}</span>
 
         </PlayListContainer>
     )
 }
-// ♫
+// 
 export default PlayList
