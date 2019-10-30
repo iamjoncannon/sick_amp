@@ -3,14 +3,6 @@ import styled, { withTheme } from 'styled-components'
 import { Store } from '../../store/Store'
 import { useTable, useBlockLayout, useResizeColumns } from 'react-table'
 
-/*
-
-Note- there are a ton of type errors in this library which 
-I have not been able to resolve
-
-*/
-
-
 // Container styling from table library 
 
 var Container = styled.div`

@@ -11,18 +11,6 @@ export interface songStateType {
     [ key: number ] : SongObject
 }
 
-
-/* 
-
-export interface PlayList {
-    Title: string
-    id: number
-    ids: number[]
-}
-
-*/
-
-
 export interface PlayList {
 
     created_at: string  // "2019-10-29T20:22:51.949220+00:00"

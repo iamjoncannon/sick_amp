@@ -1,12 +1,12 @@
 import React from 'react';
 const useEffect = (React as any).useEffect;
 import { Store } from '../../store/Store'
+import { fetchInitialData } from '../../store/Thunks'
 import styled from 'styled-components'
 import axios from 'axios'
 import { sortColumns } from './Helpers'
 import * as Types from '../../store/Types'
 import PlayList from './PlayList'
-import { remote_url } from '../../../config'
 
 const PlayListsContainer = styled.div`
  
@@ -43,46 +43,17 @@ const PlayListHeader = styled.span`
     margin-top: 2vh;
 `
 
-
 const PlayLists = () => {
     
     const { state, dispatch } = React.useContext(Store);
 
     React.useEffect( ()=>{
 
-        async function fetchData(){
-
-            let { data } = await axios.get(`${remote_url}/folders/?api_key=${state.token}`)
-            
-            const formattedData = {}
-            
-            for(let playlist in data){
-
-                // add All playlist
-
-                formattedData["All"] = { name: "All Songs" }
-                
-                // make sure the local hash key is the same 
-                // as the id returned from the server
-                formattedData[data[playlist].id] = data[playlist]
-                
-                // add hydrated boolean to prevent manage
-                // fetching of data for each playlist 
-                formattedData[data[playlist].id].hydrated = false
-            }
-
-            dispatch({
-                type: "HYDRATE_PLAYLISTS",
-                payload: formattedData
-            })
-        }
-
         if(state.PlayLists === null){
             
-            fetchData()
+            fetchInitialData(state.token, dispatch)
         }
     })
-
 
     const addPlaylist = () => {
 

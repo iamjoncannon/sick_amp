@@ -3,7 +3,7 @@ const Suspense = (React as any).Suspense;
 const lazy = (React as any).lazy;
 import ReactDOM from "react-dom";
 import { StoreProvider, Store } from './store/Store'
-import ThemeManager  from './store/ThemeManager'
+import ThemeManager  from './ThemeManager'
 import Logger from './Logger'
 const MenuBar = lazy(() => import('./Layout/MenuBar/MenuBar'))
 const BottomLayout = lazy(() => import('./Layout/Bottom/BottomLayout'))

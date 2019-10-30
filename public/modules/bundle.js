@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"2ee9aa811652ce42a0cb","1":"d545ceca97b80ed7c45f","2":"a4245ba38307424b059a","3":"4f02bc95aec477774fa9","4":"73a5fa95cb5dc6fae898","5":"6b0fe123c2b5de077564","6":"689b28c3528c549c6085","7":"c902a21e8f17537530d1","8":"6ab9b1995abe206efb75"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"2ee9aa811652ce42a0cb","1":"d545ceca97b80ed7c45f","2":"a4245ba38307424b059a","3":"4f02bc95aec477774fa9","4":"cbb4d4c17632b45d45f9","5":"a9f67895f7f1e5cffb5f","6":"689b28c3528c549c6085","7":"86184c75555d82c169dc","8":"6ab9b1995abe206efb75"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -256,6 +256,41 @@ const Logger = () => {
 
 /***/ }),
 
+/***/ "./app/ThemeManager.tsx":
+/*!******************************!*\
+  !*** ./app/ThemeManager.tsx ***!
+  \******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+
+
+// we want to create a Theme Provider 
+// for all downstream components,
+// but want our global store to be able 
+// to alter the themes as well, so the 
+// user can create skins
+const InitialTheme = {
+    primaryColor: "#3F3F3F",
+    secondaryColor: "#262626",
+    tertiaryColor: "#1E1E1E",
+    highlightColor: "#A9A9A9",
+    fontColor: "#E0E0E0"
+};
+const ThemeManager = (props) => {
+    // todo - wire into the store 
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(styled_components__WEBPACK_IMPORTED_MODULE_1__["ThemeProvider"], { theme: InitialTheme }, props.children));
+};
+/* harmony default export */ __webpack_exports__["default"] = (ThemeManager);
+
+
+/***/ }),
+
 /***/ "./app/main.tsx":
 /*!**********************!*\
   !*** ./app/main.tsx ***!
@@ -270,7 +305,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _store_Store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./store/Store */ "./app/store/Store.tsx");
-/* harmony import */ var _store_ThemeManager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./store/ThemeManager */ "./app/store/ThemeManager.tsx");
+/* harmony import */ var _ThemeManager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ThemeManager */ "./app/ThemeManager.tsx");
 /* harmony import */ var _Logger__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Logger */ "./app/Logger.tsx");
 
 const Suspense = react__WEBPACK_IMPORTED_MODULE_0___default.a.Suspense;
@@ -284,7 +319,7 @@ const BottomLayout = lazy(() => Promise.all(/*! import() */[__webpack_require__.
 react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Suspense, { fallback: "Loading..." },
     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_store_Store__WEBPACK_IMPORTED_MODULE_2__["StoreProvider"], null,
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Logger__WEBPACK_IMPORTED_MODULE_4__["default"], null),
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_store_ThemeManager__WEBPACK_IMPORTED_MODULE_3__["default"], null,
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ThemeManager__WEBPACK_IMPORTED_MODULE_3__["default"], null,
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(MenuBar, null),
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(BottomLayout, null)))), document.getElementById("root") || document.createElement('app'));
 
@@ -439,41 +474,6 @@ function StoreProvider(props) {
 function clone(item) {
     return JSON.parse(JSON.stringify(item));
 }
-
-
-/***/ }),
-
-/***/ "./app/store/ThemeManager.tsx":
-/*!************************************!*\
-  !*** ./app/store/ThemeManager.tsx ***!
-  \************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
-
-
-// we want to create a Theme Provider 
-// for all downstream components,
-// but want our global store to be able 
-// to alter the themes as well, so the 
-// user can create skins
-const InitialTheme = {
-    primaryColor: "#3F3F3F",
-    secondaryColor: "#262626",
-    tertiaryColor: "#1E1E1E",
-    highlightColor: "#A9A9A9",
-    fontColor: "#E0E0E0"
-};
-const ThemeManager = (props) => {
-    // todo - wire into the store 
-    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(styled_components__WEBPACK_IMPORTED_MODULE_1__["ThemeProvider"], { theme: InitialTheme }, props.children));
-};
-/* harmony default export */ __webpack_exports__["default"] = (ThemeManager);
 
 
 /***/ }),
