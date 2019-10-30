@@ -2,15 +2,17 @@ import React from 'react';
 const useEffect = (React as any).useEffect;
 import { Store } from '../../store/Store'
 import { fetchInitialData } from '../../store/Thunks'
+import { postPlayList } from '../../store/Thunks'
 import styled from 'styled-components'
 import axios from 'axios'
 import { sortColumns } from './Helpers'
 import * as Types from '../../store/Types'
 import PlayList from './PlayList'
+import EditablePlayList from './EditablePlayList'
 
 const PlayListsContainer = styled.div`
  
-    font-size: 2vh;
+    font-size: 1.75vh;
     cursor: default;
     height: 90vh;
     width: 14vw;
@@ -28,8 +30,6 @@ const PlayListsContainer = styled.div`
     #selected {
         font-weight: bold;
         text-decoration: underline;
-        background-color: ${props=>props.theme.highlightColor};
-        color: ${props=>props.theme.secondaryColor};
     }
 
     #draggedOver {
@@ -53,6 +53,7 @@ const PlayLists = () => {
         if(state.PlayLists === null){
 
             handleLoading(true)
+
             if(!isLoading){
 
                 fetchInitialData(state.token, dispatch)
@@ -61,8 +62,8 @@ const PlayLists = () => {
     })
 
     const addPlaylist = () => {
-
-        dispatch({type:"ADD_PLAYLIST"})
+        
+        dispatch({type: "START_EDITING_PLAYLIST", payload : "post"})    
     }
 
     return (
@@ -88,6 +89,11 @@ const PlayLists = () => {
                                 <PlayList key={each.id} id={each.id} /> 
                                 )
                         })}
+                    {state.isEditingNewPlayList === "post" && 
+                                 <EditablePlayList 
+                                    new
+                                    initialValue={"New PlayList"}
+                                  /> }
                 </>
             }
 

@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import axios from 'axios'
 import { sortColumns } from './Helpers'
 import * as Types from '../../store/Types'
+import EditablePlayList from './EditablePlayList'
 
 const PlayListContainer = styled.div`
 
@@ -38,13 +39,19 @@ const PlayList = (props: PlaylistContainerProps) => {
          } = state 
 
     const { name } = PlayLists[id]
+    
+    const isSelectedPlayList = id === SelectedPlaylist
 
     const handleClick = (id: number | string) => {
 
-        dispatch({
-            type:"SELECT_PLAYLIST",
-            payload: id
-        })
+        if(!isSelectedPlayList){
+
+            dispatch({
+                type:"SELECT_PLAYLIST",
+                payload: id
+            })
+        }
+
     }
 
     const onDragOver = (e : any) => {
@@ -70,13 +77,18 @@ const PlayList = (props: PlaylistContainerProps) => {
         })
     }
 
+    const handleDoubleClick = () => {
+
+        dispatch({type: "START_EDITING_PLAYLIST", payload: "put"})
+    }
+
     let selectionState
 
     if(draggedOverPlaylist === id ){
 
         selectionState = "draggedOver"
     }
-    else if(id === SelectedPlaylist){
+    else if(isSelectedPlayList){
 
         selectionState = "selected"
     }
@@ -84,18 +96,23 @@ const PlayList = (props: PlaylistContainerProps) => {
     return(
 
         <PlayListContainer 
+            onDoubleClick={handleDoubleClick}
             onClick={()=>handleClick(id)}
             onDragOver={ e=> onDragOver(e)}
             onDrop={(e)=>onDrop(e)}
             id={ selectionState }
 
         >
-            <span 
+            { isSelectedPlayList && state.isEditingNewPlayList === "put"?
+                <EditablePlayList initialValue={name}/>
+                : 
+                <span 
                 id={id} 
-            >{name}{id === RunningPlaylist && " ♫"}</span>
+                >{name}{id === RunningPlaylist && " ♫"}</span>
+            }
 
         </PlayListContainer>
     )
 }
-// 
+
 export default PlayList

@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"2ee9aa811652ce42a0cb","1":"d545ceca97b80ed7c45f","2":"3a012b43a7d1c60810ba","3":"4f02bc95aec477774fa9","4":"16d99dec47561a46d89e","5":"3d7d2038d333c3daaa89","6":"689b28c3528c549c6085","7":"86184c75555d82c169dc","8":"6ab9b1995abe206efb75"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"2ee9aa811652ce42a0cb","1":"d545ceca97b80ed7c45f","2":"3a012b43a7d1c60810ba","3":"4f02bc95aec477774fa9","4":"fd3ccfeb1ce9a05d5e03","5":"e5fe9d8f8cb8aac260a7","6":"689b28c3528c549c6085","7":"86184c75555d82c169dc","8":"6ab9b1995abe206efb75"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -347,6 +347,7 @@ const initialState = {
     SelectedPlaylist: "All",
     RunningPlaylist: "All",
     draggedOverPlaylist: null,
+    isEditingNewPlayList: false,
     Columns: null,
     Songs: null,
     token: "dev"
@@ -434,6 +435,9 @@ function reducer(state, action) {
         case 'HYDRATE_PLAYLISTS': {
             return { ...state, PlayLists: action.payload };
         }
+        case 'START_EDITING_PLAYLIST': {
+            return { ...state, isEditingNewPlayList: action.payload };
+        }
         case 'PLAYLIST_END': {
             const { PlayList, Page } = action.payload;
             const next_PlayLists = { ...state.PlayLists };
@@ -473,15 +477,15 @@ function reducer(state, action) {
             }
             return { ...state, PlayLists: next_playlist_object };
         }
-        case "ADD_PLAYLIST": {
-            let next_playlist_object = { ...state.PlayLists };
-            const next_id = Object.keys(next_playlist_object).length;
-            next_playlist_object[next_id] = { name: "New PlayList",
-                id: next_id,
-                files: [],
-                hydrated: {}
-            };
-            return { ...state, PlayLists: next_playlist_object };
+        case "UPDATE_PLAYLISTS": {
+            const next_playlist_object = { ...state.PlayLists };
+            const { id } = action.payload;
+            next_playlist_object[id] = action.payload;
+            next_playlist_object[id].hydrated = {};
+            return { ...state, isEditingNewPlayList: false, PlayLists: next_playlist_object };
+        }
+        case "CANCEL_UPDATE_PLAYLISTS": {
+            return { ...state, isEditingNewPlayList: false };
         }
         case "DRAG_OVER_PLAYLIST": {
             return { ...state, draggedOverPlaylist: action.payload };

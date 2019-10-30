@@ -9,6 +9,7 @@ const initialState : Types.Store = {
     SelectedPlaylist: "All",
     RunningPlaylist: "All",
     draggedOverPlaylist: null,
+    isEditingNewPlayList: false,
     
     Columns: null,
     Songs: null,
@@ -158,6 +159,11 @@ function reducer(state : Types.Store, action : ReduxAction ) {
             return {...state, PlayLists: action.payload}
         }
 
+        case 'START_EDITING_PLAYLIST':{
+
+            return {...state, isEditingNewPlayList: action.payload }
+        }
+
 
         case 'PLAYLIST_END': {
 
@@ -225,19 +231,22 @@ function reducer(state : Types.Store, action : ReduxAction ) {
             return {...state, PlayLists : next_playlist_object}
         }
 
-        case "ADD_PLAYLIST":{
+        case "UPDATE_PLAYLISTS":{
 
-            let next_playlist_object = {...state.PlayLists}
+            const next_playlist_object = {...state.PlayLists}
 
-            const next_id = Object.keys(next_playlist_object).length
+            const { id } = action.payload 
 
-            next_playlist_object[next_id] = { name: "New PlayList", 
-                                              id: next_id, 
-                                              files: [ ],
-                                              hydrated: { }
-                                            }
+            next_playlist_object[id] = action.payload
 
-            return {...state, PlayLists : next_playlist_object}
+            next_playlist_object[id].hydrated = { }
+
+            return {...state, isEditingNewPlayList: false, PlayLists : next_playlist_object}
+        }
+        
+        case "CANCEL_UPDATE_PLAYLISTS":{
+
+            return {...state, isEditingNewPlayList: false}
         }
 
         case "DRAG_OVER_PLAYLIST": {

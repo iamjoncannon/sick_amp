@@ -240,8 +240,9 @@ function Table({ columns, data }) {
 
     const keyPressHandler = (e: any) =>{
 
+      if(state.isEditingNewPlayList) return 
+      
       e.preventDefault()
-      e.stopPropagation()
     
       const { key, code } = e
       const { PlayLists, SelectedPlaylist } = state 
@@ -305,6 +306,8 @@ function Table({ columns, data }) {
         
         handleIDSelect(newSeletedID)
       }
+
+
     }
     
     window.addEventListener('keydown', keyPressHandler)
