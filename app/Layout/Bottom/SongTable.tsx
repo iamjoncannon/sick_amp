@@ -234,8 +234,6 @@ function Table({ columns, data }) {
   const [ selectedID, handleIDSelect ] = React.useState(0)
   const [ isDraggedOver, handleDragOver ] = React.useState(null)
 
-  console.log("selectedID", selectedID)
-
   // hook to manage keyboard events- 
 
   React.useEffect(()=>{
@@ -254,7 +252,6 @@ function Table({ columns, data }) {
           type: "PLAY_TRACK",
           payload: selectedID 
         })
-
       }
 
       if(code === "Space"){
@@ -263,7 +260,6 @@ function Table({ columns, data }) {
           type: "TOGGLE_PLAYERSTATE",
           payload: null 
         })
-
       }
       
       if(key === "ArrowUp"){
@@ -437,7 +433,7 @@ function Table({ columns, data }) {
 
             let calculatedStyle = "tr"
 
-            const isSelected = Number(row.original.ID) === Number(selectedID) 
+            const isSelected = Number(row.original.id) === Number(selectedID) 
 
             if(i % 2 === 0 ){
               
@@ -453,30 +449,31 @@ function Table({ columns, data }) {
               calculatedStyle += " selected"
             }
 
-            const isPlaying = Number(row.original.ID) === Number(state.Transport.current) 
+            const isPlaying = Number(row.original.id) === Number(state.Transport.current) 
 
             if(isPlaying){
 
               calculatedStyle += " playing"
             }
 
-            if(!!isDraggedOver && Number(row.original.ID) === Number(isDraggedOver)){
+            if(!!isDraggedOver && Number(row.original.id) === Number(isDraggedOver)){
 
               calculatedStyle += " draggedOver"
             }
 
             return prepareRow(row) || (
               
-              <div {...row.getRowProps()} 
-                   draggable
-                   onDoubleClick={e=>handleDoubleClick(e)}
-                   onDragStart={(e)=>onDragStart(e, Number(row.original.ID))} 
-                   onDragEnd={onDragEnd}
-                   onDragOver={ e=> state.SelectedPlaylist !== "All" && onDragOver(e)}
-                   className={ calculatedStyle } 
-                   id={row.original.id} 
-                   onClick={e=>handleClick(e)}
-                   onDrop={(e)=> state.SelectedPlaylist !== "All" && onDrop(e)}
+              <div 
+                {...row.getRowProps()} 
+                draggable
+                onDoubleClick={e=>handleDoubleClick(e)}
+                onDragStart={(e)=>onDragStart(e, Number(row.original.id))} 
+                onDragEnd={onDragEnd}
+                onDragOver={ e=> state.SelectedPlaylist !== "All" && onDragOver(e)}
+                className={ calculatedStyle } 
+                id={row.original.id} 
+                onClick={e=>handleClick(e)}
+                onDrop={(e)=> state.SelectedPlaylist !== "All" && onDrop(e)}
               >
 
                 {row.cells.map( cell => {

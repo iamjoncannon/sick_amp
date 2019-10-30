@@ -68,6 +68,7 @@ const MenuBar = (props: any) => {
     return (
         <>
         <PrimaryMenuContainer>
+            
             <Suspense fallback="Loading...">
                 
                 <Icon />

@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"2ee9aa811652ce42a0cb","1":"d545ceca97b80ed7c45f","2":"506264e1a11cccb73597","3":"4f02bc95aec477774fa9","4":"cace3923bf62ea1c472e","5":"182f5fbdf70c94cb9257","6":"689b28c3528c549c6085","7":"86184c75555d82c169dc","8":"6ab9b1995abe206efb75"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"2ee9aa811652ce42a0cb","1":"d545ceca97b80ed7c45f","2":"90e4b923aee6f91ab6f2","3":"4f02bc95aec477774fa9","4":"cace3923bf62ea1c472e","5":"13ead226a2272aa38cc7","6":"689b28c3528c549c6085","7":"86184c75555d82c169dc","8":"6ab9b1995abe206efb75"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -437,9 +437,9 @@ function reducer(state, action) {
         }
         case "REARRANGE_PLAYLIST": {
             const { item_to_put_before, item_to_be_moved } = action.payload;
-            let next_playlist_object = [...state.PlayLists];
+            let next_playlist_object = state.PlayLists;
             if (state.SelectedPlaylist !== "All") {
-                let targetPlaylist = next_playlist_object[state.SelectedPlaylist].ids;
+                let targetPlaylist = next_playlist_object[state.SelectedPlaylist].files;
                 let nextTargetPlaylist = [];
                 // this is not the most clever way to do this
                 // but it works 
@@ -451,12 +451,12 @@ function reducer(state, action) {
                         nextTargetPlaylist.push(targetPlaylist[i]);
                     }
                 }
-                next_playlist_object[state.SelectedPlaylist].ids = nextTargetPlaylist;
+                next_playlist_object[state.SelectedPlaylist].files = nextTargetPlaylist;
             }
             // this could be refactored- playlists is an object
             // we also want to treat like an array - "All" needs
             // to be reappended if we destructure as above 
-            next_playlist_object["All"] = [...Object.values(state.Songs)];
+            // next_playlist_object["All"] = [...Object.values(state.Songs)]
             return { ...state, PlayLists: next_playlist_object };
         }
         case "ADD_PLAYLIST": {

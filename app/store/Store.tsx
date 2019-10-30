@@ -165,16 +165,15 @@ function reducer(state : Types.Store, action : ReduxAction ) {
             return {...state, isPlaying: !state.isPlaying}
         }
 
-
         case "REARRANGE_PLAYLIST": {
 
             const { item_to_put_before, item_to_be_moved } = action.payload
 
-            let next_playlist_object = [...state.PlayLists]
+            let next_playlist_object = state.PlayLists
             
             if(state.SelectedPlaylist !== "All"){
 
-                let targetPlaylist = next_playlist_object[state.SelectedPlaylist].ids
+                let targetPlaylist = next_playlist_object[state.SelectedPlaylist].files
 
                 let nextTargetPlaylist = []
 
@@ -193,7 +192,7 @@ function reducer(state : Types.Store, action : ReduxAction ) {
                     }
                 }
 
-                next_playlist_object[state.SelectedPlaylist].ids = nextTargetPlaylist
+                next_playlist_object[state.SelectedPlaylist].files = nextTargetPlaylist
                 
             }
             
@@ -201,7 +200,7 @@ function reducer(state : Types.Store, action : ReduxAction ) {
             // we also want to treat like an array - "All" needs
             // to be reappended if we destructure as above 
                 
-            next_playlist_object["All"] = [...Object.values(state.Songs)]
+            // next_playlist_object["All"] = [...Object.values(state.Songs)]
                         
             return {...state, PlayLists : next_playlist_object}
         }
