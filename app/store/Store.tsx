@@ -3,14 +3,12 @@ import * as Types from './Types'
 
 const initialState : Types.Store = {
     Transport : {
-        previous: null, 
-        current: 0, 
-        next: 1
+        current: 1, 
     },
     isPlaying: false,
     SelectedPlaylist: "All",
     RunningPlaylist: "All",
-    ColumnHash: null,
+    Columns: null,
     PlayLists: null,
     Songs: null,
     draggedOverPlaylist: null,
@@ -35,21 +33,40 @@ function reducer(state : Types.Store, action : ReduxAction ) {
             return {...state, PlayLists: action.payload}
         }
 
-        case 'HYDRATE': {
+        case 'HYDRATE_SONGS': {
 
-            const { Songs, PlayLists, ColumnHash } = action.payload
+            const { PlayList, Page, data } = action.payload
 
-            PlayLists.All = [...Object.values(Songs)]
+            // pouring songs into the pool
 
-            const Transport = { previous: Object.keys(Songs).length -1 , current: 0, next: 1}
+            const Songs = {...state.Songs, ...data}
 
-            return {...state, 
-                    Songs,
-                    PlayLists,
-                    ColumnHash,
-                    Transport
-                    }
+            // update the hydration hash for the playlist 
+
+            const PlayLists = {...state.PlayLists}
+
+            PlayLists[PlayList].hydrated[Page] = true 
+  
+            return {...state, PlayLists : PlayLists, Songs: Songs }
         }
+
+        case 'PLAYLIST_END': {
+
+            const { PlayList, Page } = action.payload
+
+            const next_PlayLists = {...state.PlayLists}
+
+            next_PlayLists[PlayList].hydrated["Complete"] = true 
+            next_PlayLists[PlayList].hydrated[Page] = true 
+
+            return {...state, PlayLists: next_PlayLists }
+        }
+
+        case 'HYDRATE_COLUMNS': {
+
+            return {...state, Columns: action.payload.data}
+        }
+        
 
         case 'SELECT_PLAYLIST':
         

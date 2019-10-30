@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"2ee9aa811652ce42a0cb","1":"d545ceca97b80ed7c45f","2":"a4245ba38307424b059a","3":"4f02bc95aec477774fa9","4":"cbb4d4c17632b45d45f9","5":"a9f67895f7f1e5cffb5f","6":"689b28c3528c549c6085","7":"86184c75555d82c169dc","8":"6ab9b1995abe206efb75"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"2ee9aa811652ce42a0cb","1":"d545ceca97b80ed7c45f","2":"a4245ba38307424b059a","3":"4f02bc95aec477774fa9","4":"4b6308341402c277be66","5":"315cdf35a82cc8dfe117","6":"689b28c3528c549c6085","7":"86184c75555d82c169dc","8":"6ab9b1995abe206efb75"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -342,14 +342,12 @@ __webpack_require__.r(__webpack_exports__);
 
 const initialState = {
     Transport: {
-        previous: null,
-        current: 0,
-        next: 1
+        current: 1,
     },
     isPlaying: false,
     SelectedPlaylist: "All",
     RunningPlaylist: "All",
-    ColumnHash: null,
+    Columns: null,
     PlayLists: null,
     Songs: null,
     draggedOverPlaylist: null,
@@ -361,16 +359,24 @@ function reducer(state, action) {
         case 'HYDRATE_PLAYLISTS': {
             return { ...state, PlayLists: action.payload };
         }
-        case 'HYDRATE': {
-            const { Songs, PlayLists, ColumnHash } = action.payload;
-            PlayLists.All = [...Object.values(Songs)];
-            const Transport = { previous: Object.keys(Songs).length - 1, current: 0, next: 1 };
-            return { ...state,
-                Songs,
-                PlayLists,
-                ColumnHash,
-                Transport
-            };
+        case 'HYDRATE_SONGS': {
+            const { PlayList, Page, data } = action.payload;
+            // pouring songs into the pool
+            const Songs = { ...state.Songs, ...data };
+            // update the hydration hash for the playlist 
+            const PlayLists = { ...state.PlayLists };
+            PlayLists[PlayList].hydrated[Page] = true;
+            return { ...state, PlayLists: PlayLists, Songs: Songs };
+        }
+        case 'PLAYLIST_END': {
+            const { PlayList, Page } = action.payload;
+            const next_PlayLists = { ...state.PlayLists };
+            next_PlayLists[PlayList].hydrated["Complete"] = true;
+            next_PlayLists[PlayList].hydrated[Page] = true;
+            return { ...state, PlayLists: next_PlayLists };
+        }
+        case 'HYDRATE_COLUMNS': {
+            return { ...state, Columns: action.payload.data };
         }
         case 'SELECT_PLAYLIST':
             return { ...state, SelectedPlaylist: action.payload };

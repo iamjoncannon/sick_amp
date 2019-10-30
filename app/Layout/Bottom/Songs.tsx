@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import * as Types from '../../store/Types'
 import SongTable from './SongTable'
 import { sortColumns } from './Helpers'
+import { hydrateColumns } from '../../store/Thunks'
 
 const SongSectionContainer = styled.div`
     width: 86vw;
@@ -23,7 +24,16 @@ const PlayListFilterContainer = styled.div`
 const Songs = () => {
 
     const { state, dispatch } = React.useContext(Store);
-
+    
+    React.useEffect( ()=>{
+    
+        if(state.Columns === null){
+    
+            hydrateColumns(state.token, dispatch)
+            
+          }
+    })
+    
     return (
 
         <SongSectionContainer>
@@ -32,7 +42,10 @@ const Songs = () => {
 
             </PlayListFilterContainer>
             
-            { !!state.ColumnHash && <SongTable /> }
+            { !!state.Columns && 
+              !!state.PlayLists && 
+              !!state.Songs && 
+              <SongTable /> }
 
         </SongSectionContainer>
     )

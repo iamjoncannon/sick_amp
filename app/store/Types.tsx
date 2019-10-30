@@ -11,6 +11,10 @@ export interface songStateType {
     [ key: number ] : SongObject
 }
 
+export interface HydrationHash {
+    [ key: number ] : boolean
+}
+
 export interface PlayList {
 
     created_at: string  // "2019-10-29T20:22:51.949220+00:00"
@@ -20,9 +24,8 @@ export interface PlayList {
     slug: string        // "sick-jams-3"
     updated_at: string  // "2019-10-29T20:22:52.255682+00:00"
     user: number        // 1
-    hydrated: boolean 
+    hydrated: HydrationHash  // holds the pages that have been loaded 
 }
-
 
 export interface PlaylistState {
     [key : number] : PlayList
@@ -35,14 +38,27 @@ export interface Transport {
     next: number | void
 }
 
+export interface Column {
+    created_at: string    // "2019-10-29T19:50:51.090719+00:00",
+    id: number            // 15,
+    name: string          // "year",
+    options: string[]     // 
+    searchable: boolean   // false
+    type: string          // "int",
+    updated_at: string    // "2019-10-29T19:50:51.090736+00:00"
+}
+
 export interface Store {
     Transport : Transport 
     isPlaying: Boolean
+    draggedOverPlaylist: Boolean    
+
+    Columns : Column[]
+    
+    PlayLists : PlaylistState | void 
     SelectedPlaylist: number | string | void
     RunningPlaylist: number | string | void
-    PlayLists : PlaylistState | void 
+    
     Songs: songStateType | void 
-    ColumnHash : { [ Column : string] : Boolean} | void 
-    draggedOverPlaylist: Boolean    
 }
 

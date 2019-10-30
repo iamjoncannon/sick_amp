@@ -1,6 +1,7 @@
 import React from 'react'
 import styled, { withTheme } from 'styled-components'
 import { Store } from '../../store/Store'
+import { hydrateSongs } from '../../store/Thunks'
 import { useTable, useBlockLayout, useResizeColumns } from 'react-table'
 
 // Container styling from table library 
@@ -118,13 +119,53 @@ var Container = styled.div`
 function SongTable() {
 
   const { state, dispatch } = React.useContext(Store);
+  const [ Page, setPage ] = React.useState(1)
+
+  const { SelectedPlaylist, PlayLists } = state 
+
+  const CurrentPlayList = PlayLists[SelectedPlaylist]
+
+  React.useEffect( ()=>{
+    
+    /*
+      fetch songs for this page if not hydrated
+    */
+
+    if(!CurrentPlayList.hydrated[Page]){
+
+      hydrateSongs(state.token, dispatch, SelectedPlaylist, Page)
+    }
+
+    let container = document.getElementById("song_table")
+
+    const handleScroll = () => {
+
+        const { scrollTop, scrollHeight, offsetHeight } = container 
+      
+        if (scrollTop + offsetHeight > scrollHeight - 100 ) {
+
+          if(!CurrentPlayList.hydrated.Complete){
+            
+            console.log('hitting handlescroll callback')
+              setPage(Page + 1)
+            }
+        }
+    }
+
+    container.addEventListener("scroll", handleScroll);
+
+    return () => {
+
+      container.removeEventListener("scroll", handleScroll)
+    }
+  })
 
   // format state for the table library 
-  const generatedColumns = Object.keys(state.ColumnHash).map(key=>{
+  const generatedColumns = Object.values(state.Columns).map(column=>{
       
     return {
-      Header: key, 
-      accessor: key
+      Header: column.name, 
+      accessor: column.name
     }
   })
 
@@ -133,6 +174,9 @@ function SongTable() {
     []
   )
 
+  
+  
+  /*
   let formattedSongData = state.Songs
 
   // filter list if playlist selected  
@@ -151,10 +195,14 @@ function SongTable() {
 
   formattedSongData = Object.values(formattedSongData)
 
-  const data = React.useMemo(() => formattedSongData)
+  */
+
+  // the table expects an array of objects - 
+ 
+ const data = React.useMemo(() => Object.values(state.Songs))
 
   return (
-    <Container>
+    <Container id={"song_table"}>
       
       <Table 
         columns={columns} 
