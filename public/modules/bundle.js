@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"2ee9aa811652ce42a0cb","1":"d545ceca97b80ed7c45f","2":"90e4b923aee6f91ab6f2","3":"4f02bc95aec477774fa9","4":"cace3923bf62ea1c472e","5":"13ead226a2272aa38cc7","6":"689b28c3528c549c6085","7":"86184c75555d82c169dc","8":"6ab9b1995abe206efb75"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"2ee9aa811652ce42a0cb","1":"d545ceca97b80ed7c45f","2":"3a012b43a7d1c60810ba","3":"4f02bc95aec477774fa9","4":"18c30706026d68b1db51","5":"3d7d2038d333c3daaa89","6":"689b28c3528c549c6085","7":"86184c75555d82c169dc","8":"6ab9b1995abe206efb75"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -378,8 +378,9 @@ function reducer(state, action) {
         case 'HYDRATE_COLUMNS': {
             return { ...state, Columns: action.payload.data };
         }
-        case 'SELECT_PLAYLIST':
+        case 'SELECT_PLAYLIST': {
             return { ...state, SelectedPlaylist: action.payload };
+        }
         case 'PLAY_TRACK': {
             const current = Number(action.payload);
             const { SelectedPlaylist } = state;
@@ -395,14 +396,14 @@ function reducer(state, action) {
             // or the end of the playlist if current = 0 
             let next_current;
             if (RunningPlaylist === "All") {
-                next_current = current === 0 ? PlayLists[RunningPlaylist].length - 1 : Number(current) - 1;
+                next_current = current === 1 ? PlayLists[RunningPlaylist].length - 1 : Number(current) - 1;
             }
             else {
                 // if its a specific playlist, then we need to find the index of the track in the 
-                // playlists ids and return the previous index, or end if 0 
-                let CurrentPlaylist = PlayLists[RunningPlaylist].ids;
+                // playlists files and return the previous index, or end if 0 
+                let CurrentPlaylist = PlayLists[RunningPlaylist].files;
                 const current_index = CurrentPlaylist.indexOf(current);
-                next_current = current_index === 0 ? CurrentPlaylist[CurrentPlaylist.length - 1] : CurrentPlaylist[current_index - 1];
+                next_current = current_index === 1 ? CurrentPlaylist[CurrentPlaylist.length - 1] : CurrentPlaylist[current_index - 1];
             }
             let newTransport = { current: next_current };
             return { ...state, Transport: newTransport, isPlaying: true };
@@ -416,9 +417,9 @@ function reducer(state, action) {
                 next_current = current === CurrentPlaylist.length - 1 ? 0 : Number(current) + 1;
             }
             else {
-                CurrentPlaylist = PlayLists[RunningPlaylist].ids;
+                CurrentPlaylist = PlayLists[RunningPlaylist].files;
                 const current_index = CurrentPlaylist.indexOf(current);
-                next_current = current_index === CurrentPlaylist.length - 1 ? CurrentPlaylist[0] : CurrentPlaylist[current_index + 1];
+                next_current = current_index === CurrentPlaylist.length - 1 ? CurrentPlaylist[1] : CurrentPlaylist[current_index + 1];
             }
             let newTransport = { current: next_current };
             return { ...state, Transport: newTransport, isPlaying: true };
@@ -426,9 +427,9 @@ function reducer(state, action) {
         case 'ADD_SONG_TO_PLAYLIST': {
             const { PlayLists } = state;
             const { payload: { song, playlist } } = action;
-            const nextPlaylists = [...PlayLists];
-            if (!nextPlaylists[playlist].ids.includes(Number(song))) {
-                nextPlaylists[playlist].ids = [...PlayLists[playlist].ids, Number(song)];
+            const nextPlaylists = { ...PlayLists };
+            if (!nextPlaylists[playlist].files.includes(Number(song))) {
+                nextPlaylists[playlist].files = [...PlayLists[playlist].files, Number(song)];
             }
             return { ...state, PlayLists: nextPlaylists, draggedOverPlaylist: null };
         }
@@ -461,7 +462,12 @@ function reducer(state, action) {
         }
         case "ADD_PLAYLIST": {
             let next_playlist_object = { ...state.PlayLists };
-            next_playlist_object[next_playlist_object.length] = { name: "New PlayList", id: next_playlist_object.length, files: [] };
+            const next_id = Object.keys(next_playlist_object).length;
+            next_playlist_object[next_id] = { name: "New PlayList",
+                id: next_id,
+                files: [],
+                hydrated: {}
+            };
             return { ...state, PlayLists: next_playlist_object };
         }
         case "DRAG_OVER_PLAYLIST": {

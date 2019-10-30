@@ -27,7 +27,6 @@ export interface SongObject {
     updated_at: string              // "2019-10-29T16:30:13.272837-04:00"
     uuid: string                    // "05f9c3b1-7d74-410d-86ce-603b124088da"
     year: number | void             // null 
-
 }
 
 export interface songStateType {

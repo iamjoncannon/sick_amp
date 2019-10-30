@@ -68,10 +68,11 @@ function reducer(state : Types.Store, action : ReduxAction ) {
         }
         
 
-        case 'SELECT_PLAYLIST':
-        
+        case 'SELECT_PLAYLIST':{
+    
             return { ...state, SelectedPlaylist: action.payload }
-
+        }
+        
         case 'PLAY_TRACK': {
 
             const current : number = Number(action.payload)
@@ -98,18 +99,18 @@ function reducer(state : Types.Store, action : ReduxAction ) {
 
             if(RunningPlaylist === "All"){
 
-                next_current = current === 0 ? PlayLists[RunningPlaylist].length -1 : Number(current) - 1 
+                next_current = current === 1 ? PlayLists[RunningPlaylist].length -1 : Number(current) - 1 
             }
             else{
 
                 // if its a specific playlist, then we need to find the index of the track in the 
-                // playlists ids and return the previous index, or end if 0 
+                // playlists files and return the previous index, or end if 0 
 
-                let CurrentPlaylist = PlayLists[RunningPlaylist].ids
+                let CurrentPlaylist = PlayLists[RunningPlaylist].files
 
                 const current_index = CurrentPlaylist.indexOf(current)
 
-                next_current = current_index === 0 ? CurrentPlaylist[CurrentPlaylist.length -1] : CurrentPlaylist[current_index -1 ] 
+                next_current = current_index === 1 ? CurrentPlaylist[CurrentPlaylist.length -1] : CurrentPlaylist[current_index -1 ] 
             
             }
 
@@ -133,11 +134,11 @@ function reducer(state : Types.Store, action : ReduxAction ) {
             }
             else{
 
-                CurrentPlaylist = PlayLists[RunningPlaylist].ids
+                CurrentPlaylist = PlayLists[RunningPlaylist].files
 
                 const current_index = CurrentPlaylist.indexOf(current)
 
-                next_current = current_index === CurrentPlaylist.length -1 ? CurrentPlaylist[0] : CurrentPlaylist[current_index + 1 ] 
+                next_current = current_index === CurrentPlaylist.length -1 ? CurrentPlaylist[1] : CurrentPlaylist[current_index + 1 ] 
             }
 
             let newTransport : Types.Transport = { current: next_current } 
@@ -150,11 +151,11 @@ function reducer(state : Types.Store, action : ReduxAction ) {
             const { PlayLists } = state 
             const { payload: { song, playlist } } = action
 
-            const nextPlaylists = [...PlayLists]
+            const nextPlaylists = {...PlayLists}
 
-            if(!nextPlaylists[playlist].ids.includes(Number(song))){
+            if(!nextPlaylists[playlist].files.includes(Number(song))){
 
-                nextPlaylists[playlist].ids = [...PlayLists[playlist].ids, Number(song)]
+                nextPlaylists[playlist].files = [...PlayLists[playlist].files, Number(song)]
             }
 
             return {...state, PlayLists : nextPlaylists, draggedOverPlaylist: null}
@@ -209,7 +210,13 @@ function reducer(state : Types.Store, action : ReduxAction ) {
 
             let next_playlist_object = {...state.PlayLists}
 
-            next_playlist_object[next_playlist_object.length] = { name: "New PlayList", id: next_playlist_object.length, files: [ ]}
+            const next_id = Object.keys(next_playlist_object).length
+
+            next_playlist_object[next_id] = { name: "New PlayList", 
+                                              id: next_id, 
+                                              files: [ ],
+                                              hydrated: { }
+                                            }
 
             return {...state, PlayLists : next_playlist_object}
         }
