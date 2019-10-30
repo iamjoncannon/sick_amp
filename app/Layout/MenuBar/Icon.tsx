@@ -19,7 +19,7 @@ const Icon = () => {
     return (
 
         <IconContainer>
-            <span>sick_amp</span>
+            <span>rekord_pool</span>
         </IconContainer>
     )
 }

@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"2ee9aa811652ce42a0cb","1":"d545ceca97b80ed7c45f","2":"a4245ba38307424b059a","3":"4f02bc95aec477774fa9","4":"73d616774e7d98dea402","5":"6b0fe123c2b5de077564","6":"689b28c3528c549c6085","7":"2b9d01e0a09bfd623138","8":"6ab9b1995abe206efb75"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"2ee9aa811652ce42a0cb","1":"d545ceca97b80ed7c45f","2":"a4245ba38307424b059a","3":"4f02bc95aec477774fa9","4":"73a5fa95cb5dc6fae898","5":"6b0fe123c2b5de077564","6":"689b28c3528c549c6085","7":"c902a21e8f17537530d1","8":"6ab9b1995abe206efb75"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -419,9 +419,8 @@ function reducer(state, action) {
             return { ...state, PlayLists: next_playlist_object };
         }
         case "ADD_PLAYLIST": {
-            let next_playlist_object = [...state.PlayLists];
-            next_playlist_object[next_playlist_object.length] = { Title: "New PlayList", id: next_playlist_object.length, ids: [] };
-            next_playlist_object["All"] = [...Object.values(state.Songs)];
+            let next_playlist_object = { ...state.PlayLists };
+            next_playlist_object[next_playlist_object.length] = { name: "New PlayList", id: next_playlist_object.length, files: [] };
             return { ...state, PlayLists: next_playlist_object };
         }
         case "DRAG_OVER_PLAYLIST": {

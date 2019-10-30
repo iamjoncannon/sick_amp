@@ -191,11 +191,9 @@ function reducer(state : Types.Store, action : ReduxAction ) {
 
         case "ADD_PLAYLIST":{
 
-            let next_playlist_object = [...state.PlayLists]
+            let next_playlist_object = {...state.PlayLists}
 
-            next_playlist_object[next_playlist_object.length] = { Title: "New PlayList", id: next_playlist_object.length, ids: [ ]}
-
-            next_playlist_object["All"] = [...Object.values(state.Songs)]
+            next_playlist_object[next_playlist_object.length] = { name: "New PlayList", id: next_playlist_object.length, files: [ ]}
 
             return {...state, PlayLists : next_playlist_object}
         }
