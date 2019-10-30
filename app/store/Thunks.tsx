@@ -19,7 +19,7 @@ export async function fetchInitialData(token: string, dispatch: any){
             
             // add hydrated boolean to prevent manage
             // fetching of data for each playlist 
-            formattedData[data[playlist].id].hydrated = false
+            formattedData[data[playlist].id].hydrated = {}
         }
 
         dispatch({

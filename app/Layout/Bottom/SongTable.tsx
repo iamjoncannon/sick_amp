@@ -125,13 +125,15 @@ function SongTable() {
 
   const CurrentPlayList = PlayLists[SelectedPlaylist]
 
+  const isLoaded = !!CurrentPlayList.hydrated[Page]
+
   React.useEffect( ()=>{
     
     /*
       fetch songs for this page if not hydrated
     */
 
-    if(!CurrentPlayList.hydrated[Page]){
+    if( !isLoaded ){
 
       hydrateSongs(state.token, dispatch, SelectedPlaylist, Page)
     }
@@ -144,9 +146,8 @@ function SongTable() {
       
         if (scrollTop + offsetHeight > scrollHeight - 100 ) {
 
-          if(!CurrentPlayList.hydrated.Complete){
-            
-            console.log('hitting handlescroll callback')
+          if(!CurrentPlayList.hydrated.Complete && isLoaded){
+
               setPage(Page + 1)
             }
         }
@@ -174,32 +175,35 @@ function SongTable() {
     []
   )
 
-  
-  
-  /*
-  let formattedSongData = state.Songs
-
+  let formattedSongData = SelectedPlaylist === "All" ? Object.values(state.Songs) : []
+   
   // filter list if playlist selected  
 
   if(state.SelectedPlaylist !== "All" && !!state.PlayLists){
-    
-    formattedSongData = [] 
-    
-    const currentList = state.PlayLists[state.SelectedPlaylist].ids
+        
+    const currentList = PlayLists[SelectedPlaylist].files
     
     for(let song of currentList){
 
-      formattedSongData.push(state.Songs[song])
+      let song_exists = state.Songs[song]
+
+      if(song_exists){
+      
+        formattedSongData.push(state.Songs[song])
+      }
+    }
+
+    if(CurrentPlayList.files.length > 50 && isLoaded && formattedSongData.length < 50){
+
+      console.log("Page + 1")
+
+      setPage(Page + 1)
     }
   }
 
-  formattedSongData = Object.values(formattedSongData)
-
-  */
-
   // the table expects an array of objects - 
  
- const data = React.useMemo(() => Object.values(state.Songs))
+ const data = React.useMemo(() => formattedSongData)
 
   return (
     <Container id={"song_table"}>
