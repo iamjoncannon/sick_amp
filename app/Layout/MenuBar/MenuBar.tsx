@@ -76,7 +76,9 @@ const MenuBar = (props: any) => {
 
             <VolumeBar />
             <PlayerStateContainer>
-                <Audio />
+                
+                <Audio /> 
+                
             </PlayerStateContainer>
         
         </PrimaryMenuContainer>

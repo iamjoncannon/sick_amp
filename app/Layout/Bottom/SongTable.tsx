@@ -116,7 +116,7 @@ var Container = styled.div`
 
 // container that manages global state from store
 
-function SongTable() {
+function SongTableContainer() {
 
   const { state, dispatch } = React.useContext(Store);
   const [ Page, setPage ] = React.useState(1)
@@ -193,9 +193,9 @@ function SongTable() {
       }
     }
 
-    if(CurrentPlayList.files.length > 50 && isLoaded && formattedSongData.length < 50){
-
-      console.log("Page + 1")
+    if(CurrentPlayList.files.length > 50 
+        && isLoaded 
+        && formattedSongData.length < 50){
 
       setPage(Page + 1)
     }
@@ -234,6 +234,8 @@ function Table({ columns, data }) {
   const [ selectedID, handleIDSelect ] = React.useState(0)
   const [ isDraggedOver, handleDragOver ] = React.useState(null)
 
+  console.log("selectedID", selectedID)
+
   // hook to manage keyboard events- 
 
   React.useEffect(()=>{
@@ -270,7 +272,7 @@ function Table({ columns, data }) {
 
         if(SelectedPlaylist === "All"){
 
-          newSeletedID = selectedID === 0 ? PlayLists["All"].length -1 : Number(selectedID) - 1 
+          newSeletedID = selectedID === 1 ? PlayLists["All"].length -1 : Number(selectedID) - 1 
         }
         else{
 
@@ -294,7 +296,7 @@ function Table({ columns, data }) {
 
         if(SelectedPlaylist === "All"){
 
-          newSeletedID = selectedID === PlayLists["All"].length -1 ? 0 : Number(selectedID) + 1 
+          newSeletedID = selectedID === PlayLists["All"].length -1 ? 1 : Number(selectedID) + 1 
       }
       else{
 
@@ -472,7 +474,7 @@ function Table({ columns, data }) {
                    onDragEnd={onDragEnd}
                    onDragOver={ e=> state.SelectedPlaylist !== "All" && onDragOver(e)}
                    className={ calculatedStyle } 
-                   id={row.original.ID} 
+                   id={row.original.id} 
                    onClick={e=>handleClick(e)}
                    onDrop={(e)=> state.SelectedPlaylist !== "All" && onDrop(e)}
               >
@@ -496,4 +498,4 @@ function Table({ columns, data }) {
   )
 }
 
-export default SongTable
+export default SongTableContainer

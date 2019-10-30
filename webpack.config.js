@@ -30,8 +30,8 @@ module.exports = {
         loader: 'ts-loader',
         options: {
           // context: __dirname,
-          transpileOnly: true,
-          experimentalWatchApi: true,
+          transpileOnly: process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'mute',
+          // experimentalWatchApi: true,
           configFile: resolve(__dirname,'tsconfig.webpack.json'),
         }
       },

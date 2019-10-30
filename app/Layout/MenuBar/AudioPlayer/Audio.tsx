@@ -44,10 +44,17 @@ const ControlsContainer = styled.div`
 
 function Audio() {
 
-  const { curTime, duration, setClickedTime } = useAudioPlayer();
+  const { curTime, setClickedTime } = useAudioPlayer();
   const { state, dispatch } = React.useContext(Store);
 
+  const { Songs, Transport: { current }  } = state
 
+  let duration  
+  
+  if(Songs){
+
+    duration = Songs[current].duration
+  } 
 
   return (
 
