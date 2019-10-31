@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"d954db77bc1ac0ce2e73","1":"8f4e87851e1f788e9325","2":"28db370000f9484605ed","3":"f5a64dbb7a6cee74153a","4":"af69d9331c796210ef4c","5":"515bbb1b4132aa33b6af","6":"689b28c3528c549c6085","7":"04ead66df538b39b8400","8":"d005113b9b909aff4cff","9":"7864a8811c62df4d5f30"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"d954db77bc1ac0ce2e73","1":"8f4e87851e1f788e9325","2":"28db370000f9484605ed","3":"f5a64dbb7a6cee74153a","4":"af69d9331c796210ef4c","5":"df542ebd3e7a220ef1a9","6":"689b28c3528c549c6085","7":"04ead66df538b39b8400","8":"6d566bc2616555aade6d","9":"7864a8811c62df4d5f30"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -289,7 +289,8 @@ const InitialTheme = {
     secondaryColor: "#262626",
     tertiaryColor: "#1E1E1E",
     highlightColor: "#A9A9A9",
-    fontColor: "#E0E0E0"
+    logoColor: "rgba(255, 0, 0, .25)",
+    fontColor: "#E0E0E0",
 };
 const ThemeManager = (props) => {
     // todo - wire into the store 
@@ -367,6 +368,11 @@ const initialState = {
         1: { field: "artist", text: "" },
         2: { field: "album_artist", text: "" },
         3: { field: "genre", text: "" }
+    },
+    FilterState: {
+    // artist : { }
+    // artist_album : { } 
+    // genre :  { }
     },
     token: "dev"
 };
@@ -521,6 +527,20 @@ function reducer(state, action) {
             const next_SearchBar_text_object = { ...state.SearchBarText };
             next_SearchBar_text_object[target]["text"] = text;
             return { ...state, SearchBarText: next_SearchBar_text_object };
+        }
+        case "MUTATE_FILTERSTATE": {
+            const { payload: { field, value } } = action;
+            const { FilterState } = state;
+            const new_FilterState = { ...FilterState };
+            if (!new_FilterState[field])
+                new_FilterState[field] = {};
+            if (new_FilterState[field][value]) {
+                delete new_FilterState[field][value];
+            }
+            else {
+                new_FilterState[field][value] = true;
+            }
+            return { ...state, FilterState: new_FilterState };
         }
         default:
             return state;

@@ -8,7 +8,7 @@ import { useTable, useBlockLayout, useResizeColumns } from 'react-table'
 
 var Container = styled.div`
 
-  height: 74.5vh;
+  height: 65.5vh;
   font-size: .75rem;
   font-weight: 500;
   overflow: scroll;
@@ -41,16 +41,16 @@ var Container = styled.div`
 
   .selected {
     opacity: .75;
-    border: .5px solid ${props=>props.theme.highlightColor};
+    border: .5px solid "rgba(255, 0, 0, .75)";
   }
 
   .draggedOver {
 
-    border-top: 2px solid red;
+    border-top: 2px solid ${props=>props.theme.logoColor};
   }
 
   .playing {
-    color: red;
+    color: rgba(255, 0, 0, .9)
   }
 
   .table {
@@ -121,7 +121,7 @@ function SongTableContainer() {
   const { state, dispatch } = React.useContext(Store);
   const [ Page, setPage ] = React.useState(1)
 
-  const { SelectedPlaylist, PlayLists } = state 
+  const { SelectedPlaylist, PlayLists, FilterState } = state 
 
   const CurrentPlayList = PlayLists[SelectedPlaylist]
 
@@ -174,10 +174,11 @@ function SongTableContainer() {
     ()=> generatedColumns, 
     []
   )
+   
+
+  // generate playlist from songs 
 
   let formattedSongData = SelectedPlaylist === "All" ? Object.values(state.Songs) : []
-   
-  // filter list if playlist selected  
 
   if(state.SelectedPlaylist !== "All" && !!state.PlayLists){
         
@@ -185,14 +186,16 @@ function SongTableContainer() {
     
     for(let song of currentList){
 
+      // precaution
       let song_exists = state.Songs[song]
 
       if(song_exists){
-      
-        formattedSongData.push(state.Songs[song])
+
+          formattedSongData.push(state.Songs[song])
       }
     }
 
+    // throttle precaution
     if(CurrentPlayList.files.length > 50 
         && isLoaded 
         && formattedSongData.length < 50){
@@ -201,11 +204,50 @@ function SongTableContainer() {
     }
   }
 
+
+  // generate list of filters 
+
+  // we wanted to key into the FilterState object, now we want to
+  // be able to iterate through each field and apply that filter 
+  // as a test to each song -
+  
+  const FilterList = []
+
+  for(let i = 0; i < Object.entries(FilterState).length; i++){
+    // eg "artist", "genre"
+    let this_field = Object.entries(FilterState)[i]
+
+    // eg "Sisqo" "Miley Cyrus"  "140 bpm" "cybergoth" "chipmunk gabber"
+    let entries_in_field = Object.keys(this_field[1])
+
+    if(entries_in_field.length){
+
+      FilterList.push( [this_field[0], entries_in_field] )
+    }
+  }
+
+  formattedSongData = formattedSongData.filter(song=>{
+
+    let passesTest = true 
+
+    FilterList.forEach((filter)=>{
+
+      let test_field = filter[0]
+
+      let this_test = filter[1].includes(song[test_field])
+      
+      passesTest = this_test
+    })
+
+    return passesTest 
+  })
+
   // the table expects an array of objects - 
  
  const data = React.useMemo(() => formattedSongData)
 
   return (
+
     <Container id={"song_table"}>
       
       <Table 
@@ -215,7 +257,6 @@ function SongTableContainer() {
 
     </Container>
   )
-
 }
 
 /*

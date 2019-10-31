@@ -7,9 +7,10 @@ const FieldLabel = styled.span`
 
     position: absolute;
     opacity: .1;
-    font-size: 4vh;
+    font-size: 5vh;
     bottom: 0;
     right: 5vh;
+    z-index: 1;
 `
 
 const Selector = styled.div`
@@ -19,25 +20,55 @@ const Selector = styled.div`
     border: 1px solid rgba( 255, 255, 255, 0.25 );
     margin-top: 5px;
     overflow: scroll;
+    font-size: 1.5vh;
+    z-index: 2;
 
     display: flex;
     flex-direction: column;
     align-items; center;
+
+    .selected {
+
+        background-color: ${props=>props.theme.logoColor};
+    }
+
+    span {
+
+        display: block;
+        width: 100%;
+
+        &:hover {
+            background-color: ${props=>props.theme.logoColor};
+        } 
+    }
 `
 
 const FieldFilter = (props: any) => {
     
     const { state, dispatch } = React.useContext(Store);
 
-    const { Songs, SearchBarText } = state 
+    const { Songs, SearchBarText, FilterState } = state 
 
-    const { field } = SearchBarText[props.field]
+    const { field, text } = SearchBarText[props.field]
 
-    let deduplication_field_set 
+    const handleClick = (e) => {
+
+        const { id } = e.target
+
+        dispatch({type: "MUTATE_FILTERSTATE", payload: { field, value: id }})
+
+    }
+
+    let deduplicated_field_set 
 
     if(Songs){
 
-        deduplication_field_set = Array.from(new Set(Object.values(Songs).map(song=>song[field])))
+        deduplicated_field_set = Array.from(new Set(Object.values(Songs).map(song=>song[field])))
+    }
+
+    if(text){
+
+        deduplicated_field_set = deduplicated_field_set.filter( field => field && field.includes(text) )
     }
 
     return (
@@ -45,18 +76,30 @@ const FieldFilter = (props: any) => {
             <SearchBar target={props.field}/>
             <Selector>
 
-                {Songs && deduplication_field_set.map(field=>{
-                    
-                    console.log(field)
+                {Songs && deduplicated_field_set.map(this_field=>{
+
+                    let isSelected = false 
+
+                    if( FilterState[field] ){
+
+                        if(FilterState[field][this_field]){
+                            isSelected = true 
+                        }
+                    }
 
                     return (
-                        <span>{field}</span>
+                        <span
+                            key={this_field}
+                            id={this_field}
+                            onClick={handleClick}
+                            className={isSelected ? "selected": undefined}
+                        >{this_field}</span>
                     )
                     
                 })}
 
             </Selector>
-            { !SearchBarText[props.field].text && <FieldLabel>{field}</FieldLabel> }
+            <FieldLabel>{field}</FieldLabel>
         </>
     )
 }

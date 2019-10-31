@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import FieldFilter from './FieldFilter'
 
 const PlayListFilterContainer = styled.div`
-    height: 15vh;
+    height: 24vh;
     background-color: ${props=>props.theme.tertiaryColor}
     display: flex;
     flex-direction: row;

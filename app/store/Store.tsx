@@ -23,7 +23,11 @@ const initialState : Types.Store = {
         2: {field: "album_artist", text: ""},
         3: {field: "genre", text: ""}
     },
-    
+    FilterState: {
+        // artist : { }
+        // artist_album : { } 
+        // genre :  { }
+    },
     token: "dev"
 };
 
@@ -283,6 +287,28 @@ function reducer(state : Types.Store, action : ReduxAction ) {
             next_SearchBar_text_object[target]["text"] = text 
 
             return {...state, SearchBarText: next_SearchBar_text_object }
+        }
+
+        case "MUTATE_FILTERSTATE": {
+
+            const { payload: { field, value } } = action 
+            const { FilterState } = state 
+            const new_FilterState = {...FilterState}
+
+            if(!new_FilterState[field]) new_FilterState[field] = {}
+
+            if(new_FilterState[field][value]){
+                
+                delete new_FilterState[field][value]
+            }
+            else{
+                
+                new_FilterState[field][value] = true 
+            }
+
+
+
+            return {...state, FilterState : new_FilterState }
         }
         
         default:
