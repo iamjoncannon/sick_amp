@@ -19,9 +19,9 @@ const initialState : Types.Store = {
     isTypingInSearchBar: false,
     SearchBarText: {
         all_fields: {text: ""},
-        1: {field: "", text: ""},
-        2: {field: "", text: ""},
-        3: {field: "", text: ""}
+        1: {field: "artist", text: ""},
+        2: {field: "album_artist", text: ""},
+        3: {field: "genre", text: ""}
     },
     
     token: "dev"

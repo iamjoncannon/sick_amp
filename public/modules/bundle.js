@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"d954db77bc1ac0ce2e73","1":"8f4e87851e1f788e9325","2":"28db370000f9484605ed","3":"fe2ddd0d4ec41a2ead8c","4":"07b724ccddf3c111c94f","5":"e7e11fde79efd0312043","6":"689b28c3528c549c6085","7":"afb6d7590d6d9ab72c02","8":"d005113b9b909aff4cff","9":"7864a8811c62df4d5f30"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"d954db77bc1ac0ce2e73","1":"8f4e87851e1f788e9325","2":"28db370000f9484605ed","3":"f5a64dbb7a6cee74153a","4":"af69d9331c796210ef4c","5":"515bbb1b4132aa33b6af","6":"689b28c3528c549c6085","7":"04ead66df538b39b8400","8":"d005113b9b909aff4cff","9":"7864a8811c62df4d5f30"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -364,9 +364,9 @@ const initialState = {
     isTypingInSearchBar: false,
     SearchBarText: {
         all_fields: { text: "" },
-        1: { field: "", text: "" },
-        2: { field: "", text: "" },
-        3: { field: "", text: "" }
+        1: { field: "artist", text: "" },
+        2: { field: "album_artist", text: "" },
+        3: { field: "genre", text: "" }
     },
     token: "dev"
 };
