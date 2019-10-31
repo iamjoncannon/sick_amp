@@ -68,6 +68,14 @@ const SearchBarContainer = styled.div`
     right: 10vh;
 `
 
+const LeftSection = styled.div`
+    position: absolute;
+    left: 0;
+    height: 100%;
+    width: 25%;
+
+`
+
 const MenuBar = (props: any) => {
 
     const { state, dispatch } = React.useContext(Store);
@@ -83,6 +91,7 @@ const MenuBar = (props: any) => {
             </Suspense>
 
             <VolumeBar />
+
             <PlayerStateContainer>
                 
                 <Audio /> 

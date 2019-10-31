@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"d954db77bc1ac0ce2e73","1":"8f4e87851e1f788e9325","2":"28db370000f9484605ed","3":"83ab6f05b495acfe7b0f","4":"af69d9331c796210ef4c","5":"1bbfc8a40889b12e59cf","6":"689b28c3528c549c6085","7":"851ababc7fef33e22e2c","8":"d2598272d3ab466ced11","9":"7864a8811c62df4d5f30"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"d954db77bc1ac0ce2e73","1":"8f4e87851e1f788e9325","2":"28db370000f9484605ed","3":"9e18bbcbcbab5fe56199","4":"5f324c2ac73cd385b061","5":"1370c8ae523a172992a3","6":"9e9d6e2f4b8ba5fdfc0f","7":"f687e107b26a473b59e0","8":"d2598272d3ab466ced11","9":"7864a8811c62df4d5f30"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -326,7 +326,7 @@ const lazy = react__WEBPACK_IMPORTED_MODULE_0___default.a.lazy;
 
 
 const MenuBar = lazy(() => Promise.all(/*! import() */[__webpack_require__.e(1), __webpack_require__.e(3)]).then(__webpack_require__.bind(null, /*! ./Layout/MenuBar/MenuBar */ "./app/Layout/MenuBar/MenuBar.tsx")));
-const BottomLayout = lazy(() => Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(4)]).then(__webpack_require__.bind(null, /*! ./Layout/Bottom/BottomLayout */ "./app/Layout/Bottom/BottomLayout.tsx")));
+const BottomLayout = lazy(() => Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(5)]).then(__webpack_require__.bind(null, /*! ./Layout/Bottom/BottomLayout */ "./app/Layout/Bottom/BottomLayout.tsx")));
 
 react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Suspense, { fallback: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_FallBackIcon__WEBPACK_IMPORTED_MODULE_5__["default"], null) },
     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_store_Store__WEBPACK_IMPORTED_MODULE_2__["StoreProvider"], null,
@@ -419,18 +419,18 @@ function reducer(state, action) {
             // architecture note- I decided to structure the "All" Playlist and the specific
             // playlists differently- see ./Types -- this requires us to handle each differently
             // in the playlist actions - this could certainly be revisited and refactored 
-            // if its playing from the all playlist, then its simply the previous track
-            // or the end of the playlist if current = 0 
             let next_current;
             if (RunningPlaylist === "All") {
-                next_current = current === 1 ? PlayLists[RunningPlaylist].length - 1 : Number(current) - 1;
+                next_current = current === 1 ? Object.keys(state.Songs).length : Number(current) - 1;
             }
             else {
+                if (PlayLists[RunningPlaylist].files.length === 1)
+                    return { ...state };
                 // if its a specific playlist, then we need to find the index of the track in the 
                 // playlists files and return the previous index, or end if 0 
                 let CurrentPlaylist = PlayLists[RunningPlaylist].files;
                 const current_index = CurrentPlaylist.indexOf(current);
-                next_current = current_index === 1 ? CurrentPlaylist[CurrentPlaylist.length - 1] : CurrentPlaylist[current_index - 1];
+                next_current = current_index === 1 ? CurrentPlaylist[CurrentPlaylist.length] : CurrentPlaylist[current_index - 1];
             }
             let newTransport = { current: next_current };
             return { ...state, Transport: newTransport, isPlaying: true };
@@ -441,12 +441,14 @@ function reducer(state, action) {
             let CurrentPlaylist;
             if (RunningPlaylist === "All") {
                 CurrentPlaylist = PlayLists[RunningPlaylist];
-                next_current = current === CurrentPlaylist.length - 1 ? 0 : Number(current) + 1;
+                next_current = current === Object.keys(state.Songs).length ? 1 : Number(current) + 1;
             }
             else {
+                if (PlayLists[RunningPlaylist].files.length === 1)
+                    return { ...state };
                 CurrentPlaylist = PlayLists[RunningPlaylist].files;
                 const current_index = CurrentPlaylist.indexOf(current);
-                next_current = current_index === CurrentPlaylist.length - 1 ? CurrentPlaylist[1] : CurrentPlaylist[current_index + 1];
+                next_current = current_index === CurrentPlaylist.length ? CurrentPlaylist[1] : CurrentPlaylist[current_index + 1];
             }
             let newTransport = { current: next_current };
             return { ...state, Transport: newTransport, isPlaying: true };

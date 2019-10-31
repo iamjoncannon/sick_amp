@@ -7,7 +7,6 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { Store } from '../store/Store'
 
 const SectionContainer = styled.div`
-    ${props=>console.log(props)};
     display: flex;
     flex-direction: column;
 

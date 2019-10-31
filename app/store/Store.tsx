@@ -107,16 +107,15 @@ function reducer(state : Types.Store, action : ReduxAction ) {
             // playlists differently- see ./Types -- this requires us to handle each differently
             // in the playlist actions - this could certainly be revisited and refactored 
 
-            // if its playing from the all playlist, then its simply the previous track
-            // or the end of the playlist if current = 0 
-
             let next_current 
 
             if(RunningPlaylist === "All"){
 
-                next_current = current === 1 ? PlayLists[RunningPlaylist].length -1 : Number(current) - 1 
+                next_current = current === 1 ? Object.keys(state.Songs).length : Number(current) - 1 
             }
             else{
+
+                if(PlayLists[RunningPlaylist].files.length === 1) return {...state}
 
                 // if its a specific playlist, then we need to find the index of the track in the 
                 // playlists files and return the previous index, or end if 0 
@@ -125,7 +124,7 @@ function reducer(state : Types.Store, action : ReduxAction ) {
 
                 const current_index = CurrentPlaylist.indexOf(current)
 
-                next_current = current_index === 1 ? CurrentPlaylist[CurrentPlaylist.length -1] : CurrentPlaylist[current_index -1 ] 
+                next_current = current_index === 1 ? CurrentPlaylist[CurrentPlaylist.length] : CurrentPlaylist[current_index -1 ] 
             
             }
 
@@ -141,19 +140,22 @@ function reducer(state : Types.Store, action : ReduxAction ) {
             let next_current 
             let CurrentPlaylist 
 
+
             if(RunningPlaylist === "All"){
 
                 CurrentPlaylist = PlayLists[RunningPlaylist]
 
-                next_current = current === CurrentPlaylist.length -1 ? 0 : Number(current) + 1 
+                next_current = current === Object.keys(state.Songs).length ? 1 : Number(current) + 1 
             }
             else{
+
+                if(PlayLists[RunningPlaylist].files.length === 1) return {...state}
 
                 CurrentPlaylist = PlayLists[RunningPlaylist].files
 
                 const current_index = CurrentPlaylist.indexOf(current)
 
-                next_current = current_index === CurrentPlaylist.length -1 ? CurrentPlaylist[1] : CurrentPlaylist[current_index + 1 ] 
+                next_current = current_index === CurrentPlaylist.length ? CurrentPlaylist[1] : CurrentPlaylist[current_index + 1 ] 
             }
 
             let newTransport : Types.Transport = { current: next_current } 

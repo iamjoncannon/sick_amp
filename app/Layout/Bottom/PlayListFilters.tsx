@@ -2,6 +2,7 @@ import React from 'react';
 import { Store } from '../../store/Store'
 import styled from 'styled-components'
 import FieldFilter from './FieldFilter'
+import ToolKit from './Toolkit'
 
 const PlayListFilterContainer = styled.div`
     height: 24vh;
@@ -40,6 +41,7 @@ const PlayListFilters = (props: any ) => {
     return (
 
         <PlayListFilterContainer>
+            
             <nav>
                 <span></span> 
                 
@@ -67,7 +69,7 @@ const PlayListFilters = (props: any ) => {
 
             </nav>
             <div>
-
+                <ToolKit />
             </div>
 
         </PlayListFilterContainer>
