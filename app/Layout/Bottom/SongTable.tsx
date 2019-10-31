@@ -215,15 +215,23 @@ function SongTableContainer() {
   const FilterList = []
 
   for(let i = 0; i < Object.entries(FilterState).length; i++){
-    // eg "artist", "genre"
+
+    // the entire object -- "genre" : { "rap": true, "country": true}
     let this_field = Object.entries(FilterState)[i]
 
-    // eg "Sisqo" "Miley Cyrus"  "140 bpm" "cybergoth" "chipmunk gabber"
+    let field_name = this_field[0] 
+
+    // { "rap": true, "country": true}
     let entries_in_field = Object.keys(this_field[1])
 
-    if(entries_in_field.length){
+    if( field_name === "bpm"){
 
-      FilterList.push( [this_field[0], entries_in_field] )
+      // special case- pushing the array 
+      FilterList.push(["bpm", this_field[1] ])
+    }
+    else if(entries_in_field.length){
+
+      FilterList.push( [ field_name, entries_in_field ] )
     }
   }
 
@@ -238,8 +246,8 @@ function SongTableContainer() {
       let this_test
       
       if(filter[0] === "bpm"){
-
-        this_test = song[test_field]
+        
+        this_test = ( filter[1][0] < song[test_field] ) && ( song[test_field] < filter[1][1])
       }
       else {
       
@@ -358,8 +366,6 @@ function Table({ columns, data }) {
         
         handleIDSelect(newSeletedID)
       }
-
-
     }
     
     window.addEventListener('keydown', keyPressHandler)

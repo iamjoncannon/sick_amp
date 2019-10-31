@@ -311,6 +311,7 @@ function reducer(state : Types.Store, action : ReduxAction ) {
             else{
 
                 // only one key to be filtered
+                
                 if(field === "key") new_FilterState.key = {}
 
                 // to do - place harmonic logic here to append 

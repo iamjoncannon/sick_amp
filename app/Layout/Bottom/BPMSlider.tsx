@@ -45,7 +45,6 @@ const SliderContainer = styled.div`
     .rc-slider-handle:focus{
         box-shadow: 0 0 1px ${props => props.theme.logoColor};
     }
-
 `
 
 const BPMSlider = () => {
