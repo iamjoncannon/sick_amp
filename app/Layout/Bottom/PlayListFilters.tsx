@@ -11,6 +11,16 @@ const PlayListFilterContainer = styled.div`
     justify-content: center;
     align-items: center;
 
+    nav {
+        height: 90%;
+        width: 2.5vh;
+        background-color: ${props=>props.theme.logoColor};
+        text-align: center;
+
+        > span {
+        }
+    }
+
     > div {
         width: 24%;
         height: 90%;
@@ -30,15 +40,32 @@ const PlayListFilters = (props: any ) => {
     return (
 
         <PlayListFilterContainer>
+            <nav>
+                <span></span> 
+                
+            </nav>
+            
             <div>
                 <FieldFilter field={1}/>
             </div>
+            
+            <nav>
+
+            </nav>
             <div>
                 <FieldFilter field={2}/>
             </div>
+
+            <nav>
+
+            </nav>
             <div>
                 <FieldFilter field={3}/>
             </div>
+            
+            <nav>
+
+            </nav>
             <div>
 
             </div>

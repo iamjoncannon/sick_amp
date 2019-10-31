@@ -15,7 +15,7 @@ const FieldLabel = styled.span`
 
 const Selector = styled.div`
     width: 90%;
-    height: 68%;
+    height: 80%;
     padding: 2px;
     border: 1px solid rgba( 255, 255, 255, 0.25 );
     margin-top: 5px;
@@ -36,9 +36,9 @@ const Selector = styled.div`
 
         display: block;
         width: 100%;
-
+        margin-top: 2px;
         &:hover {
-            background-color: ${props=>props.theme.logoColor};
+            text-decoration: underline;
         } 
     }
 `

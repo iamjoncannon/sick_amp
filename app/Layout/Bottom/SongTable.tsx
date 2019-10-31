@@ -29,6 +29,7 @@ var Container = styled.div`
 
   .tr:hover{
     opacity: .75;
+    border: 1px solid rgba(255, 0, 0, .75);
   }
 
   .primary {
@@ -41,7 +42,7 @@ var Container = styled.div`
 
   .selected {
     opacity: .75;
-    border: .5px solid "rgba(255, 0, 0, .75)";
+    border: 1px solid rgba(255, 0, 0, .75);
   }
 
   .draggedOver {

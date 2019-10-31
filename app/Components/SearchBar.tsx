@@ -7,29 +7,23 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { Store } from '../store/Store'
 
 const SectionContainer = styled.div`
+    ${props=>console.log(props)};
     display: flex;
     flex-direction: column;
 
     svg {
         color: ${props=>props.theme.fontColor};
         position: relative;
-        bottom: 2vh;
+        bottom: ${props=> props.all_fields ? "3vh" : "2vh"}; 
         margin-bottom: -1.4vh;
-        height: 1.5vh;
+        height: ${props=> props.all_fields ? "2vh" : "1.5vh"};
     }
 
     input {
         background-color: ${props=>props.theme.secondaryColor};
         color: ${props=>props.theme.fontColor};
-        width: 20vh;
-        height: 2vh;
         border: none;
-    }
-
-    span {
-        font-size: 1.6vh;
-        opacity: .75;
-        color: ${props=>props.theme.fontColor}
+        font-size: ${props=> props.all_fields ? "3vh" : "1.6vh"}; 
     }
 `
 
@@ -63,12 +57,15 @@ const SearchBar = (props : SearchBarProps) => {
         dispatch({type: "TOGGLE_SEARCHBAR_FOCUS", payload: state_change})
     }
 
+    const inlines = props.target === "all_fields" ? { width: "20vw", height: "4vh"} : { width: "10vw", height: "2vh"} 
 
     return (
 
-        <SectionContainer>
+        <SectionContainer all_fields={props.target === "all_fields"}>
             
             <input 
+                style={inlines }
+                global={props.global}
                 onChange={handleChange}
                 value={ all_fields ? all_fields : SearchBarText[target].text }   
                 onFocus={()=>toggleSearchBar(true)} 

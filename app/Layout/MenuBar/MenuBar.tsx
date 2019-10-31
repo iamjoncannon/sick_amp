@@ -66,7 +66,6 @@ const SecondaryMenuContainer = styled.div`
 const SearchBarContainer = styled.div`
     position: absolute;
     right: 10vh;
-    top: 2vh;
 `
 
 const MenuBar = (props: any) => {
