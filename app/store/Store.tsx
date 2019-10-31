@@ -24,6 +24,7 @@ const initialState : Types.Store = {
         3: {field: "genre", text: ""}
     },
     FilterState: {
+        bpm: [50, 200]
         // artist : { }
         // artist_album : { } 
         // genre :  { }
@@ -303,12 +304,20 @@ function reducer(state : Types.Store, action : ReduxAction ) {
                 
                 delete new_FilterState[field][value]
             }
+            else if(field === "bpm"){
+
+                new_FilterState["bpm"] = value
+            }
             else{
+
+                // only one key to be filtered
+                if(field === "key") new_FilterState.key = {}
+
+                // to do - place harmonic logic here to append 
+                // harmonics to state for downstream component 
                 
                 new_FilterState[field][value] = true 
             }
-
-
 
             return {...state, FilterState : new_FilterState }
         }

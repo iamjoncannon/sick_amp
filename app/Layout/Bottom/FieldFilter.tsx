@@ -17,7 +17,7 @@ const Selector = styled.div`
     width: 90%;
     height: 80%;
     padding: 2px;
-    border: 1px solid rgba( 255, 255, 255, 0.25 );
+    border: 1px solid ${props=>props.theme.boxColor};
     margin-top: 5px;
     overflow: scroll;
     font-size: 1.5vh;

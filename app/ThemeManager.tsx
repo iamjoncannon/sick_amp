@@ -14,6 +14,7 @@ const InitialTheme = {
     highlightColor: "#A9A9A9",
     logoColor: "rgba(255, 0, 0, .25)",
     fontColor: "#E0E0E0",
+    boxColor: "rgba( 255, 255, 255, 0.25 )" 
 
 }
 

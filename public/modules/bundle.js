@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"d954db77bc1ac0ce2e73","1":"8f4e87851e1f788e9325","2":"28db370000f9484605ed","3":"9e18bbcbcbab5fe56199","4":"5f324c2ac73cd385b061","5":"1370c8ae523a172992a3","6":"9e9d6e2f4b8ba5fdfc0f","7":"f687e107b26a473b59e0","8":"d2598272d3ab466ced11","9":"7864a8811c62df4d5f30"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"d954db77bc1ac0ce2e73","1":"0861c0dc31eeff7f58b5","2":"4ecb3831f9115f56cba1","3":"b05286835c5109cbf47e","4":"86a7c1be79344b8ac75c","5":"137fa2b50447cb4c8739","6":"9a4c07d7080d31798d0e","7":"f687e107b26a473b59e0","8":"d2598272d3ab466ced11","9":"7864a8811c62df4d5f30"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -291,6 +291,7 @@ const InitialTheme = {
     highlightColor: "#A9A9A9",
     logoColor: "rgba(255, 0, 0, .25)",
     fontColor: "#E0E0E0",
+    boxColor: "rgba( 255, 255, 255, 0.25 )"
 };
 const ThemeManager = (props) => {
     // todo - wire into the store 
@@ -325,8 +326,8 @@ const lazy = react__WEBPACK_IMPORTED_MODULE_0___default.a.lazy;
 
 
 
-const MenuBar = lazy(() => Promise.all(/*! import() */[__webpack_require__.e(1), __webpack_require__.e(3)]).then(__webpack_require__.bind(null, /*! ./Layout/MenuBar/MenuBar */ "./app/Layout/MenuBar/MenuBar.tsx")));
-const BottomLayout = lazy(() => Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(5)]).then(__webpack_require__.bind(null, /*! ./Layout/Bottom/BottomLayout */ "./app/Layout/Bottom/BottomLayout.tsx")));
+const MenuBar = lazy(() => Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(5)]).then(__webpack_require__.bind(null, /*! ./Layout/MenuBar/MenuBar */ "./app/Layout/MenuBar/MenuBar.tsx")));
+const BottomLayout = lazy(() => Promise.all(/*! import() */[__webpack_require__.e(3), __webpack_require__.e(6)]).then(__webpack_require__.bind(null, /*! ./Layout/Bottom/BottomLayout */ "./app/Layout/Bottom/BottomLayout.tsx")));
 
 react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Suspense, { fallback: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_FallBackIcon__WEBPACK_IMPORTED_MODULE_5__["default"], null) },
     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_store_Store__WEBPACK_IMPORTED_MODULE_2__["StoreProvider"], null,
@@ -370,9 +371,10 @@ const initialState = {
         3: { field: "genre", text: "" }
     },
     FilterState: {
-    // artist : { }
-    // artist_album : { } 
-    // genre :  { }
+        bpm: [50, 200]
+        // artist : { }
+        // artist_album : { } 
+        // genre :  { }
     },
     token: "dev"
 };
@@ -539,7 +541,15 @@ function reducer(state, action) {
             if (new_FilterState[field][value]) {
                 delete new_FilterState[field][value];
             }
+            else if (field === "bpm") {
+                new_FilterState["bpm"] = value;
+            }
             else {
+                // only one key to be filtered
+                if (field === "key")
+                    new_FilterState.key = {};
+                // to do - place harmonic logic here to append 
+                // harmonics to state for downstream component 
                 new_FilterState[field][value] = true;
             }
             return { ...state, FilterState: new_FilterState };

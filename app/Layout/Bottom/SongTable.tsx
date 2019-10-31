@@ -235,8 +235,17 @@ function SongTableContainer() {
 
       let test_field = filter[0]
 
-      let this_test = filter[1].includes(song[test_field])
+      let this_test
       
+      if(filter[0] === "bpm"){
+
+        this_test = song[test_field]
+      }
+      else {
+      
+        this_test = filter[1].includes(song[test_field])
+      }
+
       passesTest = this_test
     })
 
