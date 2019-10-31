@@ -15,6 +15,9 @@ serv:
 client:
 	NODE_ENV=mute webpack -w --progress
 
+client-ts:
+	webpack -w --progress	
+
 client-compile:
 	NODE_ENV=production webpack -p --progress
 

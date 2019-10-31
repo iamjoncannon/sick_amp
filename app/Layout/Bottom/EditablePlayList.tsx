@@ -6,6 +6,8 @@ import { postPlayList, putPlayList } from '../../store/Thunks'
 const EditablePlayListContainer = styled.div`
 
     margin-top:${props=> props.new && "1vh"  }
+    padding: .5rem;
+    
     input {
         border: none
     }
@@ -24,7 +26,7 @@ const Editor = styled.input<EditorProps>`
     display: inline-block;
     margin: 0;
     padding: 0;
-    font-size: 2vh;
+    font-size: 1.75vh;
 `
 
 interface ComponentProps {

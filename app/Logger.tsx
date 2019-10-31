@@ -9,41 +9,7 @@ const Logger = () => {
 
     const { state } = React.useContext(Store);
 
-    /*
-    
-    React.useEffect( ()=>{
-
-        async function fetchData(){
-
-            // let { data } = await axios.get('http://localhost:3030/files?api_key=dev')
-            // let { data } = await axios.get('/data')
-
-            const { Songs, PlayLists } = data
-
-            let ColumnHash = sortColumns(Songs)
-
-            let sortedData = {
-                Songs,
-                PlayLists,
-                ColumnHash
-            }
-
-            dispatch({
-                type: "HYDRATE",
-                payload: sortedData
-            })
-
-        }
-
-        if(state.Songs === null){
-
-            fetchData()
-        }
-    })
-
-    */
-
-    console.log("Next State: ", state)
+    process.env.NODE_ENV !== "production" && console.log("Next State: ", state)
 
     return(
         <>

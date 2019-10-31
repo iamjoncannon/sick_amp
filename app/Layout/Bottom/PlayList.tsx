@@ -9,7 +9,8 @@ import EditablePlayList from './EditablePlayList'
 
 const PlayListContainer = styled.div`
 
-    margin-top: .5rem;
+    margin-top: 1vh;
+    padding: .25vh;
 
     span:focus{
         background: white;
@@ -101,13 +102,12 @@ const PlayList = (props: PlaylistContainerProps) => {
             onDragOver={ e=> onDragOver(e)}
             onDrop={(e)=>onDrop(e)}
             id={ selectionState }
-
         >
             { isSelectedPlayList && state.isEditingNewPlayList === "put"?
                 <EditablePlayList initialValue={name}/>
                 : 
                 <span 
-                id={id} 
+                    id={id} 
                 >{name}{id === RunningPlaylist && " ♫"}</span>
             }
 

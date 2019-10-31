@@ -1,6 +1,9 @@
 body {
-
     margin: 0;
     font-family: "Helvetica Neue";
-    /* font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; */
+    user-select: none;
+}
+
+input:focus {
+    outline: none;
 }

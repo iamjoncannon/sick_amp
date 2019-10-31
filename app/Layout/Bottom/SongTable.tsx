@@ -8,7 +8,7 @@ import { useTable, useBlockLayout, useResizeColumns } from 'react-table'
 
 var Container = styled.div`
 
-  height: 75vh;
+  height: 74.5vh;
   font-size: .75rem;
   font-weight: 500;
   overflow: scroll;
@@ -241,6 +241,7 @@ function Table({ columns, data }) {
     const keyPressHandler = (e: any) =>{
 
       if(state.isEditingNewPlayList) return 
+      if(state.isTypingInSearchBar) return 
       
       e.preventDefault()
     
@@ -274,9 +275,9 @@ function Table({ columns, data }) {
         else{
 
             // if its a specific playlist, then we need to find the index of the track in the 
-            // playlists ids and return the previous index, or end if 0 
+            // playlists files and return the previous index, or end if 0 
 
-            const CurrentPlaylist = PlayLists[SelectedPlaylist].ids
+            const CurrentPlaylist = PlayLists[SelectedPlaylist].files
 
             const current_index = CurrentPlaylist.indexOf(selectedID)
 
@@ -297,7 +298,7 @@ function Table({ columns, data }) {
       }
       else{
 
-          let CurrentPlaylist = PlayLists[SelectedPlaylist].ids
+          let CurrentPlaylist = PlayLists[SelectedPlaylist].files
 
           const current_index = CurrentPlaylist.indexOf(selectedID)
 

@@ -10,6 +10,8 @@ import Audio from '../MenuBar/AudioPlayer/Audio'
 import VolumeBar from './VolumeBar'
 const Icon = React.lazy(() => import('./Icon'))
 const Transport = React.lazy(() => import('./Transport'))
+const SearchBar = React.lazy(() => import('../../Components/SearchBar'))
+
 
 const PrimaryMenuContainer = styled.div`
     background-color: ${props=>props.theme.primaryColor};
@@ -61,6 +63,12 @@ const SecondaryMenuContainer = styled.div`
     }
 `
 
+const SearchBarContainer = styled.div`
+    position: absolute;
+    right: 10vh;
+    top: 2vh;
+`
+
 const MenuBar = (props: any) => {
 
     const { state, dispatch } = React.useContext(Store);
@@ -82,6 +90,11 @@ const MenuBar = (props: any) => {
                 
             </PlayerStateContainer>
         
+            <SearchBarContainer>
+
+                <SearchBar target={"all_fields"}/>
+            </SearchBarContainer>
+
         </PrimaryMenuContainer>
         
         <SecondaryMenuContainer>

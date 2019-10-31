@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"2ee9aa811652ce42a0cb","1":"d545ceca97b80ed7c45f","2":"3a012b43a7d1c60810ba","3":"4f02bc95aec477774fa9","4":"fd3ccfeb1ce9a05d5e03","5":"e5fe9d8f8cb8aac260a7","6":"689b28c3528c549c6085","7":"86184c75555d82c169dc","8":"6ab9b1995abe206efb75"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"d954db77bc1ac0ce2e73","1":"8f4e87851e1f788e9325","2":"28db370000f9484605ed","3":"fe2ddd0d4ec41a2ead8c","4":"07b724ccddf3c111c94f","5":"e7e11fde79efd0312043","6":"689b28c3528c549c6085","7":"afb6d7590d6d9ab72c02","8":"d005113b9b909aff4cff","9":"7864a8811c62df4d5f30"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -198,6 +198,48 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./app/FallBackIcon.tsx":
+/*!******************************!*\
+  !*** ./app/FallBackIcon.tsx ***!
+  \******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+
+
+const GlobalContainer = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div `
+    background-color: #3F3F3F;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+`;
+const IconContainer = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div `
+
+    color: #E0E0E0;
+    font-size: 10vw;
+    font-weight: bold;
+    cursor: default;
+    background-color: rgba(255, 0, 0, .25);
+    padding: .5vh 1vh .5vh 1vh;
+    border-radius: 1vh;
+`;
+const FallbackIcon = () => {
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(GlobalContainer, null,
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(IconContainer, null,
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "rekord_pool"))));
+};
+/* harmony default export */ __webpack_exports__["default"] = (FallbackIcon);
+
+
+/***/ }),
+
 /***/ "./app/Logger.tsx":
 /*!************************!*\
   !*** ./app/Logger.tsx ***!
@@ -215,40 +257,7 @@ const useEffect = react__WEBPACK_IMPORTED_MODULE_0___default.a.useEffect;
 
 const Logger = () => {
     const { state } = react__WEBPACK_IMPORTED_MODULE_0___default.a.useContext(_store_Store__WEBPACK_IMPORTED_MODULE_1__["Store"]);
-    /*
-    
-    React.useEffect( ()=>{
-
-        async function fetchData(){
-
-            // let { data } = await axios.get('http://localhost:3030/files?api_key=dev')
-            // let { data } = await axios.get('/data')
-
-            const { Songs, PlayLists } = data
-
-            let ColumnHash = sortColumns(Songs)
-
-            let sortedData = {
-                Songs,
-                PlayLists,
-                ColumnHash
-            }
-
-            dispatch({
-                type: "HYDRATE",
-                payload: sortedData
-            })
-
-        }
-
-        if(state.Songs === null){
-
-            fetchData()
-        }
-    })
-
-    */
-    console.log("Next State: ", state);
+     true && console.log("Next State: ", state);
     return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null));
 };
 /* harmony default export */ __webpack_exports__["default"] = (Logger);
@@ -307,6 +316,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store_Store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./store/Store */ "./app/store/Store.tsx");
 /* harmony import */ var _ThemeManager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ThemeManager */ "./app/ThemeManager.tsx");
 /* harmony import */ var _Logger__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Logger */ "./app/Logger.tsx");
+/* harmony import */ var _FallBackIcon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./FallBackIcon */ "./app/FallBackIcon.tsx");
 
 const Suspense = react__WEBPACK_IMPORTED_MODULE_0___default.a.Suspense;
 const lazy = react__WEBPACK_IMPORTED_MODULE_0___default.a.lazy;
@@ -314,9 +324,10 @@ const lazy = react__WEBPACK_IMPORTED_MODULE_0___default.a.lazy;
 
 
 
-const MenuBar = lazy(() => Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(2)]).then(__webpack_require__.bind(null, /*! ./Layout/MenuBar/MenuBar */ "./app/Layout/MenuBar/MenuBar.tsx")));
-const BottomLayout = lazy(() => Promise.all(/*! import() */[__webpack_require__.e(1), __webpack_require__.e(4)]).then(__webpack_require__.bind(null, /*! ./Layout/Bottom/BottomLayout */ "./app/Layout/Bottom/BottomLayout.tsx")));
-react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Suspense, { fallback: "Loading..." },
+const MenuBar = lazy(() => Promise.all(/*! import() */[__webpack_require__.e(1), __webpack_require__.e(3)]).then(__webpack_require__.bind(null, /*! ./Layout/MenuBar/MenuBar */ "./app/Layout/MenuBar/MenuBar.tsx")));
+const BottomLayout = lazy(() => Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(4)]).then(__webpack_require__.bind(null, /*! ./Layout/Bottom/BottomLayout */ "./app/Layout/Bottom/BottomLayout.tsx")));
+
+react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Suspense, { fallback: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_FallBackIcon__WEBPACK_IMPORTED_MODULE_5__["default"], null) },
     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_store_Store__WEBPACK_IMPORTED_MODULE_2__["StoreProvider"], null,
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Logger__WEBPACK_IMPORTED_MODULE_4__["default"], null),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ThemeManager__WEBPACK_IMPORTED_MODULE_3__["default"], null,
@@ -350,10 +361,17 @@ const initialState = {
     isEditingNewPlayList: false,
     Columns: null,
     Songs: null,
+    isTypingInSearchBar: false,
+    SearchBarText: {
+        all_fields: { text: "" },
+        1: { field: "", text: "" },
+        2: { field: "", text: "" },
+        3: { field: "", text: "" }
+    },
     token: "dev"
 };
 function reducer(state, action) {
-    console.log("Action: ", action.type, action.payload);
+     true && console.log("Action: ", action.type, action.payload);
     switch (action.type) {
         /*
 
@@ -449,11 +467,11 @@ function reducer(state, action) {
             return { ...state, Page: 1, SelectedPlaylist: action.payload };
         }
         case 'ADD_SONG_TO_PLAYLIST': {
-            const { PlayLists } = state;
-            const { payload: { song, playlist } } = action;
+            const { PlayLists, draggedOverPlaylist } = state;
+            const { payload: { song } } = action;
             const nextPlaylists = { ...PlayLists };
-            if (!nextPlaylists[playlist].files.includes(Number(song))) {
-                nextPlaylists[playlist].files = [...PlayLists[playlist].files, Number(song)];
+            if (!nextPlaylists[draggedOverPlaylist].files.includes(Number(song))) {
+                nextPlaylists[draggedOverPlaylist].files = [...PlayLists[draggedOverPlaylist].files, Number(song)];
             }
             return { ...state, PlayLists: nextPlaylists, draggedOverPlaylist: null };
         }
@@ -489,6 +507,20 @@ function reducer(state, action) {
         }
         case "DRAG_OVER_PLAYLIST": {
             return { ...state, draggedOverPlaylist: action.payload };
+        }
+        /*
+
+            SEARCH
+
+        */
+        case "TOGGLE_SEARCHBAR_FOCUS": {
+            return { ...state, isTypingInSearchBar: action.payload };
+        }
+        case "HANDLE_SEARCHBAR_TEXT": {
+            const { target, text } = action.payload;
+            const next_SearchBar_text_object = { ...state.SearchBarText };
+            next_SearchBar_text_object[target]["text"] = text;
+            return { ...state, SearchBarText: next_SearchBar_text_object };
         }
         default:
             return state;

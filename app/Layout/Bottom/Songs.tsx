@@ -5,6 +5,7 @@ import * as Types from '../../store/Types'
 import SongTable from './SongTable'
 import { sortColumns } from './Helpers'
 import { hydrateColumns } from '../../store/Thunks'
+import PlayListFilters from './PlayListFilters'
 
 const SongSectionContainer = styled.div`
     width: 86vw;
@@ -16,12 +17,8 @@ const SongSectionContainer = styled.div`
     flex-direction: column;
 `
 
-const PlayListFilterContainer = styled.div`
-    height: 15vh;
-    background-color: ${props=>props.theme.tertiaryColor}
-`
 
-const Songs = () => {
+const Songs = (props: any) => {
 
     const { state, dispatch } = React.useContext(Store);
     
@@ -38,9 +35,7 @@ const Songs = () => {
 
         <SongSectionContainer>
 
-            <PlayListFilterContainer>
-
-            </PlayListFilterContainer>
+            <PlayListFilters />
             
             { !!state.Columns && 
               !!state.PlayLists && 

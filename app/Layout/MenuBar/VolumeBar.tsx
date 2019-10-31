@@ -17,7 +17,6 @@ const Container = styled.div`
         -webkit-transition: .2s;
         transition: opacity .2s;
         height: .75vh;
-
     }
 
     .slider::-webkit-slider-thumb {

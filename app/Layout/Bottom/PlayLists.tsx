@@ -14,7 +14,7 @@ const PlayListsContainer = styled.div`
  
     font-size: 1.75vh;
     cursor: default;
-    height: 90vh;
+    height: 89.5vh;
     width: 14vw;
     background-color: ${props=>props.theme.primaryColor};
     border: 1px solid black;

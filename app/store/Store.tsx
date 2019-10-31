@@ -2,6 +2,7 @@ import React from 'react';
 import * as Types from './Types'
 
 const initialState : Types.Store = {
+
     Transport : {  current: 1 },
     isPlaying: false,
     
@@ -12,20 +13,28 @@ const initialState : Types.Store = {
     isEditingNewPlayList: false,
     
     Columns: null,
+    
     Songs: null,
+    
+    isTypingInSearchBar: false,
+    SearchBarText: {
+        all_fields: {text: ""},
+        1: {field: "", text: ""},
+        2: {field: "", text: ""},
+        3: {field: "", text: ""}
+    },
+    
     token: "dev"
 };
 
 interface ReduxAction {
     type: string
-    // ideally this would be an enum 
-    // with the contract for every action
     payload: any 
 }
 
 function reducer(state : Types.Store, action : ReduxAction ) {
 
-    console.log("Action: ", action.type, action.payload)
+    process.env.NODE_ENV !== "production" && console.log("Action: ", action.type, action.payload)
 
     switch (action.type) {
 
@@ -159,7 +168,7 @@ function reducer(state : Types.Store, action : ReduxAction ) {
             return {...state, PlayLists: action.payload}
         }
 
-        case 'START_EDITING_PLAYLIST':{
+        case 'START_EDITING_PLAYLIST': {
 
             return {...state, isEditingNewPlayList: action.payload }
         }
@@ -185,14 +194,14 @@ function reducer(state : Types.Store, action : ReduxAction ) {
         
         case 'ADD_SONG_TO_PLAYLIST':{
 
-            const { PlayLists } = state 
-            const { payload: { song, playlist } } = action
+            const { PlayLists, draggedOverPlaylist } = state 
+            const { payload: { song } } = action
 
             const nextPlaylists = {...PlayLists}
 
-            if(!nextPlaylists[playlist].files.includes(Number(song))){
+            if(!nextPlaylists[draggedOverPlaylist].files.includes(Number(song))){
 
-                nextPlaylists[playlist].files = [...PlayLists[playlist].files, Number(song)]
+                nextPlaylists[draggedOverPlaylist].files = [...PlayLists[draggedOverPlaylist].files, Number(song)]
             }
 
             return {...state, PlayLists : nextPlaylists, draggedOverPlaylist: null}
@@ -252,6 +261,28 @@ function reducer(state : Types.Store, action : ReduxAction ) {
         case "DRAG_OVER_PLAYLIST": {
 
             return {...state, draggedOverPlaylist: action.payload}
+        }
+
+
+        /*
+
+            SEARCH
+
+        */
+
+        case "TOGGLE_SEARCHBAR_FOCUS": {
+
+            return {...state, isTypingInSearchBar: action.payload}
+        }
+
+        case "HANDLE_SEARCHBAR_TEXT" : {
+
+            const { target, text } = action.payload
+            const next_SearchBar_text_object = {...state.SearchBarText}
+
+            next_SearchBar_text_object[target]["text"] = text 
+
+            return {...state, SearchBarText: next_SearchBar_text_object }
         }
         
         default:

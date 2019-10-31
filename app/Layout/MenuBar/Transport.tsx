@@ -3,9 +3,6 @@ import styled from 'styled-components'
 const Suspense = (React as any).Suspense;
 const lazy = (React as any).lazy;
 
-// const { FontAwesomeIcon }  = lazy(() => import('@fortawesome/react-fontawesome'))
-// const { faPlay, faPause, faBackward, faForward } = lazy(() => import('@fortawesome/free-solid-svg-icons'))
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faPause, faBackward, faForward } from '@fortawesome/free-solid-svg-icons'
 
