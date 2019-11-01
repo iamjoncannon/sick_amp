@@ -58,19 +58,50 @@ const KeyToHarmonics = {
 
 // http://www.harmonic-mixing.com/howto.aspx
 
-// major -> minor == XA => XB
+const getHarmonics = ( key ) => {
+    
+    const root = KeyToHarmonics[key].split("")
+    const degree = Number(root.slice(0, root.length-1).join(""))
+    const mode = root[root.length-1]
+    
+    // major -> minor == XA => XB
+    const newMode = mode === "A" ? "B" : "A";
+    const relativeMinor = HarmonicsToKey[degree + newMode]
 
-// circle of fifths = X => X-1 or X+1
+    // circle of fifths = X => X-1 or X+1
 
-const getHarmonics = ( root, key ) => {
+    function constrict(next){
 
-    return 
+        let newDegree = next 
+
+        if(newDegree === 13){
+
+            return 1
+        } 
+        else if(newDegree === 0){
+
+            return 12
+        }
+        else{
+
+            return newDegree
+        }
+    }
+
+    const fifths = [ 
+               HarmonicsToKey[constrict((degree - 1)) + mode], 
+               HarmonicsToKey[constrict((degree + 1)) + mode] 
+             ]
+    
+    return {
+        relativeMinor,
+        fifths 
+    } 
 }
 
 const Container = styled.div`
     width: 80%;
     height: 50%;
-    border: 1px solid ${props=>props.theme.tertiaryColor};
     display: flex;
     flex-wrap: wrap;
     margin-left: 5%;
@@ -80,24 +111,30 @@ const Container = styled.div`
         width: 15%;
         border: 1px solid ${props=>props.theme.tertiaryColor};
         text-align: center;
+        box-sizing: border-box;
     }
 
     span:hover {
 
-        background-color: ${props=>props.theme.logoColor};
+        background-image: ${props=>props.theme.logoColor_Background};
         font-weight: bold;
     }
 
     .selected {
 
-        background-color: ${props=>props.theme.logoColor};
+        background-image: ${props=>props.theme.logoColor_Background};
     }
 
-    .harmonic {
+    .relative_Minor {
 
-        background-color: ${props=>props.theme.boxColor};
+        background-color: #bc9c22;
+        color: black;
     }
-
+    
+    .fifth {        
+        
+        border: 2px solid #bc9c22;
+    }
 `
 
 const HarmonicMixingFilter = ( ) => {
@@ -115,15 +152,23 @@ const HarmonicMixingFilter = ( ) => {
 
         <Container>
            
-            {Object.keys(KeyToHarmonics).map((thisKey)=>{
+            { Object.keys(KeyToHarmonics).map((thisKey)=>{
                 
-                let computedClass 
+                let computedClass = undefined
                 
-                if(FilterState.key){
+                if(FilterState.key && Object.keys(FilterState.key).length){
 
-                    computedClass = FilterState.key[thisKey] ? "selected" : undefined ;                    
+                    const harmonics = getHarmonics(Object.keys(FilterState.key)[0])
+
+                    console.log(harmonics)
+
+                    if(FilterState.key[thisKey]) computedClass = "selected" 
+
+                    if( harmonics.relativeMinor === thisKey ) computedClass = "relative_Minor"
+
+                    if(harmonics.fifths.includes(thisKey)) computedClass = "fifth"                    
                 }
-                
+
                 return (
                     
                     <span
@@ -135,7 +180,7 @@ const HarmonicMixingFilter = ( ) => {
                     </span>
 
                 )
-            })}
+            }) }
 
         </Container>
     )

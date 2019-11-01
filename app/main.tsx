@@ -15,7 +15,6 @@ const MenuBar = lazy(() => {
   .then(([moduleExports]) => moduleExports);
 })
 
-
 const BottomLayout = lazy(() => import('./Layout/Bottom/BottomLayout'))
 
 import FallBackIcon from './FallBackIcon'

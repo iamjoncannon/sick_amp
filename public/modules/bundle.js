@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"d954db77bc1ac0ce2e73","1":"0861c0dc31eeff7f58b5","2":"4ecb3831f9115f56cba1","3":"b05286835c5109cbf47e","4":"5d8417655c858be732b5","5":"6576c1dc76ac48a122ad","6":"078bc893ece10e160cfa","7":"0567277082f551a145fd","8":"d2598272d3ab466ced11","9":"7864a8811c62df4d5f30"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"d954db77bc1ac0ce2e73","1":"0861c0dc31eeff7f58b5","2":"4ecb3831f9115f56cba1","3":"b05286835c5109cbf47e","4":"013eccdd82e9c3c49a6b","5":"40235c01f32d2bfd5917","6":"02f61795f6723f7dcdd4","7":"9d0f0c8bf6ae78634e5b","8":"6d566bc2616555aade6d","9":"7864a8811c62df4d5f30"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -260,7 +260,7 @@ const LoadingDots = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].di
     ${generateXBlinker("rekord_pool".split("").length)}
 `;
 const FallbackIcon = () => {
-    const icon = "rekord_pool".split("").map(x => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, x));
+    const icon = "rekord_pool".split("").map((x, i) => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", { key: i }, x));
     return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(GlobalContainer, null,
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(IconContainer, null,
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(LoadingDots, null, icon))));
@@ -322,6 +322,7 @@ const InitialTheme = {
     tertiaryColor_Background: "linear-gradient(rgba(30, 30, 30, 1), rgba(30, 30, 30, .95))",
     highlightColor: "#A9A9A9",
     logoColor: "rgba(255, 0, 0, .25)",
+    logoColor_Background: "linear-gradient(rgba(255, 0, 0, .20), rgba(255, 0, 0, .25))",
     fontColor: "#E0E0E0",
     boxColor: "rgba( 255, 255, 255, 0.25 )"
 };

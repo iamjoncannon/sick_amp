@@ -55,7 +55,7 @@ const LoadingDots = styled.div`
 
 const FallbackIcon = () => {
 
-    const icon = "rekord_pool".split("").map(x=> <span>{x}</span>)
+    const icon = "rekord_pool".split("").map( (x,i) => <span key={i}>{x}</span>)
 
     return (
         <GlobalContainer>
