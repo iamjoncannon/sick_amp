@@ -19,7 +19,7 @@ const SectionContainer = styled.div`
     }
 
     input {
-        background-color: ${props=>props.theme.secondaryColor};
+        background-image: ${props=>props.theme.secondaryColor_Background};
         color: ${props=>props.theme.fontColor};
         border: none;
         font-size: ${props=> props.all_fields ? "3vh" : "1.6vh"}; 

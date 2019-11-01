@@ -21,15 +21,50 @@ const IconContainer = styled.div`
     border-radius: 1vh;
 `
 
+const generateXBlinker = (num) => {
+
+    return Array(num).fill(null).map((x,i)=> {
+        return `
+        span:nth-child(${i+1}){
+            animation: blink ${ (i+1) * .5}s;
+        }
+    `
+    }).join(" ")
+}
+
+const LoadingDots = styled.div`
+
+    height: auto;
+    width: auto;
+    font-size: 20vh;
+
+    @keyframes blink {
+
+        0% {
+
+          opacity: 0;
+        }
+        100% {
+
+          opacity: 1;
+        }
+    }
+    
+    ${generateXBlinker("rekord_pool".split("").length)}
+`
+
 const FallbackIcon = () => {
+
+    const icon = "rekord_pool".split("").map(x=> <span>{x}</span>)
 
     return (
         <GlobalContainer>
 
             <IconContainer>
-                <span>rekord_pool</span>
+                <LoadingDots>
+                {icon}
+                </LoadingDots>
             </IconContainer>
-
         </GlobalContainer>
 
     )

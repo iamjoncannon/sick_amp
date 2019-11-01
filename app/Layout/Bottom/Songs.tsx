@@ -11,7 +11,7 @@ const SongSectionContainer = styled.div`
     width: 86vw;
     font-size: 2vh;
     overflow-x: scroll;
-    background-color: ${props=>props.theme.primaryColor};
+    background-image: ${props=>props.theme.primaryColor};
     border: 1px solid black;
     display: flex;
     flex-direction: column;

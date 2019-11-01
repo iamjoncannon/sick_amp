@@ -121,14 +121,13 @@ const HarmonicMixingFilter = ( ) => {
                 
                 if(FilterState.key){
 
-                    computedClass = FilterState.key[thisKey] ? "selected" : undefined ;
-                    
-                    console.log(FilterState.key, thisKey, FilterState.key[thisKey])
+                    computedClass = FilterState.key[thisKey] ? "selected" : undefined ;                    
                 }
                 
                 return (
                     
                     <span
+                        key={thisKey}
                         className={computedClass} 
                         onClick={()=>handleClick(thisKey)} 
                     >

@@ -19,7 +19,7 @@ var Container = styled.div`
    -ms-user-select: none; 
 
    .headers .th {
-      background-color: ${props=> props.theme.primaryColor}
+      background-image: ${props=> props.theme.primaryColor}
    }
 
    .headers:hover{
@@ -33,11 +33,11 @@ var Container = styled.div`
   }
 
   .primary {
-    background-color: ${props=> props.theme.tertiaryColor}
+    background-image: ${props=> props.theme.tertiaryColor_Background}
   }
 
   .secondary {
-    background-color: ${props=> props.theme.primaryColor}
+    background-image: ${props=> props.theme.primaryColor}
   }
 
   .selected {
@@ -47,7 +47,7 @@ var Container = styled.div`
 
   .draggedOver {
 
-    border-top: 2px solid ${props=>props.theme.logoColor};
+    border-top: 2px solid white;
   }
 
   .playing {
@@ -292,7 +292,7 @@ function Table({ columns, data }) {
   
   const [ selectedID, handleIDSelect ] = React.useState(0)
   const [ isDraggedOver, handleDragOver ] = React.useState(null)
-
+  const [ isDragThrottled, handleDragThrottle ] = React.useState(false)
   // hook to manage keyboard events- 
 
   React.useEffect(()=>{
@@ -406,7 +406,19 @@ function Table({ columns, data }) {
 
     e.preventDefault()
 
-    handleDragOver(id)
+    function throttledCall(id){
+
+        handleDragThrottle(true) 
+
+        handleDragOver(id)
+        
+        setTimeout(()=>{
+        
+          handleDragThrottle(false)
+        }, 50)      
+    }
+
+    if(!isDragThrottled) throttledCall(id)
   }
 
   const onDrop = (e: any) => {

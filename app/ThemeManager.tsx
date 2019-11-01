@@ -8,9 +8,11 @@ import { ThemeProvider } from 'styled-components'
 // user can create skins
 
 const InitialTheme = {
-    primaryColor: "#3F3F3F",
-    secondaryColor: "#262626",
-    tertiaryColor: "#1E1E1E",
+    primaryColor: "linear-gradient(rgba(63,63,63, 1), rgba(63,63,63,.95))",
+    secondaryColor: "#262626", 
+    secondaryColor_Background: "linear-gradient(rgba(38, 38, 38, 1), rgba(38, 38, 38,.95))",
+    tertiaryColor: "#1E1E1E", 
+    tertiaryColor_Background: "linear-gradient(rgba(30, 30, 30, 1), rgba(30, 30, 30, .95))",
     highlightColor: "#A9A9A9",
     logoColor: "rgba(255, 0, 0, .25)",
     fontColor: "#E0E0E0",

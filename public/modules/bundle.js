@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"d954db77bc1ac0ce2e73","1":"0861c0dc31eeff7f58b5","2":"4ecb3831f9115f56cba1","3":"b05286835c5109cbf47e","4":"e2c7728e9c7da15c1ef4","5":"137fa2b50447cb4c8739","6":"9a4c07d7080d31798d0e","7":"f687e107b26a473b59e0","8":"d2598272d3ab466ced11","9":"7864a8811c62df4d5f30"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"d954db77bc1ac0ce2e73","1":"0861c0dc31eeff7f58b5","2":"4ecb3831f9115f56cba1","3":"b05286835c5109cbf47e","4":"5d8417655c858be732b5","5":"6576c1dc76ac48a122ad","6":"078bc893ece10e160cfa","7":"0567277082f551a145fd","8":"d2598272d3ab466ced11","9":"7864a8811c62df4d5f30"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -230,10 +230,40 @@ const IconContainer = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].
     padding: .5vh 1vh .5vh 1vh;
     border-radius: 1vh;
 `;
+const generateXBlinker = (num) => {
+    return Array(num).fill(null).map((x, i) => {
+        return `
+        span:nth-child(${i + 1}){
+            animation: blink ${(i + 1) * .5}s;
+        }
+    `;
+    }).join(" ");
+};
+const LoadingDots = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div `
+
+    height: auto;
+    width: auto;
+    font-size: 20vh;
+
+    @keyframes blink {
+
+        0% {
+
+          opacity: 0;
+        }
+        100% {
+
+          opacity: 1;
+        }
+    }
+    
+    ${generateXBlinker("rekord_pool".split("").length)}
+`;
 const FallbackIcon = () => {
+    const icon = "rekord_pool".split("").map(x => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, x));
     return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(GlobalContainer, null,
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(IconContainer, null,
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "rekord_pool"))));
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(LoadingDots, null, icon))));
 };
 /* harmony default export */ __webpack_exports__["default"] = (FallbackIcon);
 
@@ -285,9 +315,11 @@ __webpack_require__.r(__webpack_exports__);
 // to alter the themes as well, so the 
 // user can create skins
 const InitialTheme = {
-    primaryColor: "#3F3F3F",
+    primaryColor: "linear-gradient(rgba(63,63,63, 1), rgba(63,63,63,.95))",
     secondaryColor: "#262626",
+    secondaryColor_Background: "linear-gradient(rgba(38, 38, 38, 1), rgba(38, 38, 38,.95))",
     tertiaryColor: "#1E1E1E",
+    tertiaryColor_Background: "linear-gradient(rgba(30, 30, 30, 1), rgba(30, 30, 30, .95))",
     highlightColor: "#A9A9A9",
     logoColor: "rgba(255, 0, 0, .25)",
     fontColor: "#E0E0E0",
@@ -326,7 +358,13 @@ const lazy = react__WEBPACK_IMPORTED_MODULE_0___default.a.lazy;
 
 
 
-const MenuBar = lazy(() => Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(5)]).then(__webpack_require__.bind(null, /*! ./Layout/MenuBar/MenuBar */ "./app/Layout/MenuBar/MenuBar.tsx")));
+const MenuBar = lazy(() => {
+    return Promise.all([
+        Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(5)]).then(__webpack_require__.bind(null, /*! ./Layout/MenuBar/MenuBar */ "./app/Layout/MenuBar/MenuBar.tsx")),
+        new Promise(resolve => setTimeout(resolve, 2000))
+    ])
+        .then(([moduleExports]) => moduleExports);
+});
 const BottomLayout = lazy(() => Promise.all(/*! import() */[__webpack_require__.e(3), __webpack_require__.e(6)]).then(__webpack_require__.bind(null, /*! ./Layout/Bottom/BottomLayout */ "./app/Layout/Bottom/BottomLayout.tsx")));
 
 react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Suspense, { fallback: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_FallBackIcon__WEBPACK_IMPORTED_MODULE_5__["default"], null) },

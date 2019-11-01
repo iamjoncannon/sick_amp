@@ -5,8 +5,19 @@ import ReactDOM from "react-dom";
 import { StoreProvider, Store } from './store/Store'
 import ThemeManager  from './ThemeManager'
 import Logger from './Logger'
-const MenuBar = lazy(() => import('./Layout/MenuBar/MenuBar'))
+
+const MenuBar = lazy(() => { 
+
+  return Promise.all([
+    import('./Layout/MenuBar/MenuBar'),     
+    new Promise(resolve => setTimeout(resolve, 2000))
+  ])
+  .then(([moduleExports]) => moduleExports);
+})
+
+
 const BottomLayout = lazy(() => import('./Layout/Bottom/BottomLayout'))
+
 import FallBackIcon from './FallBackIcon'
 
 ReactDOM.render(    
@@ -21,3 +32,5 @@ ReactDOM.render(
         </Suspense>,
   document.getElementById("root") || document.createElement('app')
 );
+
+

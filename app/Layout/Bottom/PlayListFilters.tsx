@@ -6,7 +6,7 @@ import ToolKit from './Toolkit'
 
 const PlayListFilterContainer = styled.div`
     height: 24vh;
-    background-color: ${props=>props.theme.tertiaryColor}
+    background-image: ${props=>props.theme.tertiaryColor_Background};
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -26,7 +26,7 @@ const PlayListFilterContainer = styled.div`
         width: 24%;
         height: 90%;
         margin: .3vh;
-        border: 1px solid ${props=>props.theme.fontColor}
+        border: 1px solid ${props=>props.theme.fontColor};
         position: relative;
         
         display: flex;

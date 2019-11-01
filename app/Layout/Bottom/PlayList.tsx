@@ -17,7 +17,7 @@ const PlayListContainer = styled.div`
     }
 
     &:hover{
-        background: ${props=>props.theme.tertiaryColor};
+        background-image: ${props=>props.theme.tertiaryColor_Background};
     }
 `
 

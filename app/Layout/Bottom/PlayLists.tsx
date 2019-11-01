@@ -16,7 +16,7 @@ const PlayListsContainer = styled.div`
     cursor: default;
     height: 89.5vh;
     width: 14vw;
-    background-color: ${props=>props.theme.primaryColor};
+    background-image: ${props=>props.theme.primaryColor};
     border: 1px solid black;
     display: flex;
     flex-direction: column;

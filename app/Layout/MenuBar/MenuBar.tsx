@@ -14,7 +14,8 @@ const SearchBar = React.lazy(() => import('../../Components/SearchBar'))
 
 
 const PrimaryMenuContainer = styled.div`
-    background-color: ${props=>props.theme.primaryColor};
+    background-image: ${props=>props.theme.primaryColor};
+    border-bottom: 1px solid rgba(63,63,63,1);
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -27,11 +28,11 @@ const PlayerStateContainer = styled.div`
 
     width: 40vw;
     height: 100%;
-    background-color: ${props=>props.theme.secondaryColor};
+    background-image: ${props=>props.theme.secondaryColor_Background};
 `
 
 const SecondaryMenuContainer = styled.div`
-    background-color: ${props=>props.theme.secondaryColor};
+    background-image: ${props=>props.theme.secondaryColor_Background};
     border: 1px solid ${props=>props.theme.primaryColor};
     height: 4vh;
     color:${props=>props.theme.fontColor}
@@ -55,7 +56,7 @@ const SecondaryMenuContainer = styled.div`
     span:first-child {
         margin-right: 2.5vh;
         text-decoration: underline;
-        background-color: ${props=>props.theme.secondaryColor};
+        background-image: ${props=>props.theme.secondaryColor_Background};
     }
 
     span:last-child {
