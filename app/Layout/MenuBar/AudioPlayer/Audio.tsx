@@ -1,7 +1,5 @@
 import React from "react";
 import Song from "./Song";
-import Play from "./Play";
-import Pause from "./Pause";
 import Bar from "./Bar";
 import useAudioPlayer from './useAudioPlayer';
 import styled from 'styled-components'
@@ -44,10 +42,17 @@ const ControlsContainer = styled.div`
 
 function Audio() {
 
-  const { curTime, duration, setClickedTime } = useAudioPlayer();
+  const { curTime, setClickedTime } = useAudioPlayer();
   const { state, dispatch } = React.useContext(Store);
 
+  const { Songs, Transport: { current }  } = state
 
+  let duration  
+  
+  if(Songs){
+
+    duration = Songs[current].duration
+  } 
 
   return (
 
@@ -57,10 +62,7 @@ function Audio() {
         id="audio" 
       />
 
-      <Song 
-        songName="Testing" 
-        songArtist="Testing"
-      />
+      <Song/>
 
       <ControlsContainer>
 

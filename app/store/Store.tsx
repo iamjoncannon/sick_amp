@@ -1,78 +1,146 @@
 import React from 'react';
 import * as Types from './Types'
 
-const initialState : Types.Store = {
-    Transport : {
-        current: 1, 
-    },
+export const initialState : Types.Store = {
+
+    Transport : {  current: 1 },
     isPlaying: false,
+    
+    PlayLists: null,
     SelectedPlaylist: "All",
     RunningPlaylist: "All",
-    Columns: null,
-    PlayLists: null,
-    Songs: null,
     draggedOverPlaylist: null,
+    isEditingNewPlayList: false,
+    
+    Columns: null,
+    
+    Songs: null,
+    
+    isTypingInSearchBar: false,
+    SearchBarText: {
+        all_fields: { text: ""},
+        1: {field: "artist", text: ""},
+        2: {field: "album_artist", text: ""},
+        3: {field: "genre", text: ""}
+    },
+    FilterState: {
+        bpm: [50, 200]
+        // artist : { }
+        // artist_album : { } 
+        // genre :  { }
+    },
     token: "dev"
 };
 
+export function MUTATE_FILTERSTATE(state, action){
+
+    const { payload: { field, value } } = action 
+    const { FilterState } = state 
+    const new_FilterState = {...FilterState}
+
+    if(!new_FilterState[field]) new_FilterState[field] = {}
+
+    if(new_FilterState[field][value]){
+        
+        delete new_FilterState[field][value]
+    }
+    else if(field === "bpm"){
+
+        new_FilterState["bpm"] = value
+    }
+    else{
+
+        // only one key to be filtered
+        
+        if(field === "key") new_FilterState.key = {}
+
+        // to do - place harmonic logic here to append 
+        // harmonics to state for downstream component 
+        
+        new_FilterState[field][value] = true 
+    }
+
+    return {...state, FilterState : new_FilterState }
+}
+
+export function TOGGLE_SEARCHBAR_FOCUS(state, action){
+
+    return {...state, isTypingInSearchBar: action.payload}
+}
+
+export function HANDLE_SEARCHBAR_TEXT(state, action){
+
+    const { target, text } = action.payload
+    const next_SearchBar_text_object = {...state.SearchBarText}
+
+    next_SearchBar_text_object[target]["text"] = text 
+
+    return {...state, SearchBarText: next_SearchBar_text_object }
+}
+
+export function CANCEL_UPDATE_PLAYLISTS(state,action){
+
+    return {...state, isEditingNewPlayList: false}
+}
+
 interface ReduxAction {
     type: string
-    // ideally this would be an enum 
-    // with the contract for every action
     payload: any 
 }
 
-function reducer(state : Types.Store, action : ReduxAction ) {
+export function reducer(state : Types.Store, action : ReduxAction ) {
 
-    console.log("Action: ", action.type, action.payload)
+    process.env.NODE_ENV !== "production" && process.env.NODE_ENV !== "test" && console.log("Action: ", action.type, action.payload)
 
     switch (action.type) {
 
-        case 'HYDRATE_PLAYLISTS': {
+        /*
 
-            return {...state, PlayLists: action.payload}
-        }
+            COLUMNS
 
-        case 'HYDRATE_SONGS': {
+        */
 
-            const { PlayList, Page, data } = action.payload
-
-            // pouring songs into the pool
-
-            const Songs = {...state.Songs, ...data}
-
-            // update the hydration hash for the playlist 
-
-            const PlayLists = {...state.PlayLists}
-
-            PlayLists[PlayList].hydrated[Page] = true 
-  
-            return {...state, PlayLists : PlayLists, Songs: Songs }
-        }
-
-        case 'PLAYLIST_END': {
-
-            const { PlayList, Page } = action.payload
-
-            const next_PlayLists = {...state.PlayLists}
-
-            next_PlayLists[PlayList].hydrated["Complete"] = true 
-            next_PlayLists[PlayList].hydrated[Page] = true 
-
-            return {...state, PlayLists: next_PlayLists }
-        }
-
-        case 'HYDRATE_COLUMNS': {
+       case 'HYDRATE_COLUMNS': {
 
             return {...state, Columns: action.payload.data}
-        }
-        
+       }   
 
-        case 'SELECT_PLAYLIST':
-        
-            return { ...state, SelectedPlaylist: action.payload }
 
-        case 'PLAY_TRACK': {
+       /*
+
+            TRANSPORT
+       */
+
+
+      case "TOGGLE_PLAYERSTATE": {
+
+            return {...state, isPlaying: !state.isPlaying}
+      }
+
+        /*
+
+            SONGS 
+
+        */
+
+       case 'HYDRATE_SONGS': {
+
+           const { PlayList, Page, data } = action.payload
+
+           // pouring songs into the pool
+
+           const Songs = {...state.Songs, ...data}
+
+           // update the hydration hash for the playlist 
+
+           const PlayLists = {...state.PlayLists}
+
+           PlayLists[PlayList].hydrated[Page] = true 
+ 
+           return {...state, PlayLists : PlayLists, Songs: Songs }
+       }
+
+       case 'PLAY_TRACK': {
 
             const current : number = Number(action.payload)
 
@@ -82,7 +150,7 @@ function reducer(state : Types.Store, action : ReduxAction ) {
 
             return {...state, Transport: newTransport, isPlaying: true, RunningPlaylist: SelectedPlaylist}
         }
-        
+
         case "PLAY_PREVIOUS_TRACK": {
 
             const { RunningPlaylist, PlayLists, Transport : { current } } = state 
@@ -91,25 +159,24 @@ function reducer(state : Types.Store, action : ReduxAction ) {
             // playlists differently- see ./Types -- this requires us to handle each differently
             // in the playlist actions - this could certainly be revisited and refactored 
 
-            // if its playing from the all playlist, then its simply the previous track
-            // or the end of the playlist if current = 0 
-
             let next_current 
 
             if(RunningPlaylist === "All"){
 
-                next_current = current === 0 ? PlayLists[RunningPlaylist].length -1 : Number(current) - 1 
+                next_current = current === 1 ? Object.keys(state.Songs).length : Number(current) - 1 
             }
             else{
 
-                // if its a specific playlist, then we need to find the index of the track in the 
-                // playlists ids and return the previous index, or end if 0 
+                if(PlayLists[RunningPlaylist].files.length === 1) return {...state}
 
-                let CurrentPlaylist = PlayLists[RunningPlaylist].ids
+                // if its a specific playlist, then we need to find the index of the track in the 
+                // playlists files and return the previous index, or end if 0 
+
+                let CurrentPlaylist = PlayLists[RunningPlaylist].files
 
                 const current_index = CurrentPlaylist.indexOf(current)
 
-                next_current = current_index === 0 ? CurrentPlaylist[CurrentPlaylist.length -1] : CurrentPlaylist[current_index -1 ] 
+                next_current = current_index === 1 ? CurrentPlaylist[CurrentPlaylist.length] : CurrentPlaylist[current_index -1 ] 
             
             }
 
@@ -125,19 +192,22 @@ function reducer(state : Types.Store, action : ReduxAction ) {
             let next_current 
             let CurrentPlaylist 
 
+
             if(RunningPlaylist === "All"){
 
                 CurrentPlaylist = PlayLists[RunningPlaylist]
 
-                next_current = current === CurrentPlaylist.length -1 ? 0 : Number(current) + 1 
+                next_current = current === (Object.keys(state.Songs) as string[]).length ? 1 : Number(current) + 1 
             }
             else{
 
-                CurrentPlaylist = PlayLists[RunningPlaylist].ids
+                if(PlayLists[RunningPlaylist].files.length === 1) return {...state}
+
+                CurrentPlaylist = PlayLists[RunningPlaylist].files
 
                 const current_index = CurrentPlaylist.indexOf(current)
 
-                next_current = current_index === CurrentPlaylist.length -1 ? CurrentPlaylist[0] : CurrentPlaylist[current_index + 1 ] 
+                next_current = current_index === CurrentPlaylist.length ? CurrentPlaylist[1] : CurrentPlaylist[current_index + 1 ] 
             }
 
             let newTransport : Types.Transport = { current: next_current } 
@@ -145,36 +215,65 @@ function reducer(state : Types.Store, action : ReduxAction ) {
             return {...state, Transport: newTransport, isPlaying: true}
         }
 
+        /*
+
+            PLAYLISTS/FOLDERS
+
+        */
+
+        case 'HYDRATE_PLAYLISTS': {
+
+            return {...state, PlayLists: action.payload}
+        }
+
+        case 'START_EDITING_PLAYLIST': {
+
+            return {...state, isEditingNewPlayList: action.payload }
+        }
+
+
+        case 'PLAYLIST_END': {
+
+            const { PlayList, Page } = action.payload
+
+            const next_PlayLists = {...state.PlayLists}
+
+            next_PlayLists[PlayList].hydrated["Complete"] = true 
+            next_PlayLists[PlayList].hydrated[Page] = true 
+
+            return {...state, PlayLists: next_PlayLists }
+        }
+
+    
+        case 'SELECT_PLAYLIST':{
+    
+            return { ...state, Page: 1, SelectedPlaylist: action.payload }
+        }
+        
         case 'ADD_SONG_TO_PLAYLIST':{
 
-            const { PlayLists } = state 
-            const { payload: { song, playlist } } = action
+            const { PlayLists, draggedOverPlaylist } = state 
+            const { payload: { song } } = action
 
-            const nextPlaylists = [...PlayLists]
+            const nextPlaylists = {...PlayLists}
 
-            if(!nextPlaylists[playlist].ids.includes(Number(song))){
+            if(!nextPlaylists[draggedOverPlaylist].files.includes(Number(song))){
 
-                nextPlaylists[playlist].ids = [...PlayLists[playlist].ids, Number(song)]
+                nextPlaylists[draggedOverPlaylist].files = [...PlayLists[draggedOverPlaylist].files, Number(song)]
             }
 
             return {...state, PlayLists : nextPlaylists, draggedOverPlaylist: null}
         }
 
-        case "TOGGLE_PLAYERSTATE": {
-
-            return {...state, isPlaying: !state.isPlaying}
-        }
-
-
         case "REARRANGE_PLAYLIST": {
 
             const { item_to_put_before, item_to_be_moved } = action.payload
 
-            let next_playlist_object = [...state.PlayLists]
+            let next_playlist_object = state.PlayLists
             
             if(state.SelectedPlaylist !== "All"){
 
-                let targetPlaylist = next_playlist_object[state.SelectedPlaylist].ids
+                let targetPlaylist = next_playlist_object[state.SelectedPlaylist].files
 
                 let nextTargetPlaylist = []
 
@@ -193,31 +292,55 @@ function reducer(state : Types.Store, action : ReduxAction ) {
                     }
                 }
 
-                next_playlist_object[state.SelectedPlaylist].ids = nextTargetPlaylist
-                
+                next_playlist_object[state.SelectedPlaylist].files = nextTargetPlaylist
             }
-            
-            // this could be refactored- playlists is an object
-            // we also want to treat like an array - "All" needs
-            // to be reappended if we destructure as above 
-                
-            next_playlist_object["All"] = [...Object.values(state.Songs)]
-                        
+                                    
             return {...state, PlayLists : next_playlist_object}
         }
 
-        case "ADD_PLAYLIST":{
+        case "UPDATE_PLAYLISTS":{
 
-            let next_playlist_object = {...state.PlayLists}
+            const next_playlist_object = {...state.PlayLists}
 
-            next_playlist_object[next_playlist_object.length] = { name: "New PlayList", id: next_playlist_object.length, files: [ ]}
+            const { id } = action.payload 
 
-            return {...state, PlayLists : next_playlist_object}
+            next_playlist_object[id] = action.payload
+
+            next_playlist_object[id].hydrated = { }
+
+            return {...state, isEditingNewPlayList: false, PlayLists : next_playlist_object}
+        }
+        
+        case "CANCEL_UPDATE_PLAYLISTS":{
+
+            return CANCEL_UPDATE_PLAYLISTS(state, action)
         }
 
         case "DRAG_OVER_PLAYLIST": {
 
             return {...state, draggedOverPlaylist: action.payload}
+        }
+
+
+        /*
+
+            SEARCH
+
+        */
+
+        case "TOGGLE_SEARCHBAR_FOCUS": {
+
+            return TOGGLE_SEARCHBAR_FOCUS(state, action)
+        }
+
+        case "HANDLE_SEARCHBAR_TEXT" : {
+
+            return HANDLE_SEARCHBAR_TEXT(state, action)
+        }
+
+        case "MUTATE_FILTERSTATE": {
+
+            return MUTATE_FILTERSTATE(state, action)
         }
         
         default:
@@ -229,7 +352,7 @@ export const Store = React.createContext(null);
 
 export function StoreProvider(props : any) {
 
-    const [state, dispatch] = React.useReducer(reducer, initialState);
+    const [ state, dispatch ] = React.useReducer(reducer, initialState);
     const value = { state, dispatch };
 
     return (

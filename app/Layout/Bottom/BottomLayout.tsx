@@ -5,10 +5,11 @@ import styled from 'styled-components'
 import * as Types from '../../store/Types'
 import { StoreProvider, Store } from '../../store/Store'
 const Songs = React.lazy(() => import('./Songs'))
-// import Songs from './Songs'
 import PlayLists from './PlayLists'
 
 import Audio from '../MenuBar/AudioPlayer/Audio'
+
+import { getDevice } from '../../Helpers'
 
 const Container = styled.div`
     color: ${props=>props.theme.fontColor}
@@ -20,7 +21,7 @@ const PlayListDND = () => {
 
     return (
         <Container>
-
+            
             <PlayLists />      
             
             <Songs />

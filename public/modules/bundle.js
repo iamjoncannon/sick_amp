@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"2ee9aa811652ce42a0cb","1":"d545ceca97b80ed7c45f","2":"a4245ba38307424b059a","3":"4f02bc95aec477774fa9","4":"02e17a222397484b5b14","5":"c931c45b180a1049d03b","6":"689b28c3528c549c6085","7":"86184c75555d82c169dc","8":"6ab9b1995abe206efb75"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"d954db77bc1ac0ce2e73","1":"0861c0dc31eeff7f58b5","2":"4ecb3831f9115f56cba1","3":"b05286835c5109cbf47e","4":"7dd57a33683de2eaeef8","5":"27227eda4a5779daa8b4","6":"fadcc6380c701437915d","7":"1ace394a4dd26d2b96bc","8":"035a2e105ba557ba883b","9":"e83b35d5009998db0065"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -198,6 +198,87 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./app/FallBackIcon.tsx":
+/*!******************************!*\
+  !*** ./app/FallBackIcon.tsx ***!
+  \******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+
+
+const GlobalContainer = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div `
+    background-color: #3F3F3F;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-size: 20vh;
+
+    ${props => props.theme.query('cell', `
+        height: 100vh;
+        width: 100%;
+    `)}
+`;
+const IconContainer = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div `
+
+    color: #E0E0E0;
+    font-size: 10vw;
+    font-weight: bold;
+    cursor: default;
+    background-color: rgba(255, 0, 0, .25);
+    padding: .5vh 1vh .5vh 1vh;
+    border-radius: 1vh;
+
+    ${props => props.theme.query('cell', `
+        font-size: 15vw; 
+    `)}
+`;
+const generateXBlinker = (num) => {
+    return Array(num).fill(null).map((x, i) => {
+        return `
+        span:nth-child(${i + 1}){
+            animation: blink ${(i + 1) * .5}s;
+        }
+    `;
+    }).join(" ");
+};
+const LoadingDots = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div `
+
+    height: auto;
+    width: auto;
+
+    @keyframes blink {
+
+        0% {
+
+          opacity: 0;
+        }
+        100% {
+
+          opacity: 1;
+        }
+    }
+    
+    ${generateXBlinker("rekord_pool".split("").length)}
+`;
+const FallbackIcon = () => {
+    const icon = "rekord_pool".split("").map((x, i) => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", { key: i }, x));
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(GlobalContainer, null,
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(IconContainer, null,
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(LoadingDots, null, icon))));
+};
+/* harmony default export */ __webpack_exports__["default"] = (FallbackIcon);
+
+
+/***/ }),
+
 /***/ "./app/Logger.tsx":
 /*!************************!*\
   !*** ./app/Logger.tsx ***!
@@ -215,40 +296,7 @@ const useEffect = react__WEBPACK_IMPORTED_MODULE_0___default.a.useEffect;
 
 const Logger = () => {
     const { state } = react__WEBPACK_IMPORTED_MODULE_0___default.a.useContext(_store_Store__WEBPACK_IMPORTED_MODULE_1__["Store"]);
-    /*
-    
-    React.useEffect( ()=>{
-
-        async function fetchData(){
-
-            // let { data } = await axios.get('http://localhost:3030/files?api_key=dev')
-            // let { data } = await axios.get('/data')
-
-            const { Songs, PlayLists } = data
-
-            let ColumnHash = sortColumns(Songs)
-
-            let sortedData = {
-                Songs,
-                PlayLists,
-                ColumnHash
-            }
-
-            dispatch({
-                type: "HYDRATE",
-                payload: sortedData
-            })
-
-        }
-
-        if(state.Songs === null){
-
-            fetchData()
-        }
-    })
-
-    */
-    console.log("Next State: ", state);
+     true && console.log("Next State: ", state);
     return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null));
 };
 /* harmony default export */ __webpack_exports__["default"] = (Logger);
@@ -275,12 +323,57 @@ __webpack_require__.r(__webpack_exports__);
 // but want our global store to be able 
 // to alter the themes as well, so the 
 // user can create skins
+const device = {
+    mobileS: ['320px', "min"],
+    mobileM: ['375px', "min"],
+    mobileL: ['425px', 'min'],
+    tablet: ['768px', 'min'],
+    laptop: ['1024px', 'min'],
+    laptopL: ['1440px', 'min'],
+    desktop: ['2560px', 'min'],
+    cell: ["600px", "max"],
+    tab: ["601px", "min"],
+    desk: ["1100px", 'min']
+};
+/*
+
+@mixin for-phone-only {
+    @media (max-width: 599px) { @content; }
+  }
+  @mixin for-tablet-portrait-up {
+    @media (min-width: 600px) { @content; }
+  }
+  @mixin for-tablet-landscape-up {
+    @media (min-width: 900px) { @content; }
+  }
+  @mixin for-desktop-up {
+    @media (min-width: 1200px) { @content; }
+  }
+  @mixin for-big-desktop-up {
+    @media (min-width: 1800px) { @content; }
+  }
+  
+*/
 const InitialTheme = {
-    primaryColor: "#3F3F3F",
+    primaryColor: "linear-gradient(rgba(63,63,63, 1), rgba(63,63,63,.95))",
     secondaryColor: "#262626",
+    secondaryColor_Background: "linear-gradient(rgba(38, 38, 38, 1), rgba(38, 38, 38,.95))",
     tertiaryColor: "#1E1E1E",
+    tertiaryColor_Background: "linear-gradient(rgba(30, 30, 30, 1), rgba(30, 30, 30, .95))",
     highlightColor: "#A9A9A9",
-    fontColor: "#E0E0E0"
+    logoColor: "rgba(255, 0, 0, .25)",
+    logoColor_Background: "linear-gradient(rgba(255, 0, 0, .20), rgba(255, 0, 0, .25))",
+    fontColor: "#E0E0E0",
+    boxColor: "rgba( 255, 255, 255, 0.25 )",
+    query: (size, content) => {
+        const [pixels, direction] = device[size];
+        return `
+            @media only screen and (${direction}-device-width: ${pixels}){
+
+                ${content}
+            }
+        `;
+    }
 };
 const ThemeManager = (props) => {
     // todo - wire into the store 
@@ -307,6 +400,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store_Store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./store/Store */ "./app/store/Store.tsx");
 /* harmony import */ var _ThemeManager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ThemeManager */ "./app/ThemeManager.tsx");
 /* harmony import */ var _Logger__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Logger */ "./app/Logger.tsx");
+/* harmony import */ var _FallBackIcon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./FallBackIcon */ "./app/FallBackIcon.tsx");
 
 const Suspense = react__WEBPACK_IMPORTED_MODULE_0___default.a.Suspense;
 const lazy = react__WEBPACK_IMPORTED_MODULE_0___default.a.lazy;
@@ -314,9 +408,17 @@ const lazy = react__WEBPACK_IMPORTED_MODULE_0___default.a.lazy;
 
 
 
-const MenuBar = lazy(() => Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(2)]).then(__webpack_require__.bind(null, /*! ./Layout/MenuBar/MenuBar */ "./app/Layout/MenuBar/MenuBar.tsx")));
-const BottomLayout = lazy(() => Promise.all(/*! import() */[__webpack_require__.e(1), __webpack_require__.e(4)]).then(__webpack_require__.bind(null, /*! ./Layout/Bottom/BottomLayout */ "./app/Layout/Bottom/BottomLayout.tsx")));
-react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Suspense, { fallback: "Loading..." },
+const MenuBar = lazy(() => {
+    return Promise.all([
+        Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(4)]).then(__webpack_require__.bind(null, /*! ./Layout/MenuBar/MenuBar */ "./app/Layout/MenuBar/MenuBar.tsx")),
+        new Promise(resolve => setTimeout(resolve, 1000))
+    ])
+        .then(([moduleExports]) => moduleExports);
+});
+const BottomLayout = lazy(() => Promise.all(/*! import() */[__webpack_require__.e(3), __webpack_require__.e(6)]).then(__webpack_require__.bind(null, /*! ./Layout/Bottom/BottomLayout */ "./app/Layout/Bottom/BottomLayout.tsx")));
+
+react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Suspense, { fallback: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ThemeManager__WEBPACK_IMPORTED_MODULE_3__["default"], null,
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_FallBackIcon__WEBPACK_IMPORTED_MODULE_5__["default"], null)) },
     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_store_Store__WEBPACK_IMPORTED_MODULE_2__["StoreProvider"], null,
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Logger__WEBPACK_IMPORTED_MODULE_4__["default"], null),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ThemeManager__WEBPACK_IMPORTED_MODULE_3__["default"], null,
@@ -330,35 +432,104 @@ react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_
 /*!*****************************!*\
   !*** ./app/store/Store.tsx ***!
   \*****************************/
-/*! exports provided: Store, StoreProvider */
+/*! exports provided: initialState, MUTATE_FILTERSTATE, TOGGLE_SEARCHBAR_FOCUS, HANDLE_SEARCHBAR_TEXT, CANCEL_UPDATE_PLAYLISTS, reducer, Store, StoreProvider */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initialState", function() { return initialState; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MUTATE_FILTERSTATE", function() { return MUTATE_FILTERSTATE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_SEARCHBAR_FOCUS", function() { return TOGGLE_SEARCHBAR_FOCUS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HANDLE_SEARCHBAR_TEXT", function() { return HANDLE_SEARCHBAR_TEXT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CANCEL_UPDATE_PLAYLISTS", function() { return CANCEL_UPDATE_PLAYLISTS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "reducer", function() { return reducer; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Store", function() { return Store; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StoreProvider", function() { return StoreProvider; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 
 const initialState = {
-    Transport: {
-        current: 1,
-    },
+    Transport: { current: 1 },
     isPlaying: false,
+    PlayLists: null,
     SelectedPlaylist: "All",
     RunningPlaylist: "All",
-    Columns: null,
-    PlayLists: null,
-    Songs: null,
     draggedOverPlaylist: null,
+    isEditingNewPlayList: false,
+    Columns: null,
+    Songs: null,
+    isTypingInSearchBar: false,
+    SearchBarText: {
+        all_fields: { text: "" },
+        1: { field: "artist", text: "" },
+        2: { field: "album_artist", text: "" },
+        3: { field: "genre", text: "" }
+    },
+    FilterState: {
+        bpm: [50, 200]
+        // artist : { }
+        // artist_album : { } 
+        // genre :  { }
+    },
     token: "dev"
 };
+function MUTATE_FILTERSTATE(state, action) {
+    const { payload: { field, value } } = action;
+    const { FilterState } = state;
+    const new_FilterState = { ...FilterState };
+    if (!new_FilterState[field])
+        new_FilterState[field] = {};
+    if (new_FilterState[field][value]) {
+        delete new_FilterState[field][value];
+    }
+    else if (field === "bpm") {
+        new_FilterState["bpm"] = value;
+    }
+    else {
+        // only one key to be filtered
+        if (field === "key")
+            new_FilterState.key = {};
+        // to do - place harmonic logic here to append 
+        // harmonics to state for downstream component 
+        new_FilterState[field][value] = true;
+    }
+    return { ...state, FilterState: new_FilterState };
+}
+function TOGGLE_SEARCHBAR_FOCUS(state, action) {
+    return { ...state, isTypingInSearchBar: action.payload };
+}
+function HANDLE_SEARCHBAR_TEXT(state, action) {
+    const { target, text } = action.payload;
+    const next_SearchBar_text_object = { ...state.SearchBarText };
+    next_SearchBar_text_object[target]["text"] = text;
+    return { ...state, SearchBarText: next_SearchBar_text_object };
+}
+function CANCEL_UPDATE_PLAYLISTS(state, action) {
+    return { ...state, isEditingNewPlayList: false };
+}
 function reducer(state, action) {
-    console.log("Action: ", action.type, action.payload);
+     true && console.log("Action: ", action.type, action.payload);
     switch (action.type) {
-        case 'HYDRATE_PLAYLISTS': {
-            return { ...state, PlayLists: action.payload };
+        /*
+
+            COLUMNS
+
+        */
+        case 'HYDRATE_COLUMNS': {
+            return { ...state, Columns: action.payload.data };
         }
+        /*
+ 
+             TRANSPORT
+        */
+        case "TOGGLE_PLAYERSTATE": {
+            return { ...state, isPlaying: !state.isPlaying };
+        }
+        /*
+
+            SONGS
+
+        */
         case 'HYDRATE_SONGS': {
             const { PlayList, Page, data } = action.payload;
             // pouring songs into the pool
@@ -368,18 +539,6 @@ function reducer(state, action) {
             PlayLists[PlayList].hydrated[Page] = true;
             return { ...state, PlayLists: PlayLists, Songs: Songs };
         }
-        case 'PLAYLIST_END': {
-            const { PlayList, Page } = action.payload;
-            const next_PlayLists = { ...state.PlayLists };
-            next_PlayLists[PlayList].hydrated["Complete"] = true;
-            next_PlayLists[PlayList].hydrated[Page] = true;
-            return { ...state, PlayLists: next_PlayLists };
-        }
-        case 'HYDRATE_COLUMNS': {
-            return { ...state, Columns: action.payload.data };
-        }
-        case 'SELECT_PLAYLIST':
-            return { ...state, SelectedPlaylist: action.payload };
         case 'PLAY_TRACK': {
             const current = Number(action.payload);
             const { SelectedPlaylist } = state;
@@ -391,18 +550,18 @@ function reducer(state, action) {
             // architecture note- I decided to structure the "All" Playlist and the specific
             // playlists differently- see ./Types -- this requires us to handle each differently
             // in the playlist actions - this could certainly be revisited and refactored 
-            // if its playing from the all playlist, then its simply the previous track
-            // or the end of the playlist if current = 0 
             let next_current;
             if (RunningPlaylist === "All") {
-                next_current = current === 0 ? PlayLists[RunningPlaylist].length - 1 : Number(current) - 1;
+                next_current = current === 1 ? Object.keys(state.Songs).length : Number(current) - 1;
             }
             else {
+                if (PlayLists[RunningPlaylist].files.length === 1)
+                    return { ...state };
                 // if its a specific playlist, then we need to find the index of the track in the 
-                // playlists ids and return the previous index, or end if 0 
-                let CurrentPlaylist = PlayLists[RunningPlaylist].ids;
+                // playlists files and return the previous index, or end if 0 
+                let CurrentPlaylist = PlayLists[RunningPlaylist].files;
                 const current_index = CurrentPlaylist.indexOf(current);
-                next_current = current_index === 0 ? CurrentPlaylist[CurrentPlaylist.length - 1] : CurrentPlaylist[current_index - 1];
+                next_current = current_index === 1 ? CurrentPlaylist[CurrentPlaylist.length] : CurrentPlaylist[current_index - 1];
             }
             let newTransport = { current: next_current };
             return { ...state, Transport: newTransport, isPlaying: true };
@@ -413,33 +572,53 @@ function reducer(state, action) {
             let CurrentPlaylist;
             if (RunningPlaylist === "All") {
                 CurrentPlaylist = PlayLists[RunningPlaylist];
-                next_current = current === CurrentPlaylist.length - 1 ? 0 : Number(current) + 1;
+                next_current = current === Object.keys(state.Songs).length ? 1 : Number(current) + 1;
             }
             else {
-                CurrentPlaylist = PlayLists[RunningPlaylist].ids;
+                if (PlayLists[RunningPlaylist].files.length === 1)
+                    return { ...state };
+                CurrentPlaylist = PlayLists[RunningPlaylist].files;
                 const current_index = CurrentPlaylist.indexOf(current);
-                next_current = current_index === CurrentPlaylist.length - 1 ? CurrentPlaylist[0] : CurrentPlaylist[current_index + 1];
+                next_current = current_index === CurrentPlaylist.length ? CurrentPlaylist[1] : CurrentPlaylist[current_index + 1];
             }
             let newTransport = { current: next_current };
             return { ...state, Transport: newTransport, isPlaying: true };
         }
+        /*
+
+            PLAYLISTS/FOLDERS
+
+        */
+        case 'HYDRATE_PLAYLISTS': {
+            return { ...state, PlayLists: action.payload };
+        }
+        case 'START_EDITING_PLAYLIST': {
+            return { ...state, isEditingNewPlayList: action.payload };
+        }
+        case 'PLAYLIST_END': {
+            const { PlayList, Page } = action.payload;
+            const next_PlayLists = { ...state.PlayLists };
+            next_PlayLists[PlayList].hydrated["Complete"] = true;
+            next_PlayLists[PlayList].hydrated[Page] = true;
+            return { ...state, PlayLists: next_PlayLists };
+        }
+        case 'SELECT_PLAYLIST': {
+            return { ...state, Page: 1, SelectedPlaylist: action.payload };
+        }
         case 'ADD_SONG_TO_PLAYLIST': {
-            const { PlayLists } = state;
-            const { payload: { song, playlist } } = action;
-            const nextPlaylists = [...PlayLists];
-            if (!nextPlaylists[playlist].ids.includes(Number(song))) {
-                nextPlaylists[playlist].ids = [...PlayLists[playlist].ids, Number(song)];
+            const { PlayLists, draggedOverPlaylist } = state;
+            const { payload: { song } } = action;
+            const nextPlaylists = { ...PlayLists };
+            if (!nextPlaylists[draggedOverPlaylist].files.includes(Number(song))) {
+                nextPlaylists[draggedOverPlaylist].files = [...PlayLists[draggedOverPlaylist].files, Number(song)];
             }
             return { ...state, PlayLists: nextPlaylists, draggedOverPlaylist: null };
         }
-        case "TOGGLE_PLAYERSTATE": {
-            return { ...state, isPlaying: !state.isPlaying };
-        }
         case "REARRANGE_PLAYLIST": {
             const { item_to_put_before, item_to_be_moved } = action.payload;
-            let next_playlist_object = [...state.PlayLists];
+            let next_playlist_object = state.PlayLists;
             if (state.SelectedPlaylist !== "All") {
-                let targetPlaylist = next_playlist_object[state.SelectedPlaylist].ids;
+                let targetPlaylist = next_playlist_object[state.SelectedPlaylist].files;
                 let nextTargetPlaylist = [];
                 // this is not the most clever way to do this
                 // but it works 
@@ -451,21 +630,36 @@ function reducer(state, action) {
                         nextTargetPlaylist.push(targetPlaylist[i]);
                     }
                 }
-                next_playlist_object[state.SelectedPlaylist].ids = nextTargetPlaylist;
+                next_playlist_object[state.SelectedPlaylist].files = nextTargetPlaylist;
             }
-            // this could be refactored- playlists is an object
-            // we also want to treat like an array - "All" needs
-            // to be reappended if we destructure as above 
-            next_playlist_object["All"] = [...Object.values(state.Songs)];
             return { ...state, PlayLists: next_playlist_object };
         }
-        case "ADD_PLAYLIST": {
-            let next_playlist_object = { ...state.PlayLists };
-            next_playlist_object[next_playlist_object.length] = { name: "New PlayList", id: next_playlist_object.length, files: [] };
-            return { ...state, PlayLists: next_playlist_object };
+        case "UPDATE_PLAYLISTS": {
+            const next_playlist_object = { ...state.PlayLists };
+            const { id } = action.payload;
+            next_playlist_object[id] = action.payload;
+            next_playlist_object[id].hydrated = {};
+            return { ...state, isEditingNewPlayList: false, PlayLists: next_playlist_object };
+        }
+        case "CANCEL_UPDATE_PLAYLISTS": {
+            return CANCEL_UPDATE_PLAYLISTS(state, action);
         }
         case "DRAG_OVER_PLAYLIST": {
             return { ...state, draggedOverPlaylist: action.payload };
+        }
+        /*
+
+            SEARCH
+
+        */
+        case "TOGGLE_SEARCHBAR_FOCUS": {
+            return TOGGLE_SEARCHBAR_FOCUS(state, action);
+        }
+        case "HANDLE_SEARCHBAR_TEXT": {
+            return HANDLE_SEARCHBAR_TEXT(state, action);
+        }
+        case "MUTATE_FILTERSTATE": {
+            return MUTATE_FILTERSTATE(state, action);
         }
         default:
             return state;

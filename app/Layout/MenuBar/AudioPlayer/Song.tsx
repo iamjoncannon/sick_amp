@@ -12,6 +12,7 @@ const SongInfoContainer = styled.div`
     span:first-child{
       font-weight: bold;
       font-size: 1.6vh;
+      margin-top: .5vh;
     }
 
     span:last-child{
@@ -38,8 +39,8 @@ function Song() {
       {
         !!state.Songs &&
         <> 
-          <span>{selectedTrackObject.TITLE || selectedTrackObject.FILENAME}</span>
-          <span>{selectedTrackObject.ARTIST || selectedTrackObject.FILENAME} - {selectedTrackObject.ALBUM} </span>
+          <span>{selectedTrackObject.title || selectedTrackObject.stream_url}</span>
+          <span>{selectedTrackObject.artist || selectedTrackObject.stream_url} - {selectedTrackObject.ALBUM} </span>
         </>
       }
     

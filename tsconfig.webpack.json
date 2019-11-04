@@ -1,7 +1,12 @@
 {
     "extends": "./tsconfig.json",
     "compilerOptions": {
+        // "noImplicitAny": false,
         "module": "esnext",
         "target": "esnext",
-    }
+    },
+    "exclude": [
+         "node_modules",
+           "**/*.test.tsx"
+    ]
 }

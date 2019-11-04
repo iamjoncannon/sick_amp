@@ -1,24 +1,39 @@
 import React,{ useState, useEffect } from "react";
 import { Store } from '../../../store/Store'
 
+export interface AudioObject extends HTMLElement{
+
+    loop : boolean
+    duration: number
+    currentTime: number
+    addEventListener: any
+    removeEventListener: any
+    src: string 
+    play: any 
+    pause: any
+    volume: number 
+}
+
 function useAudioPlayer() {
 
   const { state, dispatch } = React.useContext(Store);
 
-  const [duration, setDuration] = useState();
+  const { token } = state
+
+  const [ duration, setDuration] = useState();
   const [curTime, setCurTime] = useState();
   const [currentTrack, setCurrentTrack] = useState(false);
   const [clickedTime, setClickedTime] = useState();
 
   useEffect(() => {
     
-    let audio = document.getElementById("audio")
+    let audio : AudioObject = document.getElementById("audio")
 
     audio.loop = false 
 
     // state setters wrappers
     const setAudioData = () => {
-
+      
       setDuration(audio.duration);
       setCurTime(audio.currentTime);
     }
@@ -49,13 +64,11 @@ function useAudioPlayer() {
   
     if(state.Songs){
 
-      filePath = state.Songs[state.Transport.current].FILENAME
+      filePath = state.Songs[state.Transport.current].stream_url
 
       if(!currentTrack || (currentTrack !== filePath) ){
-
-        // audio.src = `/tunes/${filePath}`
         
-        audio.src = `https://sickamptunes.s3.amazonaws.com/${filePath}`
+        audio.src = `${filePath}?api_key=${token}`
         setCurrentTrack(filePath)
       }
     }

@@ -23,15 +23,16 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: (inputFile)=>{
+          let thisTest = /\.tsx?$/.test(inputFile) && !(/\.test.tsx?$/.test(inputFile))
+          return thisTest
+        },
         exclude: /node_modules/,
-        // use: 'ts-loader',
-        // loader: require.resolve('ts-loader'),
         loader: 'ts-loader',
         options: {
           // context: __dirname,
-          transpileOnly: true,
-          experimentalWatchApi: true,
+          transpileOnly: process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'mute',
+          // experimentalWatchApi: true,
           configFile: resolve(__dirname,'tsconfig.webpack.json'),
         }
       },

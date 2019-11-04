@@ -1,4 +1,4 @@
-import * as Types from '../../store/Types'
+import * as Types from './store/Types'
 
 /* 
 
@@ -6,7 +6,6 @@ we have to sort through the songs and find
 all the possible categories- later we will build
 out a feature to allow the user to filter the  
 columns
-
 */
 
 export function sortColumns( data : Types.songStateType ){
@@ -29,4 +28,19 @@ export function sortColumns( data : Types.songStateType ){
     })
 
     return ColumnHash
+}
+
+export const getDevice = () => {
+
+    if( window.outerWidth > 1100){
+
+        return 'desktop'
+    }
+    
+    if(window.outerWidth < 601){
+        
+        return 'cell'
+    }
+
+    return 'tab'
 }

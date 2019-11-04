@@ -1,6 +1,5 @@
 import React from "react";
 import moment from "moment";
-// import moment from 'moment/moment';
 import momentDurationFormatSetup from "moment-duration-format";
 import styled from 'styled-components'
 

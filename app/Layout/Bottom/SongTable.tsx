@@ -8,7 +8,7 @@ import { useTable, useBlockLayout, useResizeColumns } from 'react-table'
 
 var Container = styled.div`
 
-  height: 75vh;
+  height: 65.5vh;
   font-size: .75rem;
   font-weight: 500;
   overflow: scroll;
@@ -19,7 +19,7 @@ var Container = styled.div`
    -ms-user-select: none; 
 
    .headers .th {
-      background-color: ${props=> props.theme.primaryColor}
+      background-image: ${props=> props.theme.primaryColor}
    }
 
    .headers:hover{
@@ -29,28 +29,29 @@ var Container = styled.div`
 
   .tr:hover{
     opacity: .75;
+    border: 1px solid rgba(255, 0, 0, .75);
   }
 
   .primary {
-    background-color: ${props=> props.theme.tertiaryColor}
+    background-image: ${props=> props.theme.tertiaryColor_Background}
   }
 
   .secondary {
-    background-color: ${props=> props.theme.primaryColor}
+    background-image: ${props=> props.theme.primaryColor}
   }
 
   .selected {
     opacity: .75;
-    border: .5px solid ${props=>props.theme.highlightColor};
+    border: 1px solid rgba(255, 0, 0, .75);
   }
 
   .draggedOver {
 
-    border-top: 2px solid red;
+    border-top: 2px solid white;
   }
 
   .playing {
-    color: red;
+    color: rgba(255, 0, 0, .9)
   }
 
   .table {
@@ -116,12 +117,12 @@ var Container = styled.div`
 
 // container that manages global state from store
 
-function SongTable() {
+function SongTableContainer() {
 
   const { state, dispatch } = React.useContext(Store);
   const [ Page, setPage ] = React.useState(1)
 
-  const { SelectedPlaylist, PlayLists } = state 
+  const { SelectedPlaylist, PlayLists, FilterState } = state 
 
   const CurrentPlayList = PlayLists[SelectedPlaylist]
 
@@ -174,10 +175,11 @@ function SongTable() {
     ()=> generatedColumns, 
     []
   )
+   
+
+  // generate playlist from songs 
 
   let formattedSongData = SelectedPlaylist === "All" ? Object.values(state.Songs) : []
-   
-  // filter list if playlist selected  
 
   if(state.SelectedPlaylist !== "All" && !!state.PlayLists){
         
@@ -185,27 +187,85 @@ function SongTable() {
     
     for(let song of currentList){
 
+      // precaution
       let song_exists = state.Songs[song]
 
       if(song_exists){
-      
-        formattedSongData.push(state.Songs[song])
+
+          formattedSongData.push(state.Songs[song])
       }
     }
 
-    if(CurrentPlayList.files.length > 50 && isLoaded && formattedSongData.length < 50){
-
-      console.log("Page + 1")
+    // throttle precaution
+    if(CurrentPlayList.files.length > 50 
+        && isLoaded 
+        && formattedSongData.length < 50){
 
       setPage(Page + 1)
     }
   }
 
+
+  // generate list of filters 
+
+  // we wanted to key into the FilterState object, now we want to
+  // be able to iterate through each field and apply that filter 
+  // as a test to each song -
+  
+  const FilterList = []
+
+  for(let i = 0; i < Object.entries(FilterState).length; i++){
+
+    // the entire object -- "genre" : { "rap": true, "country": true}
+    let this_field = Object.entries(FilterState)[i]
+
+    let field_name = this_field[0] 
+
+    // { "rap": true, "country": true}
+    let entries_in_field = Object.keys(this_field[1])
+
+    if( field_name === "bpm"){
+
+      // special case- pushing the array 
+      FilterList.push(["bpm", this_field[1] ])
+    }
+    else if(entries_in_field.length){
+
+      FilterList.push( [ field_name, entries_in_field ] )
+    }
+  }
+
+  formattedSongData = formattedSongData.filter(song=>{
+
+    let passesTest = true 
+
+    FilterList.forEach((filter)=>{
+
+      let test_field = filter[0]
+
+      let this_test
+      
+      if(filter[0] === "bpm"){
+        
+        this_test = ( filter[1][0] < song[test_field] ) && ( song[test_field] < filter[1][1])
+      }
+      else {
+      
+        this_test = filter[1].includes(song[test_field])
+      }
+
+      passesTest = this_test
+    })
+
+    return passesTest 
+  })
+
   // the table expects an array of objects - 
  
- const data = React.useMemo(() => formattedSongData)
+ const data = React.useMemo(() => formattedSongData, null)
 
   return (
+
     <Container id={"song_table"}>
       
       <Table 
@@ -215,7 +275,6 @@ function SongTable() {
 
     </Container>
   )
-
 }
 
 /*
@@ -233,15 +292,17 @@ function Table({ columns, data }) {
   
   const [ selectedID, handleIDSelect ] = React.useState(0)
   const [ isDraggedOver, handleDragOver ] = React.useState(null)
-
+  const [ isDragThrottled, handleDragThrottle ] = React.useState(false)
   // hook to manage keyboard events- 
 
   React.useEffect(()=>{
 
     const keyPressHandler = (e: any) =>{
 
+      if(state.isEditingNewPlayList) return 
+      if(state.isTypingInSearchBar) return 
+      
       e.preventDefault()
-      e.stopPropagation()
     
       const { key, code } = e
       const { PlayLists, SelectedPlaylist } = state 
@@ -252,7 +313,6 @@ function Table({ columns, data }) {
           type: "PLAY_TRACK",
           payload: selectedID 
         })
-
       }
 
       if(code === "Space"){
@@ -261,7 +321,6 @@ function Table({ columns, data }) {
           type: "TOGGLE_PLAYERSTATE",
           payload: null 
         })
-
       }
       
       if(key === "ArrowUp"){
@@ -270,14 +329,14 @@ function Table({ columns, data }) {
 
         if(SelectedPlaylist === "All"){
 
-          newSeletedID = selectedID === 0 ? PlayLists["All"].length -1 : Number(selectedID) - 1 
+          newSeletedID = selectedID === 1 ? PlayLists["All"].length -1 : Number(selectedID) - 1 
         }
         else{
 
             // if its a specific playlist, then we need to find the index of the track in the 
-            // playlists ids and return the previous index, or end if 0 
+            // playlists files and return the previous index, or end if 0 
 
-            const CurrentPlaylist = PlayLists[SelectedPlaylist].ids
+            const CurrentPlaylist = PlayLists[SelectedPlaylist].files
 
             const current_index = CurrentPlaylist.indexOf(selectedID)
 
@@ -294,11 +353,11 @@ function Table({ columns, data }) {
 
         if(SelectedPlaylist === "All"){
 
-          newSeletedID = selectedID === PlayLists["All"].length -1 ? 0 : Number(selectedID) + 1 
+          newSeletedID = selectedID === PlayLists["All"].length -1 ? 1 : Number(selectedID) + 1 
       }
       else{
 
-          let CurrentPlaylist = PlayLists[SelectedPlaylist].ids
+          let CurrentPlaylist = PlayLists[SelectedPlaylist].files
 
           const current_index = CurrentPlaylist.indexOf(selectedID)
 
@@ -347,7 +406,19 @@ function Table({ columns, data }) {
 
     e.preventDefault()
 
-    handleDragOver(id)
+    function throttledCall(id){
+
+        handleDragThrottle(true) 
+
+        handleDragOver(id)
+        
+        setTimeout(()=>{
+        
+          handleDragThrottle(false)
+        }, 50)      
+    }
+
+    if(!isDragThrottled) throttledCall(id)
   }
 
   const onDrop = (e: any) => {
@@ -435,7 +506,7 @@ function Table({ columns, data }) {
 
             let calculatedStyle = "tr"
 
-            const isSelected = Number(row.original.ID) === Number(selectedID) 
+            const isSelected = Number(row.original.id) === Number(selectedID) 
 
             if(i % 2 === 0 ){
               
@@ -451,30 +522,31 @@ function Table({ columns, data }) {
               calculatedStyle += " selected"
             }
 
-            const isPlaying = Number(row.original.ID) === Number(state.Transport.current) 
+            const isPlaying = Number(row.original.id) === Number(state.Transport.current) 
 
             if(isPlaying){
 
               calculatedStyle += " playing"
             }
 
-            if(!!isDraggedOver && Number(row.original.ID) === Number(isDraggedOver)){
+            if(!!isDraggedOver && Number(row.original.id) === Number(isDraggedOver)){
 
               calculatedStyle += " draggedOver"
             }
 
             return prepareRow(row) || (
               
-              <div {...row.getRowProps()} 
-                   draggable
-                   onDoubleClick={e=>handleDoubleClick(e)}
-                   onDragStart={(e)=>onDragStart(e, Number(row.original.ID))} 
-                   onDragEnd={onDragEnd}
-                   onDragOver={ e=> state.SelectedPlaylist !== "All" && onDragOver(e)}
-                   className={ calculatedStyle } 
-                   id={row.original.ID} 
-                   onClick={e=>handleClick(e)}
-                   onDrop={(e)=> state.SelectedPlaylist !== "All" && onDrop(e)}
+              <div 
+                {...row.getRowProps()} 
+                draggable
+                onDoubleClick={e=>handleDoubleClick(e)}
+                onDragStart={(e)=>onDragStart(e, Number(row.original.id))} 
+                onDragEnd={onDragEnd}
+                onDragOver={ e=> state.SelectedPlaylist !== "All" && onDragOver(e)}
+                className={ calculatedStyle } 
+                id={row.original.id} 
+                onClick={e=>handleClick(e)}
+                onDrop={(e)=> state.SelectedPlaylist !== "All" && onDrop(e)}
               >
 
                 {row.cells.map( cell => {
@@ -496,4 +568,4 @@ function Table({ columns, data }) {
   )
 }
 
-export default SongTable
+export default SongTableContainer

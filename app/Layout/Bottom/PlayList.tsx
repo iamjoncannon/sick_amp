@@ -1,28 +1,26 @@
 import React from 'react';
-const useEffect = (React as any).useEffect;
 import { Store } from '../../store/Store'
 import styled from 'styled-components'
-import axios from 'axios'
-import { sortColumns } from './Helpers'
 import * as Types from '../../store/Types'
+import EditablePlayList from './EditablePlayList'
 
 const PlayListContainer = styled.div`
 
-    margin-top: .5rem;
+    margin-top: 1vh;
+    padding: .25vh;
 
     span:focus{
         background: white;
     }
 
     &:hover{
-        background: ${props=>props.theme.tertiaryColor};
+        background-image: ${props=>props.theme.tertiaryColor_Background};
     }
 `
 
-
 interface PlaylistContainerProps {
     key: string | number
-    id: string | number
+    id: number | string
 }
 
 const PlayList = (props: PlaylistContainerProps) => {
@@ -31,16 +29,26 @@ const PlayList = (props: PlaylistContainerProps) => {
 
     const { id } = props 
 
-    const { PlayLists } = state 
+    const { PlayLists, 
+            RunningPlaylist, 
+            SelectedPlaylist, 
+            draggedOverPlaylist 
+         } = state 
 
     const { name } = PlayLists[id]
+    
+    const isSelectedPlayList = id === SelectedPlaylist
 
     const handleClick = (id: number | string) => {
 
-        dispatch({
-            type:"SELECT_PLAYLIST",
-            payload: id
-        })
+        if(!isSelectedPlayList){
+
+            dispatch({
+                type:"SELECT_PLAYLIST",
+                payload: id
+            })
+        }
+
     }
 
     const onDragOver = (e : any) => {
@@ -66,13 +74,18 @@ const PlayList = (props: PlaylistContainerProps) => {
         })
     }
 
+    const handleDoubleClick = () => {
+
+        dispatch({type: "START_EDITING_PLAYLIST", payload: "put"})
+    }
+
     let selectionState
 
-    if(state.draggedOverPlaylist === id ){
+    if(draggedOverPlaylist === id ){
 
         selectionState = "draggedOver"
     }
-    else if(id === state.SelectedPlaylist){
+    else if(isSelectedPlayList){
 
         selectionState = "selected"
     }
@@ -80,18 +93,22 @@ const PlayList = (props: PlaylistContainerProps) => {
     return(
 
         <PlayListContainer 
+            onDoubleClick={handleDoubleClick}
             onClick={()=>handleClick(id)}
             onDragOver={ e=> onDragOver(e)}
             onDrop={(e)=>onDrop(e)}
             id={ selectionState }
-
         >
-            <span 
-                id={id} 
-            >{name}</span>
+            { isSelectedPlayList && state.isEditingNewPlayList === "put"?
+                <EditablePlayList initialValue={name}/>
+                : 
+                <span 
+                    id={id} 
+                >{name}{id === RunningPlaylist && " ♫"}</span>
+            }
 
         </PlayListContainer>
     )
 }
-// ♫
+
 export default PlayList

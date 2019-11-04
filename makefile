@@ -13,7 +13,10 @@ serv:
 	nodemon dev-server.js & tsc -p ./server -w
 
 client:
-	webpack -w --progress
+	NODE_ENV=mute webpack -w --progress
+
+client-ts:
+	webpack -w --progress	
 
 client-compile:
 	NODE_ENV=production webpack -p --progress
@@ -50,6 +53,9 @@ install-lazy:
 	npm install webpack@4.28.4
 	npm install acorn-dynamic-import@4.0.0
 	npm update acorn --depth 20 && npm dedupe
+
+run-test:
+	NODE_ENV=test jest --watch --verbose -- -u
 
 # some git commands to help deal with me accidentally
 # committing mp3s

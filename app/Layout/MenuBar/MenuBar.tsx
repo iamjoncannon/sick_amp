@@ -10,9 +10,13 @@ import Audio from '../MenuBar/AudioPlayer/Audio'
 import VolumeBar from './VolumeBar'
 const Icon = React.lazy(() => import('./Icon'))
 const Transport = React.lazy(() => import('./Transport'))
+const SearchBar = React.lazy(() => import('../../Components/SearchBar'))
+import { getDevice } from '../../Helpers'
 
 const PrimaryMenuContainer = styled.div`
-    background-color: ${props=>props.theme.primaryColor};
+
+    background-image: ${props=>props.theme.primaryColor};
+    border-bottom: 1px solid rgba(63,63,63,1);
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -25,11 +29,12 @@ const PlayerStateContainer = styled.div`
 
     width: 40vw;
     height: 100%;
-    background-color: ${props=>props.theme.secondaryColor};
+    background-image: ${props=>props.theme.secondaryColor_Background};
+    position: absolute;
 `
 
 const SecondaryMenuContainer = styled.div`
-    background-color: ${props=>props.theme.secondaryColor};
+    background-image: ${props=>props.theme.secondaryColor_Background};
     border: 1px solid ${props=>props.theme.primaryColor};
     height: 4vh;
     color:${props=>props.theme.fontColor}
@@ -53,7 +58,7 @@ const SecondaryMenuContainer = styled.div`
     span:first-child {
         margin-right: 2.5vh;
         text-decoration: underline;
-        background-color: ${props=>props.theme.secondaryColor};
+        background-image: ${props=>props.theme.secondaryColor_Background};
     }
 
     span:last-child {
@@ -61,33 +66,67 @@ const SecondaryMenuContainer = styled.div`
     }
 `
 
+const SearchBarContainer = styled.div`
+`
+
+const LeftSection = styled.div`
+    height: 100%;
+    width: 75%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+`
+
 const MenuBar = (props: any) => {
 
     const { state, dispatch } = React.useContext(Store);
 
-    return (
-        <>
-        <PrimaryMenuContainer>
-            <Suspense fallback="Loading...">
-                
-                <Icon />
-                <Transport /> 
-            </Suspense>
+    const device = getDevice()
 
-            <VolumeBar />
+    return (
+
+        <>
+        
+        <PrimaryMenuContainer>
+            
+            <LeftSection>
+
+                <Suspense fallback="Loading...">
+                    
+                    <Icon />
+
+                    <Transport />
+
+                </Suspense>
+
+                { device !== 'cell' &&  <VolumeBar /> }
+
+            </LeftSection>
+
             <PlayerStateContainer>
-                <Audio />
+                
+                <Audio /> 
+                
             </PlayerStateContainer>
         
+            <SearchBarContainer>
+
+                { device !== 'cell' && <SearchBar target={"all_fields"}/> }
+
+            </SearchBarContainer>
+
         </PrimaryMenuContainer>
         
-        <SecondaryMenuContainer>
-            <div>
-                <span>My Library</span>
-                <span>Profile</span>
-                <span>Sick.DB</span>
-            </div>
-        </SecondaryMenuContainer>
+
+        { device !== 'cell' && 
+            <SecondaryMenuContainer>
+                <div>
+                    <span>My Library</span>
+                    <span>Profile</span>
+                    <span>Sick.DB</span>
+                </div>
+            </SecondaryMenuContainer>
+        }
         </>
     )
 }
