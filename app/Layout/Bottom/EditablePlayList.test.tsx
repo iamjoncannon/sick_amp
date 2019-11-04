@@ -2,21 +2,21 @@ import React from 'react'
 import { mount } from 'enzyme'
 import EditablePlayList from './EditablePlayList'
 import Types from '../store/Types'
-import nocked from '../../test/nock.setup'
+import { act } from 'react-dom/test-utils';
+import moxios from 'moxios'
 
 /*
 
     Intended behavior: 
 
-    [ ] props.initialState used in initial useState value
-    [ ] onChange sets local state with key value
-    [ ] onKeyPress monitors keys, if "Enter", dispatches postPlayList or putPlayList thunk to api 
-    [ ] onFocus selects the input element
-    [ ] onMouseLeave dispatches CANCEL_UPDATE_PLAYLISTS to store 
+    [x] props.initialState used in initial useState value
+    [x] onChange sets local state with key value
+    [x] onKeyPress monitors keys, if "Enter", dispatches postPlayList or putPlayList thunk to api 
+    [ TODO ] if not a new playlist, calls playlist put route to api 
+    [x] onMouseLeave dispatches CANCEL_UPDATE_PLAYLISTS to store 
 */
 
 export let MockStore 
-let mockState 
 let dispatchedActions = []
 let mockInitialState
 
@@ -24,18 +24,17 @@ function mockReducer(state : Types.Store, action : ReduxAction ) {
     
     switch (action.type) {
 
-        // actions to mock 
     }
 }
 
 describe("EditablePlayList", ()=>{
-
+    let nextState = [] 
     const setState = jest.fn();
     const useStateSpy = jest.spyOn(React, 'useState')
     useStateSpy.mockImplementation((init) => [init, setState]);
 
     beforeEach(() => {
-
+        moxios.install()
         MockStore = React.createContext(null);
 
         mockInitialState = {
@@ -44,17 +43,22 @@ describe("EditablePlayList", ()=>{
         }
     });
 
+    afterEach(()=>{
+
+        moxios.uninstall()
+    })
+
     function MockStoreProvider(props : any) {
 
         let [ state, dispatch ] = React.useReducer(mockReducer, mockInitialState);
-
-        mockState = state 
 
         let mockDispatch = function(...args){
 
             dispatchedActions.push(...args)
 
             dispatch(...args)
+
+            nextState.push(state)
         }
 
         return (
@@ -64,13 +68,23 @@ describe("EditablePlayList", ()=>{
         )
     }
 
-    function TestComponent (prop){
+    function TestComponent (prop, isNew){
+
+        if(isNew){
+
+            return mount(
+                <MockStoreProvider>
+                    <EditablePlayList new initialValue={prop}/>
+                </MockStoreProvider>
+                );
+        }
 
         return mount(
             <MockStoreProvider>
                 <EditablePlayList initialValue={prop}/>
             </MockStoreProvider>
             );
+
     }
 
     it('Component renders correctly', () => {
@@ -98,12 +112,46 @@ describe("EditablePlayList", ()=>{
         expect(setState.mock.calls[0][0]).toEqual('E')
     })
 
-    // [ ] onKeyPress monitors keys, if "Enter", dispatches postPlayList or putPlayList thunk to api 
-    
+    it("onKeyPress monitors keys, if 'Enter', calls playlist thunk", async (done)=>{
 
-    
-    // [ ] onFocus selects the input element
-    // [ ] onMouseLeave dispatches CANCEL_UPDATE_PLAYLISTS to store 
-    
+        const initialProps = "Im the InitialValue Prop"
+        const Tree = TestComponent(initialProps, true)
 
+        act(()=>{
+
+            Tree.find('input').props().onKeyPress({key: 'space'})
+        })
+
+        moxios.wait(()=>{
+
+            expect(moxios.requests.__items.length).toEqual(0)
+            
+            act(()=>{
+
+                const newPlaylist = "New PlayList Name"
+                
+                Tree.find('input').props().onKeyPress({key: 'Enter', target: {value: newPlaylist}})
+                
+                moxios.wait(()=>{
+
+                    expect(moxios.requests.mostRecent().url).toEqual('http://localhost:3030/folders/?api_key=dev')
+                    expect(moxios.requests.mostRecent().config.data).toEqual(JSON.stringify({name: newPlaylist}))
+                    done()
+                })
+            })
+        })
+    })
+
+    it("onMouseLeave dispatches CANCEL_UPDATE_PLAYLISTS to store", ()=>{
+
+        const initialProps = "Im the InitialValue Prop"
+        const Tree = TestComponent(initialProps, true)
+
+        act(()=>{
+
+            Tree.find('input').props().onMouseLeave()
+        })
+
+        expect(dispatchedActions[0].type).toEqual('CANCEL_UPDATE_PLAYLISTS')
+    })
 })

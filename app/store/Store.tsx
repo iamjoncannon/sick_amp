@@ -78,6 +78,11 @@ export function HANDLE_SEARCHBAR_TEXT(state, action){
     return {...state, SearchBarText: next_SearchBar_text_object }
 }
 
+export function CANCEL_UPDATE_PLAYLISTS(state,action){
+
+    return {...state, isEditingNewPlayList: false}
+}
+
 interface ReduxAction {
     type: string
     payload: any 
@@ -308,7 +313,7 @@ export function reducer(state : Types.Store, action : ReduxAction ) {
         
         case "CANCEL_UPDATE_PLAYLISTS":{
 
-            return {...state, isEditingNewPlayList: false}
+            return CANCEL_UPDATE_PLAYLISTS(state, action)
         }
 
         case "DRAG_OVER_PLAYLIST": {

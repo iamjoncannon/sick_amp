@@ -54,12 +54,10 @@ export async function postPlayList(name: string, token: string, dispatch: any){
 
 export async function putPlayList(name: string, token: string, dispatch: any){
 
-    console.log(name, token)
-    
     let result
-
+    
     try{
-
+        
         result = await axios.put(`${api_url}/folders/?api_key=${token}`, { name })
     }
     catch(err){
@@ -69,6 +67,9 @@ export async function putPlayList(name: string, token: string, dispatch: any){
         return 
     }
 
+    console.log('not hitting')
+    console.log(result)
+    
     dispatch({type: 'UPDATE_PLAYLISTS', payload: result.data})
 }
 

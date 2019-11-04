@@ -31,7 +31,7 @@ function mockReducer(state : Types.Store, action : ReduxAction ) {
 }
 
 describe("BPMSlider", ()=>{
-
+    let nextState = [] 
     const setState = jest.fn();
     const useStateSpy = jest.spyOn(React, 'useState')
     useStateSpy.mockImplementation((init) => [init, setState]);
@@ -59,6 +59,8 @@ describe("BPMSlider", ()=>{
             dispatchedActions.push(...args)
 
             dispatch(...args)
+
+            nextState.push(state)
         }
 
         return (
@@ -107,7 +109,7 @@ describe("BPMSlider", ()=>{
         expect(setState.mock.calls[0][0]).toEqual(newValue)
     })
 
-    it("onAfterChange callback dispatches MUTATE_FILTERSTATE to store with local state", ()=>{
+    it("onAfterChange callback dispatches MUTATE_FILTERSTATE to store with current value of input", ()=>{
 
         dispatchedActions = []
 
@@ -124,6 +126,7 @@ describe("BPMSlider", ()=>{
 
         expect(dispatchedActions[0].type).toEqual("MUTATE_FILTERSTATE")
         expect(dispatchedActions[0].payload.value).toEqual(value)
+
+        expect(nextState[0].FilterState.bpm).toEqual([100,200])
     })
-    
 })
