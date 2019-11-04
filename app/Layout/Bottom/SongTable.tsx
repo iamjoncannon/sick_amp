@@ -262,7 +262,7 @@ function SongTableContainer() {
 
   // the table expects an array of objects - 
  
- const data = React.useMemo(() => formattedSongData)
+ const data = React.useMemo(() => formattedSongData, null)
 
   return (
 

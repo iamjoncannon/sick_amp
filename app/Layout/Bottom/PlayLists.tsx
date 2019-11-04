@@ -1,11 +1,7 @@
 import React from 'react';
-const useEffect = (React as any).useEffect;
 import { Store } from '../../store/Store'
 import { fetchInitialData } from '../../store/Thunks'
-import { postPlayList } from '../../store/Thunks'
 import styled from 'styled-components'
-import axios from 'axios'
-import { sortColumns } from './Helpers'
 import * as Types from '../../store/Types'
 import PlayList from './PlayList'
 import EditablePlayList from './EditablePlayList'
@@ -88,7 +84,7 @@ const PlayLists = () => {
                     </PlayListHeader>
                     
                     {Object.values(state.PlayLists)
-                        .filter(each=> each.name !== "All Songs")
+                        .filter( (each: any)=> each.name !== "All Songs")
                         .map( (each : Types.PlayList) =>{
                             
                             return (

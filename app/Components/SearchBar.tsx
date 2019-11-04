@@ -5,9 +5,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 
 import { Store } from '../store/Store'
-// import { MockStore } from './SearchBar.test'
 
-const SectionContainer = styled.div`
+interface SectionContainerProps {
+    all_fields : string | boolean
+}
+
+const SectionContainer = styled.div<SectionContainerProps>`
 
     display: flex;
     flex-direction: column;

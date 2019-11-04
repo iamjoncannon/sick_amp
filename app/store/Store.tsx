@@ -197,7 +197,7 @@ export function reducer(state : Types.Store, action : ReduxAction ) {
 
                 CurrentPlaylist = PlayLists[RunningPlaylist]
 
-                next_current = current === Object.keys(state.Songs).length ? 1 : Number(current) + 1 
+                next_current = current === (Object.keys(state.Songs) as string[]).length ? 1 : Number(current) + 1 
             }
             else{
 

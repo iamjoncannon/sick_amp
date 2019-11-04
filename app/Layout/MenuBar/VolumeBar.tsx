@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'
 import { Store } from '../../store/Store'
+import { AudioObject } from './AudioPlayer/useAudioPlayer'
 
 const Container = styled.div`
 
@@ -41,9 +42,6 @@ const Container = styled.div`
 
 `
 
-const StyledInput = styled.input`
-    
-`
 
 const VolumeBar = () => {
 
@@ -51,7 +49,7 @@ const VolumeBar = () => {
 
     React.useEffect(()=>{
 
-        let audio = document.getElementById("audio")
+        let audio : AudioObject = document.getElementById("audio")
 
         if(audio){
 

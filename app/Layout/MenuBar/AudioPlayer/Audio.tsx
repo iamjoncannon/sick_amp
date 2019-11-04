@@ -1,7 +1,5 @@
 import React from "react";
 import Song from "./Song";
-import Play from "./Play";
-import Pause from "./Pause";
 import Bar from "./Bar";
 import useAudioPlayer from './useAudioPlayer';
 import styled from 'styled-components'
@@ -64,10 +62,7 @@ function Audio() {
         id="audio" 
       />
 
-      <Song 
-        songName="Testing" 
-        songArtist="Testing"
-      />
+      <Song/>
 
       <ControlsContainer>
 

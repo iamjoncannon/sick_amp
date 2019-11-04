@@ -1,4 +1,4 @@
-import * as Types from '../../store/Types'
+import * as Types from './store/Types'
 
 /* 
 
@@ -6,7 +6,6 @@ we have to sort through the songs and find
 all the possible categories- later we will build
 out a feature to allow the user to filter the  
 columns
-
 */
 
 export function sortColumns( data : Types.songStateType ){

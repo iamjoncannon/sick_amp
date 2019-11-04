@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"d954db77bc1ac0ce2e73","1":"0861c0dc31eeff7f58b5","2":"4ecb3831f9115f56cba1","3":"b05286835c5109cbf47e","4":"c865d3e4508b33275513","5":"1da30009648c238671f3","6":"529e5bda9c865b669178","7":"47c4b692d5b3cb03e8cc","8":"c29eeec8d7bf8cff51d0","9":"7864a8811c62df4d5f30"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"d954db77bc1ac0ce2e73","1":"0861c0dc31eeff7f58b5","2":"4ecb3831f9115f56cba1","3":"b05286835c5109cbf47e","4":"7dd57a33683de2eaeef8","5":"27227eda4a5779daa8b4","6":"fadcc6380c701437915d","7":"1ace394a4dd26d2b96bc","8":"035a2e105ba557ba883b","9":"e83b35d5009998db0065"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -432,7 +432,7 @@ react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_
 /*!*****************************!*\
   !*** ./app/store/Store.tsx ***!
   \*****************************/
-/*! exports provided: initialState, MUTATE_FILTERSTATE, TOGGLE_SEARCHBAR_FOCUS, HANDLE_SEARCHBAR_TEXT, reducer, Store, StoreProvider */
+/*! exports provided: initialState, MUTATE_FILTERSTATE, TOGGLE_SEARCHBAR_FOCUS, HANDLE_SEARCHBAR_TEXT, CANCEL_UPDATE_PLAYLISTS, reducer, Store, StoreProvider */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -441,6 +441,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MUTATE_FILTERSTATE", function() { return MUTATE_FILTERSTATE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_SEARCHBAR_FOCUS", function() { return TOGGLE_SEARCHBAR_FOCUS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HANDLE_SEARCHBAR_TEXT", function() { return HANDLE_SEARCHBAR_TEXT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CANCEL_UPDATE_PLAYLISTS", function() { return CANCEL_UPDATE_PLAYLISTS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "reducer", function() { return reducer; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Store", function() { return Store; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StoreProvider", function() { return StoreProvider; });
@@ -502,6 +503,9 @@ function HANDLE_SEARCHBAR_TEXT(state, action) {
     const next_SearchBar_text_object = { ...state.SearchBarText };
     next_SearchBar_text_object[target]["text"] = text;
     return { ...state, SearchBarText: next_SearchBar_text_object };
+}
+function CANCEL_UPDATE_PLAYLISTS(state, action) {
+    return { ...state, isEditingNewPlayList: false };
 }
 function reducer(state, action) {
      true && console.log("Action: ", action.type, action.payload);
@@ -638,7 +642,7 @@ function reducer(state, action) {
             return { ...state, isEditingNewPlayList: false, PlayLists: next_playlist_object };
         }
         case "CANCEL_UPDATE_PLAYLISTS": {
-            return { ...state, isEditingNewPlayList: false };
+            return CANCEL_UPDATE_PLAYLISTS(state, action);
         }
         case "DRAG_OVER_PLAYLIST": {
             return { ...state, draggedOverPlaylist: action.payload };

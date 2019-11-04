@@ -1,9 +1,6 @@
 import React from 'react';
-const useEffect = (React as any).useEffect;
 import { Store } from '../../store/Store'
 import styled from 'styled-components'
-import axios from 'axios'
-import { sortColumns } from './Helpers'
 import * as Types from '../../store/Types'
 import EditablePlayList from './EditablePlayList'
 
@@ -21,10 +18,9 @@ const PlayListContainer = styled.div`
     }
 `
 
-
 interface PlaylistContainerProps {
     key: string | number
-    id: string | number
+    id: number | string
 }
 
 const PlayList = (props: PlaylistContainerProps) => {

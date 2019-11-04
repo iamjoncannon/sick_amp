@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 // import ComponentToTest from './ComponentToTest'
-import Types from '../store/Types'
+import * as Types from '../app/store/Types'
 
 /*
 
@@ -15,20 +15,13 @@ export let MockStore
 let mockState 
 let dispatchedActions = []
 let mockInitialState
-
-function mockReducer(state : Types.Store, action : ReduxAction ) {
-    
-    switch (action.type) {
-
-        // actions to mock 
-    }
-}
+let mockReducer
 
 describe("ComponentToTest", ()=>{
 
     const setState = jest.fn();
     const useStateSpy = jest.spyOn(React, 'useState')
-    useStateSpy.mockImplementation((init) => [init, setState]);
+    useStateSpy.mockImplementation((init) => [ init, setState ]);
 
     beforeEach(() => {
 
@@ -39,6 +32,14 @@ describe("ComponentToTest", ()=>{
             // store to mock
             
         }
+
+        function mockReducer(state : Types.Store = mockInitialState, action : Types.ReduxAction ) {
+    
+            switch (action.type) {
+        
+                // actions to mock 
+            }
+        }
     });
 
     function MockStoreProvider(props : any) {
@@ -47,11 +48,11 @@ describe("ComponentToTest", ()=>{
 
         mockState = state 
 
-        let mockDispatch = function(...args){
+        let mockDispatch = function(...args: any){
 
             dispatchedActions.push(...args)
 
-            dispatch(...args)
+            dispatch(args)
         }
 
         return (

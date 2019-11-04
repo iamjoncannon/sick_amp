@@ -1,6 +1,19 @@
 import React,{ useState, useEffect } from "react";
 import { Store } from '../../../store/Store'
 
+export interface AudioObject extends HTMLElement{
+
+    loop : boolean
+    duration: number
+    currentTime: number
+    addEventListener: any
+    removeEventListener: any
+    src: string 
+    play: any 
+    pause: any
+    volume: number 
+}
+
 function useAudioPlayer() {
 
   const { state, dispatch } = React.useContext(Store);
@@ -14,7 +27,7 @@ function useAudioPlayer() {
 
   useEffect(() => {
     
-    let audio = document.getElementById("audio")
+    let audio : AudioObject = document.getElementById("audio")
 
     audio.loop = false 
 

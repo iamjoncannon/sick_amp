@@ -1,9 +1,7 @@
 import React from 'react';
 import { Store } from '../../store/Store'
 import styled from 'styled-components'
-import * as Types from '../../store/Types'
 import SongTable from './SongTable'
-import { sortColumns } from './Helpers'
 import { hydrateColumns } from '../../store/Thunks'
 import PlayListFilters from './PlayListFilters'
 
@@ -16,7 +14,6 @@ const SongSectionContainer = styled.div`
     display: flex;
     flex-direction: column;
 `
-
 
 const Songs = (props: any) => {
 

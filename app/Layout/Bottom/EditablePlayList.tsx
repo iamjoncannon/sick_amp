@@ -3,7 +3,12 @@ import styled from 'styled-components'
 import { Store } from '../../store/Store'
 import { postPlayList, putPlayList } from '../../store/Thunks'
 
-const EditablePlayListContainer = styled.div`
+interface EditablePlayListContainer {
+
+    new : boolean
+}
+
+const EditablePlayListContainer = styled.div<EditablePlayListContainer>`
 
     margin-top:${props=> props.new && "1vh"}
     padding: .5rem;
@@ -14,11 +19,14 @@ const EditablePlayListContainer = styled.div`
 `
 
 interface EditorProps {
-    readonly isEditing : Boolean
-    size: number
     value: string
     autoFocus : Boolean
+    onKeyPress: any
+    onChange: any 
+    onFocus: any 
+    onMouseLeave: any
 }
+
 
 const Editor = styled.input<EditorProps>`
     background-color: transparent;
@@ -32,7 +40,7 @@ const Editor = styled.input<EditorProps>`
 interface ComponentProps {
 
     initialValue : string 
-    new : boolean
+    new? : boolean
 }
 
 const EditablePlayList = (props: ComponentProps) => {

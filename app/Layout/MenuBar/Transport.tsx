@@ -24,7 +24,6 @@ const Container = styled.div`
     }
 `
 
-
 const Transport = ( ) => {
 
     const { state, dispatch } = React.useContext(Store);
@@ -36,6 +35,7 @@ const Transport = ( ) => {
 
     return ( 
         <Container>
+
         <Suspense fallback="Loading">
             
             <FontAwesomeIcon 
@@ -52,6 +52,7 @@ const Transport = ( ) => {
                 icon={faForward} 
                 onClick={()=>handleTransport("PLAY_NEXT_TRACK")}
             />
+
         </Suspense>
 
         </Container>

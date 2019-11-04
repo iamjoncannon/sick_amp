@@ -1,5 +1,4 @@
-import { Store } from 'Store'
-import axios from 'axios'
+const { default: axios } = require('axios');
 import { api_url } from '../../config'
 
 // called by PlayLists 

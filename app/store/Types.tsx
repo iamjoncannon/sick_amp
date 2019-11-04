@@ -55,9 +55,7 @@ export interface PlaylistState {
 }
 
 export interface Transport {
-    previous: number | void 
     current: number | void
-    next: number | void
 }
 
 export interface Column {
@@ -70,17 +68,42 @@ export interface Column {
     updated_at: string    // "2019-10-29T19:50:51.090736+00:00"
 }
 
+interface SearchBarTextValue {
+
+    field?: string 
+    text: string 
+}
+
+interface SearchBarTextObject {
+
+    [key: string]: SearchBarTextValue 
+}
+
 export interface Store {
     Transport : Transport 
     isPlaying: Boolean
-    draggedOverPlaylist: Boolean    
+    draggedOverPlaylist: number | string    
+    isEditingNewPlayList: boolean 
+    isTypingInSearchBar: boolean 
 
     Columns : Column[]
     
     PlayLists : PlaylistState | void 
-    SelectedPlaylist: number | string | void
-    RunningPlaylist: number | string | void
+    SelectedPlaylist: number | string 
+    RunningPlaylist: number | string
     
     Songs: songStateType | void 
+
+    SearchBarText: SearchBarTextObject
+
+    FilterState : {
+        [key: string] : any 
+    }
+    
+    token: string 
 }
 
+export interface ReduxAction {
+    type: string
+    payload: any 
+}
