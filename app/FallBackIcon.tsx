@@ -8,6 +8,12 @@ const GlobalContainer = styled.div`
     align-items: center;
     justify-content: center;
     height: 100vh;
+    font-size: 20vh;
+
+    ${ props => props.theme.query('cell',`
+        height: 100vh;
+        width: 100%;
+    `)}
 `
 
 const IconContainer = styled.div`
@@ -19,6 +25,10 @@ const IconContainer = styled.div`
     background-color: rgba(255, 0, 0, .25);
     padding: .5vh 1vh .5vh 1vh;
     border-radius: 1vh;
+
+    ${ props => props.theme.query('cell',`
+        font-size: 15vw; 
+    `)}
 `
 
 const generateXBlinker = (num) => {
@@ -36,7 +46,6 @@ const LoadingDots = styled.div`
 
     height: auto;
     width: auto;
-    font-size: 20vh;
 
     @keyframes blink {
 
@@ -61,9 +70,11 @@ const FallbackIcon = () => {
         <GlobalContainer>
 
             <IconContainer>
+
                 <LoadingDots>
                 {icon}
                 </LoadingDots>
+                
             </IconContainer>
         </GlobalContainer>
 

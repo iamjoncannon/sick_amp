@@ -11,9 +11,10 @@ import VolumeBar from './VolumeBar'
 const Icon = React.lazy(() => import('./Icon'))
 const Transport = React.lazy(() => import('./Transport'))
 const SearchBar = React.lazy(() => import('../../Components/SearchBar'))
-
+import { getDevice } from '../../Helpers'
 
 const PrimaryMenuContainer = styled.div`
+
     background-image: ${props=>props.theme.primaryColor};
     border-bottom: 1px solid rgba(63,63,63,1);
     display: flex;
@@ -29,6 +30,7 @@ const PlayerStateContainer = styled.div`
     width: 40vw;
     height: 100%;
     background-image: ${props=>props.theme.secondaryColor_Background};
+    position: absolute;
 `
 
 const SecondaryMenuContainer = styled.div`
@@ -65,33 +67,41 @@ const SecondaryMenuContainer = styled.div`
 `
 
 const SearchBarContainer = styled.div`
-    position: absolute;
-    right: 10vh;
 `
 
 const LeftSection = styled.div`
-    position: absolute;
-    left: 0;
     height: 100%;
-    width: 25%;
-
+    width: 75%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
 `
 
 const MenuBar = (props: any) => {
 
     const { state, dispatch } = React.useContext(Store);
 
+    const device = getDevice()
+
     return (
+
         <>
+        
         <PrimaryMenuContainer>
             
-            <Suspense fallback="Loading...">
-                
-                <Icon />
-                <Transport /> 
-            </Suspense>
+            <LeftSection>
 
-            <VolumeBar />
+                <Suspense fallback="Loading...">
+                    
+                    <Icon />
+
+                    <Transport />
+
+                </Suspense>
+
+                { device !== 'cell' &&  <VolumeBar /> }
+
+            </LeftSection>
 
             <PlayerStateContainer>
                 
@@ -101,18 +111,22 @@ const MenuBar = (props: any) => {
         
             <SearchBarContainer>
 
-                <SearchBar target={"all_fields"}/>
+                { device !== 'cell' && <SearchBar target={"all_fields"}/> }
+
             </SearchBarContainer>
 
         </PrimaryMenuContainer>
         
-        <SecondaryMenuContainer>
-            <div>
-                <span>My Library</span>
-                <span>Profile</span>
-                <span>Sick.DB</span>
-            </div>
-        </SecondaryMenuContainer>
+
+        { device !== 'cell' && 
+            <SecondaryMenuContainer>
+                <div>
+                    <span>My Library</span>
+                    <span>Profile</span>
+                    <span>Sick.DB</span>
+                </div>
+            </SecondaryMenuContainer>
+        }
         </>
     )
 }

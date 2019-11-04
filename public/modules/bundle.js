@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"d954db77bc1ac0ce2e73","1":"0861c0dc31eeff7f58b5","2":"4ecb3831f9115f56cba1","3":"b05286835c5109cbf47e","4":"013eccdd82e9c3c49a6b","5":"40235c01f32d2bfd5917","6":"02f61795f6723f7dcdd4","7":"9d0f0c8bf6ae78634e5b","8":"6d566bc2616555aade6d","9":"7864a8811c62df4d5f30"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"d954db77bc1ac0ce2e73","1":"0861c0dc31eeff7f58b5","2":"4ecb3831f9115f56cba1","3":"b05286835c5109cbf47e","4":"c865d3e4508b33275513","5":"1da30009648c238671f3","6":"529e5bda9c865b669178","7":"47c4b692d5b3cb03e8cc","8":"c29eeec8d7bf8cff51d0","9":"7864a8811c62df4d5f30"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -219,6 +219,12 @@ const GlobalContainer = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"
     align-items: center;
     justify-content: center;
     height: 100vh;
+    font-size: 20vh;
+
+    ${props => props.theme.query('cell', `
+        height: 100vh;
+        width: 100%;
+    `)}
 `;
 const IconContainer = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div `
 
@@ -229,6 +235,10 @@ const IconContainer = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].
     background-color: rgba(255, 0, 0, .25);
     padding: .5vh 1vh .5vh 1vh;
     border-radius: 1vh;
+
+    ${props => props.theme.query('cell', `
+        font-size: 15vw; 
+    `)}
 `;
 const generateXBlinker = (num) => {
     return Array(num).fill(null).map((x, i) => {
@@ -243,7 +253,6 @@ const LoadingDots = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].di
 
     height: auto;
     width: auto;
-    font-size: 20vh;
 
     @keyframes blink {
 
@@ -314,6 +323,37 @@ __webpack_require__.r(__webpack_exports__);
 // but want our global store to be able 
 // to alter the themes as well, so the 
 // user can create skins
+const device = {
+    mobileS: ['320px', "min"],
+    mobileM: ['375px', "min"],
+    mobileL: ['425px', 'min'],
+    tablet: ['768px', 'min'],
+    laptop: ['1024px', 'min'],
+    laptopL: ['1440px', 'min'],
+    desktop: ['2560px', 'min'],
+    cell: ["600px", "max"],
+    tab: ["601px", "min"],
+    desk: ["1100px", 'min']
+};
+/*
+
+@mixin for-phone-only {
+    @media (max-width: 599px) { @content; }
+  }
+  @mixin for-tablet-portrait-up {
+    @media (min-width: 600px) { @content; }
+  }
+  @mixin for-tablet-landscape-up {
+    @media (min-width: 900px) { @content; }
+  }
+  @mixin for-desktop-up {
+    @media (min-width: 1200px) { @content; }
+  }
+  @mixin for-big-desktop-up {
+    @media (min-width: 1800px) { @content; }
+  }
+  
+*/
 const InitialTheme = {
     primaryColor: "linear-gradient(rgba(63,63,63, 1), rgba(63,63,63,.95))",
     secondaryColor: "#262626",
@@ -324,7 +364,16 @@ const InitialTheme = {
     logoColor: "rgba(255, 0, 0, .25)",
     logoColor_Background: "linear-gradient(rgba(255, 0, 0, .20), rgba(255, 0, 0, .25))",
     fontColor: "#E0E0E0",
-    boxColor: "rgba( 255, 255, 255, 0.25 )"
+    boxColor: "rgba( 255, 255, 255, 0.25 )",
+    query: (size, content) => {
+        const [pixels, direction] = device[size];
+        return `
+            @media only screen and (${direction}-device-width: ${pixels}){
+
+                ${content}
+            }
+        `;
+    }
 };
 const ThemeManager = (props) => {
     // todo - wire into the store 
@@ -361,14 +410,15 @@ const lazy = react__WEBPACK_IMPORTED_MODULE_0___default.a.lazy;
 
 const MenuBar = lazy(() => {
     return Promise.all([
-        Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(5)]).then(__webpack_require__.bind(null, /*! ./Layout/MenuBar/MenuBar */ "./app/Layout/MenuBar/MenuBar.tsx")),
-        new Promise(resolve => setTimeout(resolve, 2000))
+        Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(4)]).then(__webpack_require__.bind(null, /*! ./Layout/MenuBar/MenuBar */ "./app/Layout/MenuBar/MenuBar.tsx")),
+        new Promise(resolve => setTimeout(resolve, 1000))
     ])
         .then(([moduleExports]) => moduleExports);
 });
 const BottomLayout = lazy(() => Promise.all(/*! import() */[__webpack_require__.e(3), __webpack_require__.e(6)]).then(__webpack_require__.bind(null, /*! ./Layout/Bottom/BottomLayout */ "./app/Layout/Bottom/BottomLayout.tsx")));
 
-react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Suspense, { fallback: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_FallBackIcon__WEBPACK_IMPORTED_MODULE_5__["default"], null) },
+react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Suspense, { fallback: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ThemeManager__WEBPACK_IMPORTED_MODULE_3__["default"], null,
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_FallBackIcon__WEBPACK_IMPORTED_MODULE_5__["default"], null)) },
     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_store_Store__WEBPACK_IMPORTED_MODULE_2__["StoreProvider"], null,
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Logger__WEBPACK_IMPORTED_MODULE_4__["default"], null),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ThemeManager__WEBPACK_IMPORTED_MODULE_3__["default"], null,
@@ -382,11 +432,16 @@ react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_
 /*!*****************************!*\
   !*** ./app/store/Store.tsx ***!
   \*****************************/
-/*! exports provided: Store, StoreProvider */
+/*! exports provided: initialState, MUTATE_FILTERSTATE, TOGGLE_SEARCHBAR_FOCUS, HANDLE_SEARCHBAR_TEXT, reducer, Store, StoreProvider */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initialState", function() { return initialState; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MUTATE_FILTERSTATE", function() { return MUTATE_FILTERSTATE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_SEARCHBAR_FOCUS", function() { return TOGGLE_SEARCHBAR_FOCUS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HANDLE_SEARCHBAR_TEXT", function() { return HANDLE_SEARCHBAR_TEXT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "reducer", function() { return reducer; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Store", function() { return Store; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StoreProvider", function() { return StoreProvider; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
@@ -417,6 +472,37 @@ const initialState = {
     },
     token: "dev"
 };
+function MUTATE_FILTERSTATE(state, action) {
+    const { payload: { field, value } } = action;
+    const { FilterState } = state;
+    const new_FilterState = { ...FilterState };
+    if (!new_FilterState[field])
+        new_FilterState[field] = {};
+    if (new_FilterState[field][value]) {
+        delete new_FilterState[field][value];
+    }
+    else if (field === "bpm") {
+        new_FilterState["bpm"] = value;
+    }
+    else {
+        // only one key to be filtered
+        if (field === "key")
+            new_FilterState.key = {};
+        // to do - place harmonic logic here to append 
+        // harmonics to state for downstream component 
+        new_FilterState[field][value] = true;
+    }
+    return { ...state, FilterState: new_FilterState };
+}
+function TOGGLE_SEARCHBAR_FOCUS(state, action) {
+    return { ...state, isTypingInSearchBar: action.payload };
+}
+function HANDLE_SEARCHBAR_TEXT(state, action) {
+    const { target, text } = action.payload;
+    const next_SearchBar_text_object = { ...state.SearchBarText };
+    next_SearchBar_text_object[target]["text"] = text;
+    return { ...state, SearchBarText: next_SearchBar_text_object };
+}
 function reducer(state, action) {
      true && console.log("Action: ", action.type, action.payload);
     switch (action.type) {
@@ -563,35 +649,13 @@ function reducer(state, action) {
 
         */
         case "TOGGLE_SEARCHBAR_FOCUS": {
-            return { ...state, isTypingInSearchBar: action.payload };
+            return TOGGLE_SEARCHBAR_FOCUS(state, action);
         }
         case "HANDLE_SEARCHBAR_TEXT": {
-            const { target, text } = action.payload;
-            const next_SearchBar_text_object = { ...state.SearchBarText };
-            next_SearchBar_text_object[target]["text"] = text;
-            return { ...state, SearchBarText: next_SearchBar_text_object };
+            return HANDLE_SEARCHBAR_TEXT(state, action);
         }
         case "MUTATE_FILTERSTATE": {
-            const { payload: { field, value } } = action;
-            const { FilterState } = state;
-            const new_FilterState = { ...FilterState };
-            if (!new_FilterState[field])
-                new_FilterState[field] = {};
-            if (new_FilterState[field][value]) {
-                delete new_FilterState[field][value];
-            }
-            else if (field === "bpm") {
-                new_FilterState["bpm"] = value;
-            }
-            else {
-                // only one key to be filtered
-                if (field === "key")
-                    new_FilterState.key = {};
-                // to do - place harmonic logic here to append 
-                // harmonics to state for downstream component 
-                new_FilterState[field][value] = true;
-            }
-            return { ...state, FilterState: new_FilterState };
+            return MUTATE_FILTERSTATE(state, action);
         }
         default:
             return state;

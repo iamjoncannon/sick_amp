@@ -54,6 +54,9 @@ install-lazy:
 	npm install acorn-dynamic-import@4.0.0
 	npm update acorn --depth 20 && npm dedupe
 
+run-test:
+	NODE_ENV=test jest --watch --verbose -- -u
+
 # some git commands to help deal with me accidentally
 # committing mp3s
 

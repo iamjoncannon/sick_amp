@@ -30,3 +30,18 @@ export function sortColumns( data : Types.songStateType ){
 
     return ColumnHash
 }
+
+export const getDevice = () => {
+
+    if( window.outerWidth > 1100){
+
+        return 'desktop'
+    }
+    
+    if(window.outerWidth < 601){
+        
+        return 'cell'
+    }
+
+    return 'tab'
+}

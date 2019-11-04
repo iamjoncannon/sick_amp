@@ -23,10 +23,11 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: (inputFile)=>{
+          let thisTest = /\.tsx?$/.test(inputFile) && !(/\.test.tsx?$/.test(inputFile))
+          return thisTest
+        },
         exclude: /node_modules/,
-        // use: 'ts-loader',
-        // loader: require.resolve('ts-loader'),
         loader: 'ts-loader',
         options: {
           // context: __dirname,

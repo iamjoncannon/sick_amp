@@ -5,8 +5,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 
 import { Store } from '../store/Store'
+// import { MockStore } from './SearchBar.test'
 
 const SectionContainer = styled.div`
+
     display: flex;
     flex-direction: column;
 
@@ -16,6 +18,7 @@ const SectionContainer = styled.div`
         bottom: ${props=> props.all_fields ? "3vh" : "2vh"}; 
         margin-bottom: -1.4vh;
         height: ${props=> props.all_fields ? "2vh" : "1.5vh"};
+
     }
 
     input {
@@ -33,7 +36,9 @@ interface SearchBarProps {
 
 const SearchBar = (props : SearchBarProps) => {
 
-    const { state, dispatch } = React.useContext(Store);
+    const whichStore = process.env.NODE_ENV === 'test' ? require('./SearchBar.test').MockStore : Store ;
+
+    const { state, dispatch } = React.useContext(whichStore);
 
     const { SearchBarText } = state
 
@@ -44,11 +49,6 @@ const SearchBar = (props : SearchBarProps) => {
     function handleChange(e){
 
         dispatch({type: "HANDLE_SEARCHBAR_TEXT", payload: { target: target, text: e.target.value} })
-    }
-
-    const handleFocusOut = () => {
-        
-        toggleSearchBar(false)
     }
 
     const toggleSearchBar = (state_change) => {
@@ -63,12 +63,11 @@ const SearchBar = (props : SearchBarProps) => {
         <SectionContainer all_fields={props.target === "all_fields"}>
             
             <input 
-                style={inlines }
-                global={props.global}
+                style={ inlines }
                 onChange={handleChange}
                 value={ all_fields ? all_fields : SearchBarText[target].text }   
                 onFocus={()=>toggleSearchBar(true)} 
-                onBlur={handleFocusOut}    
+                onBlur={()=>toggleSearchBar(false)}    
             />
                 { SearchBarText[target].text === "" && 
                   all_fields === "" && 

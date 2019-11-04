@@ -12,8 +12,11 @@ const IconContainer = styled.div`
     background-color: ${props=>props.theme.logoColor};
     padding: .5vh 1vh .5vh 1vh;
     border-radius: 1vh;
-`
 
+    ${props=>props.theme.query('cell', `
+        left: 2vh;
+    `)}
+`
 
 const Icon = () => {
 

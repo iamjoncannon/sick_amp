@@ -1,7 +1,7 @@
 import React from 'react';
 import * as Types from './Types'
 
-const initialState : Types.Store = {
+export const initialState : Types.Store = {
 
     Transport : {  current: 1 },
     isPlaying: false,
@@ -18,7 +18,7 @@ const initialState : Types.Store = {
     
     isTypingInSearchBar: false,
     SearchBarText: {
-        all_fields: {text: ""},
+        all_fields: { text: ""},
         1: {field: "artist", text: ""},
         2: {field: "album_artist", text: ""},
         3: {field: "genre", text: ""}
@@ -32,14 +32,60 @@ const initialState : Types.Store = {
     token: "dev"
 };
 
+export function MUTATE_FILTERSTATE(state, action){
+
+    const { payload: { field, value } } = action 
+    const { FilterState } = state 
+    const new_FilterState = {...FilterState}
+
+    if(!new_FilterState[field]) new_FilterState[field] = {}
+
+    if(new_FilterState[field][value]){
+        
+        delete new_FilterState[field][value]
+    }
+    else if(field === "bpm"){
+
+        new_FilterState["bpm"] = value
+    }
+    else{
+
+        // only one key to be filtered
+        
+        if(field === "key") new_FilterState.key = {}
+
+        // to do - place harmonic logic here to append 
+        // harmonics to state for downstream component 
+        
+        new_FilterState[field][value] = true 
+    }
+
+    return {...state, FilterState : new_FilterState }
+}
+
+export function TOGGLE_SEARCHBAR_FOCUS(state, action){
+
+    return {...state, isTypingInSearchBar: action.payload}
+}
+
+export function HANDLE_SEARCHBAR_TEXT(state, action){
+
+    const { target, text } = action.payload
+    const next_SearchBar_text_object = {...state.SearchBarText}
+
+    next_SearchBar_text_object[target]["text"] = text 
+
+    return {...state, SearchBarText: next_SearchBar_text_object }
+}
+
 interface ReduxAction {
     type: string
     payload: any 
 }
 
-function reducer(state : Types.Store, action : ReduxAction ) {
+export function reducer(state : Types.Store, action : ReduxAction ) {
 
-    process.env.NODE_ENV !== "production" && console.log("Action: ", action.type, action.payload)
+    process.env.NODE_ENV !== "production" && process.env.NODE_ENV !== "test" && console.log("Action: ", action.type, action.payload)
 
     switch (action.type) {
 
@@ -279,48 +325,17 @@ function reducer(state : Types.Store, action : ReduxAction ) {
 
         case "TOGGLE_SEARCHBAR_FOCUS": {
 
-            return {...state, isTypingInSearchBar: action.payload}
+            return TOGGLE_SEARCHBAR_FOCUS(state, action)
         }
 
         case "HANDLE_SEARCHBAR_TEXT" : {
 
-            const { target, text } = action.payload
-            const next_SearchBar_text_object = {...state.SearchBarText}
-
-            next_SearchBar_text_object[target]["text"] = text 
-
-            return {...state, SearchBarText: next_SearchBar_text_object }
+            return HANDLE_SEARCHBAR_TEXT(state, action)
         }
 
         case "MUTATE_FILTERSTATE": {
 
-            const { payload: { field, value } } = action 
-            const { FilterState } = state 
-            const new_FilterState = {...FilterState}
-
-            if(!new_FilterState[field]) new_FilterState[field] = {}
-
-            if(new_FilterState[field][value]){
-                
-                delete new_FilterState[field][value]
-            }
-            else if(field === "bpm"){
-
-                new_FilterState["bpm"] = value
-            }
-            else{
-
-                // only one key to be filtered
-                
-                if(field === "key") new_FilterState.key = {}
-
-                // to do - place harmonic logic here to append 
-                // harmonics to state for downstream component 
-                
-                new_FilterState[field][value] = true 
-            }
-
-            return {...state, FilterState : new_FilterState }
+            return MUTATE_FILTERSTATE(state, action)
         }
         
         default:

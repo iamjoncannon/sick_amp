@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
-const SliderContainer = styled.div`
+export const SliderContainer = styled.div`
 
     width: 80%;
     margin: 1vh;
@@ -48,8 +48,10 @@ const SliderContainer = styled.div`
 `
 
 const BPMSlider = () => {
+
+    const whichStore = process.env.NODE_ENV === 'test' ? require('./BPMSlider.test').MockStore : Store ;
     
-    const { state, dispatch } = React.useContext(Store);
+    const { state, dispatch } = React.useContext(whichStore);
     const { FilterState: { bpm } } = state 
     const [ value, setValue ] = React.useState(bpm)
 

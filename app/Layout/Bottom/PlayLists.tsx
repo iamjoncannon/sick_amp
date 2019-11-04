@@ -23,6 +23,12 @@ const PlayListsContainer = styled.div`
     justify-content: flex-start;
     padding-left: 1rem;
 
+    ${props=>props.theme.query('cell',`
+        height: 0;
+        width: 0;
+        margin-right: -3vh;
+    `)}
+
     button {
         height: 1vh;
     }

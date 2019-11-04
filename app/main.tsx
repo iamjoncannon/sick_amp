@@ -10,7 +10,7 @@ const MenuBar = lazy(() => {
 
   return Promise.all([
     import('./Layout/MenuBar/MenuBar'),     
-    new Promise(resolve => setTimeout(resolve, 2000))
+    new Promise(resolve => setTimeout(resolve, 1000))
   ])
   .then(([moduleExports]) => moduleExports);
 })
@@ -20,7 +20,11 @@ const BottomLayout = lazy(() => import('./Layout/Bottom/BottomLayout'))
 import FallBackIcon from './FallBackIcon'
 
 ReactDOM.render(    
-        <Suspense fallback={ <FallBackIcon /> }>
+        <Suspense fallback={ 
+          <ThemeManager>
+            <FallBackIcon /> 
+          </ThemeManager>
+        }>
           <StoreProvider>
               <Logger />
               <ThemeManager>

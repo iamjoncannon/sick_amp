@@ -9,7 +9,7 @@ const Logger = () => {
 
     const { state } = React.useContext(Store);
 
-    process.env.NODE_ENV !== "production" && console.log("Next State: ", state)
+    process.env.NODE_ENV !== "production" && process.env.NODE_ENV !== "test" && console.log("Next State: ", state)
 
     return(
         <>

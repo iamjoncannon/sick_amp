@@ -5,7 +5,7 @@ import { postPlayList, putPlayList } from '../../store/Thunks'
 
 const EditablePlayListContainer = styled.div`
 
-    margin-top:${props=> props.new && "1vh"  }
+    margin-top:${props=> props.new && "1vh"}
     padding: .5rem;
     
     input {
@@ -37,7 +37,9 @@ interface ComponentProps {
 
 const EditablePlayList = (props: ComponentProps) => {
 
-    const { state, dispatch } = React.useContext(Store);
+    const whichStore = process.env.NODE_ENV === 'test' ? require('./EditablePlayList.test').MockStore : Store ;
+
+    const { state, dispatch } = React.useContext(whichStore);
     const [ value, handleChange ] = React.useState(props.initialValue)
 
     const handleKeyPress = (e) => {
@@ -50,13 +52,13 @@ const EditablePlayList = (props: ComponentProps) => {
             }
             else{
 
-                console.log(e.target.value)
                 putPlayList( e.target.value, state.token, dispatch)
             }
         }
     }
 
     return (
+
         <EditablePlayListContainer new={props.new}>
 
             <Editor
