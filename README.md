@@ -8,4 +8,4 @@ There are two separate dev server and client build processes:
 
 make client
 
-make server
+make serv
