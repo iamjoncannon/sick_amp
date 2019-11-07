@@ -160,8 +160,6 @@ const HarmonicMixingFilter = ( ) => {
 
                     const harmonics = getHarmonics(Object.keys(FilterState.key)[0])
 
-                    console.log(harmonics)
-
                     if(FilterState.key[thisKey]) computedClass = "selected" 
 
                     if( harmonics.relativeMinor === thisKey ) computedClass = "relative_Minor"
