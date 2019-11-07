@@ -296,6 +296,7 @@ export function reducer(state : Types.Store, action : ReduxAction ) {
             }
                                     
             return {...state, PlayLists : next_playlist_object}
+            
         }
 
         case "UPDATE_PLAYLISTS":{

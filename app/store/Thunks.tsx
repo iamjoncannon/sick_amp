@@ -53,11 +53,12 @@ export async function postPlayList(name: string, token: string, dispatch: any){
 
 export async function putPlayList(name: string, token: string, dispatch: any){
 
+    const endpoint = `${api_url}/folders/?api_key=${token}`
     let result
     
     try{
         
-        result = await axios.put(`${api_url}/folders/?api_key=${token}`, { name })
+        result = await axios.put(endpoint, { name })
     }
     catch(err){
 
@@ -65,12 +66,43 @@ export async function putPlayList(name: string, token: string, dispatch: any){
         dispatch({type: "CANCEL_UPDATE_PLAYLISTS"})
         return 
     }
-
-    console.log('not hitting')
-    console.log(result)
     
     dispatch({type: 'UPDATE_PLAYLISTS', payload: result.data})
 }
+
+export async function rearrange_playlist(folder_id: number, song_id: number, position: number, token: string, dispatch: any){
+
+    // files/{fileid}/folders/{folderid} { position: int }
+    const endpoint = `${api_url}/files/${song_id}/folders/${folder_id}?api_key=${token}`
+    
+    let result
+    
+    try{
+        
+        result = await axios.put(endpoint, { position })
+    }
+    catch(err){
+
+        console.log(err)
+        dispatch({type: "CANCEL_UPDATE_PLAYLISTS"})
+        return 
+    }
+    
+    console.log(result)
+    
+    /*
+    dispatch({
+        type: "REARRANGE_PLAYLIST",
+        payload: {
+            
+            // item_to_put_before: Number(id),
+            // item_to_be_moved: Number(item_to_be_moved)
+        }
+    })
+
+    */
+}
+
 
 // called by Songs 
 

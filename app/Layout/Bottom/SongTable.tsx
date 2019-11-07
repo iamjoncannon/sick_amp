@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { withTheme } from 'styled-components'
 import { Store } from '../../store/Store'
-import { hydrateSongs } from '../../store/Thunks'
+import { hydrateSongs, rearrange_playlist } from '../../store/Thunks'
 import { useTable, useBlockLayout, useResizeColumns } from 'react-table'
 
 // Container styling from table library 
@@ -159,6 +159,7 @@ function SongTableContainer() {
     return () => {
 
       container.removeEventListener("scroll", handleScroll)
+      
     }
   })
 
@@ -176,7 +177,6 @@ function SongTableContainer() {
     []
   )
    
-
   // generate playlist from songs 
 
   let formattedSongData = SelectedPlaylist === "All" ? Object.values(state.Songs) : []
@@ -185,14 +185,14 @@ function SongTableContainer() {
         
     const currentList = PlayLists[SelectedPlaylist].files
     
-    for(let song of currentList){
+    for(let playlist_object of currentList){
 
       // precaution
-      let song_exists = state.Songs[song]
+      let song = state.Songs[playlist_object.file_id]
 
-      if(song_exists){
-
-          formattedSongData.push(state.Songs[song])
+      if(song){
+          song.position = playlist_object.position
+          formattedSongData.push(song)
       }
     }
 
@@ -204,7 +204,6 @@ function SongTableContainer() {
       setPage(Page + 1)
     }
   }
-
 
   // generate list of filters 
 
@@ -235,7 +234,7 @@ function SongTableContainer() {
     }
   }
 
-  formattedSongData = formattedSongData.filter(song=>{
+  formattedSongData = formattedSongData.filter( song=>{
 
     let passesTest = true 
 
@@ -258,7 +257,8 @@ function SongTableContainer() {
     })
 
     return passesTest 
-  })
+
+  }).sort( ( a, b ) => { return a.position - b.position } )
 
   // the table expects an array of objects - 
  
@@ -421,7 +421,7 @@ function Table({ columns, data }) {
     if(!isDragThrottled) throttledCall(id)
   }
 
-  const onDrop = (e: any) => {
+  const onDrop = ( e: any) => {
 
     handleDragOver(null)
 
@@ -429,14 +429,12 @@ function Table({ columns, data }) {
 
     const item_to_be_moved = e.dataTransfer.getData( "track")
 
-    dispatch({
-        type: "REARRANGE_PLAYLIST",
-        payload: {
-            item_to_put_before: Number(id),
-            item_to_be_moved: Number(item_to_be_moved)
-        }
-    })
-
+    rearrange_playlist( state.SelectedPlaylist, 
+                        item_to_be_moved, 
+                        Number(id) + 1, 
+                        state.token, 
+                        dispatch
+                      )
   }
 
   // column boilerplate from the table library: 
@@ -501,6 +499,8 @@ function Table({ columns, data }) {
         {rows.map(
         
           (row : any, i : number) => {
+
+            const identifier = state.SelectedPlaylist === "All" ? row.original.id : row.original.position
             
             // check if locally selected or globally playing 
 
@@ -544,7 +544,7 @@ function Table({ columns, data }) {
                 onDragEnd={onDragEnd}
                 onDragOver={ e=> state.SelectedPlaylist !== "All" && onDragOver(e)}
                 className={ calculatedStyle } 
-                id={row.original.id} 
+                id={identifier} 
                 onClick={e=>handleClick(e)}
                 onDrop={(e)=> state.SelectedPlaylist !== "All" && onDrop(e)}
               >
