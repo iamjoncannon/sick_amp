@@ -7,7 +7,6 @@ import { ThemeProvider } from 'styled-components'
 // to alter the themes as well, so the 
 // user can create skins
 
-
 const device = {
 
     mobileS: ['320px', "min"],

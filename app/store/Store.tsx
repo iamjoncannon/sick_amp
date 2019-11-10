@@ -12,6 +12,10 @@ export const initialState : Types.Store = {
     draggedOverPlaylist: null,
     isEditingNewPlayList: false,
     
+    // drag
+    isDraggingSong: false, 
+    draggedSong: null, 
+
     Columns: null,
     
     Songs: null,
@@ -321,6 +325,24 @@ export function reducer(state : Types.Store, action : ReduxAction ) {
 
             return {...state, draggedOverPlaylist: action.payload}
         }
+
+        case "START_DRAGGING_SONG": {
+
+            return {...state, isDraggingSong: true, draggedSong: action.payload }
+        }
+
+        case "DRAG_OVER_SONG": {
+
+            return {...state, draggedOverSong: action.payload }
+        }
+
+        case "STOP_DRAGGING_SONG": {
+
+            // update playlist from API 
+
+            return {...state, isDraggingSong: false  }
+        }
+
 
 
         /*

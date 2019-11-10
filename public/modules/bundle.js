@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"d954db77bc1ac0ce2e73","1":"0861c0dc31eeff7f58b5","2":"4ecb3831f9115f56cba1","3":"b05286835c5109cbf47e","4":"9d9ef97b278819420e0b","5":"9c3e55db513cc10fd956","6":"5c48ebaddfc5072c64f4","7":"69a2b84015f99c8b96ba","8":"c29eeec8d7bf8cff51d0","9":"7864a8811c62df4d5f30"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"d954db77bc1ac0ce2e73","1":"0861c0dc31eeff7f58b5","2":"4ecb3831f9115f56cba1","3":"b05286835c5109cbf47e","4":"9d9ef97b278819420e0b","5":"69107874bc5b074df458","6":"5c48ebaddfc5072c64f4","7":"69a2b84015f99c8b96ba","8":"c29eeec8d7bf8cff51d0","9":"7864a8811c62df4d5f30"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -456,6 +456,9 @@ const initialState = {
     RunningPlaylist: "All",
     draggedOverPlaylist: null,
     isEditingNewPlayList: false,
+    // drag
+    isDraggingSong: false,
+    draggedSong: null,
     Columns: null,
     Songs: null,
     isTypingInSearchBar: false,
@@ -646,6 +649,16 @@ function reducer(state, action) {
         }
         case "DRAG_OVER_PLAYLIST": {
             return { ...state, draggedOverPlaylist: action.payload };
+        }
+        case "START_DRAGGING_SONG": {
+            return { ...state, isDraggingSong: true, draggedSong: action.payload };
+        }
+        case "DRAG_OVER_SONG": {
+            return { ...state, draggedOverSong: action.payload };
+        }
+        case "STOP_DRAGGING_SONG": {
+            // update playlist from API 
+            return { ...state, isDraggingSong: false };
         }
         /*
 

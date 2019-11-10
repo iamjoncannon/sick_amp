@@ -384,7 +384,8 @@ function Table({ columns, data }) {
 
   const onDragStart = (e : any, id: number) => {
     
-    e.dataTransfer.setData( "track", id)
+    // e.dataTransfer.setData( "track", id)
+    dispatch({type: "START_DRAGGING_SONG", payload: id })
   }
 
   const onDragEnd = () => {
@@ -529,7 +530,7 @@ function Table({ columns, data }) {
               calculatedStyle += " playing"
             }
 
-            if(!!isDraggedOver && Number(row.original.id) === Number(isDraggedOver)){
+            if(Number(identifier) === Number(isDraggedOver)){
 
               calculatedStyle += " draggedOver"
             }

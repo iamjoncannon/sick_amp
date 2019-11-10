@@ -80,20 +80,29 @@ interface SearchBarTextObject {
 }
 
 export interface Store {
+
+    // TODO-- split into separate reducers 
+
+    // transport  
     Transport : Transport 
     isPlaying: Boolean
-    draggedOverPlaylist: number | string    
-    isEditingNewPlayList: boolean 
-    isTypingInSearchBar: boolean 
 
     Columns : Column[]
-    
+
+    // Playlists
+    draggedOverPlaylist: number | string    
+    isEditingNewPlayList: boolean 
     PlayLists : PlaylistState | void 
     SelectedPlaylist: number | string 
     RunningPlaylist: number | string
+    isDraggingSong: boolean 
+    draggedSong: number | void 
     
+    // Songs
     Songs: songStateType | void 
 
+    // Search
+    isTypingInSearchBar: boolean 
     SearchBarText: SearchBarTextObject
 
     FilterState : {
