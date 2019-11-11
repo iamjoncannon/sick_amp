@@ -7,3 +7,4 @@ public/tunes/
 public/modules
 config.js
 /curls
+node_modules/
