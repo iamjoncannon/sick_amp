@@ -3,6 +3,7 @@ import { Store } from '../../store/Store'
 import styled from 'styled-components'
 import * as Types from '../../store/Types'
 import EditablePlayList from './EditablePlayList'
+import { addSongToPlaylist } from "../../store/Thunks"
 
 const PlayListContainer = styled.div`
 
@@ -63,15 +64,21 @@ const PlayList = (props: PlaylistContainerProps) => {
 
     const onDrop = (e: any) => {
 
-        const selected = e.dataTransfer.getData( "track")
+        const { draggedSong, PlayLists, token } = state 
 
-        dispatch({
-            type: "ADD_SONG_TO_PLAYLIST",
-            payload: {
-                song: selected,
-                playlist: e.target.id
-            }
-        })
+        const { id } = e.target
+
+        // prevent duplicate songs being added 
+
+        const hasSongNotBeenAddedYet = PlayLists[Number(id)].files
+                                         .filter(file=>file.file_id)
+                                         .includes(draggedSong)
+
+        if(!hasSongNotBeenAddedYet){
+
+            addSongToPlaylist(id, draggedSong, token, dispatch)
+            
+        }
     }
 
     const handleDoubleClick = () => {

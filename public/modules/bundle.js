@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"d954db77bc1ac0ce2e73","1":"0861c0dc31eeff7f58b5","2":"4ecb3831f9115f56cba1","3":"b05286835c5109cbf47e","4":"9d9ef97b278819420e0b","5":"69107874bc5b074df458","6":"5c48ebaddfc5072c64f4","7":"69a2b84015f99c8b96ba","8":"c29eeec8d7bf8cff51d0","9":"7864a8811c62df4d5f30"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "./modules/" + ({}[chunkId]||chunkId) + "." + {"0":"d954db77bc1ac0ce2e73","1":"0861c0dc31eeff7f58b5","2":"4ecb3831f9115f56cba1","3":"b05286835c5109cbf47e","4":"9d9ef97b278819420e0b","5":"9b5f81ec00ee2c9c9855","6":"b73469d72da9872e7644","7":"69a2b84015f99c8b96ba","8":"c29eeec8d7bf8cff51d0","9":"7864a8811c62df4d5f30"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -609,32 +609,13 @@ function reducer(state, action) {
             return { ...state, Page: 1, SelectedPlaylist: action.payload };
         }
         case 'ADD_SONG_TO_PLAYLIST': {
-            const { PlayLists, draggedOverPlaylist } = state;
-            const { payload: { song } } = action;
-            const nextPlaylists = { ...PlayLists };
-            if (!nextPlaylists[draggedOverPlaylist].files.includes(Number(song))) {
-                nextPlaylists[draggedOverPlaylist].files = [...PlayLists[draggedOverPlaylist].files, Number(song)];
-            }
             return { ...state, PlayLists: nextPlaylists, draggedOverPlaylist: null };
         }
         case "REARRANGE_PLAYLIST": {
-            const { item_to_put_before, item_to_be_moved } = action.payload;
-            let next_playlist_object = state.PlayLists;
-            if (state.SelectedPlaylist !== "All") {
-                let targetPlaylist = next_playlist_object[state.SelectedPlaylist].files;
-                let nextTargetPlaylist = [];
-                // this is not the most clever way to do this
-                // but it works 
-                for (let i = 0; i < targetPlaylist.length; i++) {
-                    if (targetPlaylist[i] !== item_to_be_moved) {
-                        if (targetPlaylist[i] === item_to_put_before) {
-                            nextTargetPlaylist.push(item_to_be_moved);
-                        }
-                        nextTargetPlaylist.push(targetPlaylist[i]);
-                    }
-                }
-                next_playlist_object[state.SelectedPlaylist].files = nextTargetPlaylist;
-            }
+            const next_playlist_object = { ...state.PlayLists };
+            const previousHydrated = state.PlayLists[state.SelectedPlaylist].hydrated;
+            next_playlist_object[state.SelectedPlaylist] = action.payload.updatedPlaylist;
+            next_playlist_object[state.SelectedPlaylist].hydrated = previousHydrated;
             return { ...state, PlayLists: next_playlist_object };
         }
         case "UPDATE_PLAYLISTS": {

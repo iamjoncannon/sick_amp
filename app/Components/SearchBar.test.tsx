@@ -23,7 +23,7 @@ let mockState
 let dispatchedActions = []
 let mockInitialState
 
-function mockReducer(state : Types.Store, action : ReduxAction ) {
+function mockReducer(state : Types.Store, action : Types.ReduxAction ) {
     
     switch (action.type) {
 

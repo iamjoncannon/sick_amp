@@ -70,6 +70,42 @@ export async function putPlayList(name: string, token: string, dispatch: any){
     dispatch({type: 'UPDATE_PLAYLISTS', payload: result.data})
 }
 
+// addSongToPlaylist POST /files/{file_id}/folders/{folder_id}
+
+export async function addSongToPlaylist(folder_id: number, song_id: number, token: string, dispatch: any){
+
+    const endpoint = `${api_url}/files/${song_id}/folders/${folder_id}?api_key=${token}`
+
+    let result 
+
+    try {
+
+        result = await axios.post(endpoint)
+    }
+    catch(err){
+
+        console.log("addSongToPlaylist thunk error: ", err)
+        return
+    }
+
+    console.log(result)
+
+
+    /*
+
+    dispatch({
+                type: "ADD_SONG_TO_PLAYLIST",
+                payload: {
+                    newPlayListObject = result.data,
+                    playlist_id: folder_id
+                }
+            })
+
+    */
+
+}
+
+
 export async function rearrange_playlist(folder_id: number, song_id: number, position: number, token: string, dispatch: any){
 
     // files/{fileid}/folders/{folderid} { position: int }
@@ -87,20 +123,15 @@ export async function rearrange_playlist(folder_id: number, song_id: number, pos
         dispatch({type: "CANCEL_UPDATE_PLAYLISTS"})
         return 
     }
-    
-    console.log(result)
-    
-    /*
+
     dispatch({
         type: "REARRANGE_PLAYLIST",
         payload: {
             
-            // item_to_put_before: Number(id),
-            // item_to_be_moved: Number(item_to_be_moved)
+            updatedPlaylist: result.data
         }
     })
 
-    */
 }
 
 

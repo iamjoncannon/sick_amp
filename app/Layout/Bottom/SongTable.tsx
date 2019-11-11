@@ -428,11 +428,11 @@ function Table({ columns, data }) {
 
     const { id } = e.target.parentNode
 
-    const item_to_be_moved = e.dataTransfer.getData( "track")
+    const item_to_be_moved =  state.draggedSong // e.dataTransfer.getData( "track")
 
     rearrange_playlist( state.SelectedPlaylist, 
                         item_to_be_moved, 
-                        Number(id) + 1, 
+                        Number(id), 
                         state.token, 
                         dispatch
                       )
